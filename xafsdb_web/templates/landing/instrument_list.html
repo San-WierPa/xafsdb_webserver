@@ -1,0 +1,49 @@
+{% load static %}
+
+<header>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <title>xafsDB - All Instruments</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+</header>
+
+{% include "landing/navbar.html" %}
+
+<main class="page">
+
+    <table id="datatablesSimple">
+
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Facility</th>
+            </tr>
+        </thead>
+
+    {% for instrument_meta in instrument_meta_objects %}
+    <tbody>
+        <tr>
+        <td> {{ instrument_meta.id }} </td>
+        <td>{{ instrument_meta.facility }}</td>
+        <td>
+            <form action="{% url 'instrument' instrument_id=instrument_meta.id %}">
+            <button type="submit"/>More</button>
+            </form>
+        </td>
+        </tr>
+    </tbody>
+
+    {% endfor %}
+
+    </table>
+
+</main>
+
+{% include "landing/footer.html" %}

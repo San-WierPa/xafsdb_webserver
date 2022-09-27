@@ -1,0 +1,53 @@
+{% load static %}
+
+<html>
+
+<header>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    {% block title %}
+        <title>xafsDB - Home</title>
+    {% endblock %}
+    
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+</header>
+
+<body>
+
+    {% include "landing/navbar.html" %}
+
+    <!-- main -->
+    <main class="page">
+      <!-- header -->
+      <header class="hero">
+        <div class="hero-container">
+          <div class="hero-text">
+            <h1>xafsDB</h1>
+            <h4>Research database</h4>
+          </div>
+        </div>
+      </header>
+      <!-- end of header -->
+
+      {% block home_buttons %}
+      <div class="button-center">
+        <button class="button button4"><a href="{% url 'dataset_list' %}">Browse all datasets</a></button>
+      </div>
+
+      {% endblock %}
+
+    </main>
+
+
+    <!-- {% include "landing/content_section.html" } -->
+
+    {% include "landing/footer.html" %}
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% load static %}
+
+<div class="navbar">
+    <div class="navbar-container">
+        <div class="logo-container">
+            <a href="http://127.0.0.1:8001">
+                <h1 class="logo">xafsdb</h1>
+            </a>
+        </div>
+
+        <div class="menu-container">
+            <ul class="menu-list">
+                <li class="menu-list-item active"><a href="{% url 'home' %}">Home</a></li>
+                <a href="{% url 'dataset_list' %}" class="menu-list-item active"> DataSets </a>
+                <a href="{% url 'contact' %}"  class="menu-list-item active"> Contact </a>
+
+            </ul>
+        </div>
+
+        <!-- searchbar -->
+        <div class="search-container">
+            <form action="{% url 'pg_search' %}">
+                <input
+                type="search"
+                class="searchTerm" 
+                id="form-busca"
+                name="term"
+                value="{{ request.GET.term }}"
+                placeholder="Try to find a title..."
+                autocomplete="off">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
+        <!-- end of searchbar {% csrf_token %}-->
+
+    </div>
+</div>
