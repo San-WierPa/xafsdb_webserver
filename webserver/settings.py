@@ -25,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-6l_w9r-y4p!y3y$pon1wify3#awc)^g@j1pkjhcaa)ymcy2$w@"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # while giving remote access to the localhost via "pagekite.py 8001 xafsdb.pagekite.me"
 # uncomment following and change "test/" in urls.py to "" and "" to "test/":
 # ALLOWED_HOSTS = ["xafsdb.pagekite.me"]
-ALLOWED_HOSTS = ['xafsdb-test-deploy.herokuapp.com/']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
