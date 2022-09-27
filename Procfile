@@ -1,1 +1,1 @@
-web: uvicorn webserver.asgi:application --workers 4
+web: gunicorn webserver.wsgi
