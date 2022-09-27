@@ -1,1 +1,1 @@
-web: gunicorn webserver.wsgi --log-file - 
+web: uvicorn webserver.asgi:application --workers 4
