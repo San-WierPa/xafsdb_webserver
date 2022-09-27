@@ -6,3 +6,4 @@ psycopg2==2.9.3
 python-decouple==3.6
 whitenoise==6.2.0
 uvicorn>=0.17.6
+-e git+https://git.uni-wuppertal.de/paripsa/xafs-db.git@7254c46b3a6606f16950a0fc0bcb146463f03026#egg=xafsdbpy&subdirectory=xafsdbpy
