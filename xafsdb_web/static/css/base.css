@@ -27,7 +27,7 @@
     --green-dark: #0f5132;
 
     /* fonts  */
-    --max-width: 1120px;
+    --max-width: 1500px;
 
     /* vars */
     --backgroundColor: var(--grey-50);
@@ -307,6 +307,13 @@ tr:hover {
 
 .limit-title-length {
     max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.limit-id-length {
+    max-width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

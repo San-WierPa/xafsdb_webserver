@@ -1,4 +1,5 @@
 import xafsdbpy
+import scicat_py
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import Paginator
@@ -6,45 +7,41 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 
-from xafsdb.webserver.webserver.settings import EMAIL_HOST_USER
+from xafsdb.webserver.webserver.settings import (EMAIL_HOST_USER, URL_REST_API, CONTEXT)
 
-from .utils import *
+from .utils import (get_all_datasets, term_checker, get_access)
+from ._auth_constants import CONFIGURATION
 
-URL_REST_API = "http://127.0.0.1:8000"
-
-CONTEXT = {
-    "url": "http://127.0.0.1:8001",
-}
-
-configuration = xafsdbpy.Configuration(host="http://localhost:8000")
+URL_REST_API = URL_REST_API
 
 
 async def dataset_list(request):
-    # Enter a context with an instance of the API client
-    async with xafsdbpy.ApiClient(configuration) as api_client:
-        # Create an instance of the API class
-        api_instance = xafsdbpy.DatasetApi(api_client)
-        dataset_meta_list = await api_instance.api_v1_dataset_list_get()
-    # result = await xafsdbpy.DatasetApi.api_v1_dataset_list_get()
+    with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
+        access_token = get_access()
+        api_client.configuration.access_token=access_token
+
+        api_instance_dataset = scicat_py.DatasetsApi(api_client)
+        filter = None
+        dataset_meta_list = api_instance_dataset.datasets_controller_find_all(filter=filter)
     return render(request, "landing/dataset_list.html", {"dataset_meta_list": dataset_meta_list})
 
+async def dataset_details(request, dataset_id: str):
+    with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
+        access_token = get_access()
+        api_client.configuration.access_token=access_token
 
-async def dataset_details(request, dataset_id: int):
-    async with xafsdbpy.ApiClient(configuration) as api_client:
-        api_instance = xafsdbpy.DatasetApi(api_client)
-        api_items = xafsdbpy.ItemApi(api_client=api_client)
-        dataset_meta = await api_instance.api_v1_dataset_get_get(dataset_id)
-        item_list = await api_items.api_v1_item_list_get(dataset_id)
+        api_instance_dataset = scicat_py.DatasetsApi(api_client)
+        #api_items = xafsdbpy.ItemApi(api_client=api_client)
+        dataset_meta = api_instance_dataset.datasets_controller_find_by_id(dataset_id)
+        #item_list = api_items.api_v1_item_list_get(dataset_id)
     return render(
         request,
         "landing/base.html",
         {
             "dataset_meta": dataset_meta,
-            "item_list": item_list,
+            #"item_list": item_list,
         },
     )
-
-
 
 
 class SearchView(TemplateView):

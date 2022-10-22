@@ -32,6 +32,13 @@ DEBUG = True
 # ALLOWED_HOSTS = ["xafsdb.pagekite.me"]
 ALLOWED_HOSTS = ['*']
 
+URL_REST_API = "http://127.0.0.1:8000"
+
+CONTEXT = {
+    "url": "http://127.0.0.1:8001",
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [

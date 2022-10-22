@@ -4,28 +4,37 @@
     <div class="menu_column_spacer">
     </div>content_column-->
     <div class="content-container">
-        <h2> {{ dataset_meta.title }} </h2>
+        <h2> {{ dataset_meta.datasetName }} </h2>
         <center><img src="http://127.0.0.1:8000/api/v1/file/download?file_id={{ dataset_meta.preview_id }}"
             alt="Preview" height="400" width="600" style="object-fit:contain; border: 5px solid #555;"> </center>
         <div>
             <table id="datatablesSimple">
-                <caption class="table-title">Dataset Meta</caption>
+                <caption class="table-title">GeneralInfo</caption>
                 <thead>
                     <tr>
                         <th>id</th>
                         <th>Title</th>
                         <th>Instrument ID</th>
                         <th>Bibliography ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> {{ dataset_meta.id }} </td>
+                        <td style="max-width: 200px;">{{ dataset_meta.datasetName }}</td>
+                        <td>{{ dataset_meta.instrumentId }}</td>
+                        <td>{{ dataset_meta.bibliography_id }}</td>
+                    </tr>
+                </tbody>
+
+                <thead>
+                    <tr>
                         <th>History ID</th>
                         <th>General ID</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td> {{ dataset_meta.id }} </td>
-                        <td style="max-width: 200px;">{{ dataset_meta.title }}</td>
-                        <td>{{ dataset_meta.instrument_id }}</td>
-                        <td>{{ dataset_meta.bibliography_id }}</td>
                         <td>{{ dataset_meta.history_id }}</td>
                         <td>{{ dataset_meta.general_id }}</td>
                         <table>

@@ -30,12 +30,12 @@
         {% for dataset_meta in dataset_meta_list %}
         <tbody>
             <tr>
-                <td> {{ dataset_meta.id }} </td>
+                <td class="limit-id-length"> {{ dataset_meta.id }} </td>
                 <td class="table-title limit-title-length">
-                    {{ dataset_meta.title }}
+                    {{ dataset_meta.datasetName }}
                     <table>
                         <tr>
-                            <td class="limit-abstract-length"> Abstract: {{ dataset_meta.abstract }} </td>
+                            <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
                             <td><img src="http://127.0.0.1:8000/api/v1/file/download?file_id={{ dataset_meta.preview_id }}"
                                 alt="Preview" style="border: 5px solid #555;" height="100" width="150">
                         </td>
