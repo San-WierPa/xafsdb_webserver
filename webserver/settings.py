@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 
-import dj_database_url
-import django_heroku
+#import django_heroku
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,12 +30,12 @@ DEBUG = True
 # while giving remote access to the localhost via "pagekite.py 8001 xafsdb.pagekite.me"
 # uncomment following and change "test/" in urls.py to "" and "" to "test/":
 # ALLOWED_HOSTS = ["xafsdb.pagekite.me"]
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 URL_REST_API = "http://127.0.0.1:8000"
 
 CONTEXT = {
-    "url": "http://127.0.0.1:8001",
+    "url": "http://127.0.0.1:8000",
 }
 
 
@@ -154,4 +154,4 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-django_heroku.settings(locals())
+#django_heroku.settings(locals())
