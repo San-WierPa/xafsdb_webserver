@@ -1,5 +1,5 @@
-import xafsdbpy
 import scicat_py
+#import xafsdbpy
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import Paginator
@@ -7,10 +7,10 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 
-from xafsdb.webserver.webserver.settings import (EMAIL_HOST_USER, URL_REST_API, CONTEXT)
+from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
 
-from .utils import (get_all_datasets, term_checker, get_access)
 from ._auth_constants import CONFIGURATION
+from .utils import get_access, get_all_datasets, term_checker
 
 URL_REST_API = URL_REST_API
 
@@ -18,28 +18,33 @@ URL_REST_API = URL_REST_API
 async def dataset_list(request):
     with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
         access_token = get_access()
-        api_client.configuration.access_token=access_token
+        api_client.configuration.access_token = access_token
 
         api_instance_dataset = scicat_py.DatasetsApi(api_client)
         filter = None
-        dataset_meta_list = api_instance_dataset.datasets_controller_find_all(filter=filter)
-    return render(request, "landing/dataset_list.html", {"dataset_meta_list": dataset_meta_list})
+        dataset_meta_list = api_instance_dataset.datasets_controller_find_all(
+            filter=filter
+        )
+    return render(
+        request, "landing/dataset_list.html", {"dataset_meta_list": dataset_meta_list}
+    )
+
 
 async def dataset_details(request, dataset_id: str):
     with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
         access_token = get_access()
-        api_client.configuration.access_token=access_token
+        api_client.configuration.access_token = access_token
 
         api_instance_dataset = scicat_py.DatasetsApi(api_client)
-        #api_items = xafsdbpy.ItemApi(api_client=api_client)
+        # api_items = xafsdbpy.ItemApi(api_client=api_client)
         dataset_meta = api_instance_dataset.datasets_controller_find_by_id(dataset_id)
-        #item_list = api_items.api_v1_item_list_get(dataset_id)
+        # item_list = api_items.api_v1_item_list_get(dataset_id)
     return render(
         request,
         "landing/base.html",
         {
             "dataset_meta": dataset_meta,
-            #"item_list": item_list,
+            # "item_list": item_list,
         },
     )
 
@@ -66,7 +71,6 @@ class SearchView(TemplateView):
         return context
 
 
-
 def page_not_found(request, exception):
     return render(request, "landing/404.html", status=404)
 
@@ -78,7 +82,9 @@ def home(request):
 class ContactForm(forms.Form):
     first_name = forms.CharField(required=False, max_length=50, label="First name")
     last_name = forms.CharField(required=True, max_length=50, label="Last name")
-    email_address = forms.EmailField(required=True, max_length=150, label="Email address")
+    email_address = forms.EmailField(
+        required=True, max_length=150, label="Email address"
+    )
     message = forms.CharField(
         widget=forms.Textarea, required=True, max_length=2000, label="Your message"
     )
