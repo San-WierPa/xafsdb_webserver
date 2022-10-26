@@ -14,7 +14,7 @@ services:
     volumes:
       - "/srv/mongodb:/bitnami/mongodb"     # check that is mount exists on local filesystem
 
-  scicat_backend:
+  scicat:
     image: ghcr.io/scicatproject/backend-next:latest
     depends_on:
       - mongodb
@@ -41,12 +41,12 @@ services:
   xafsdb:
     image: registry.hzdr.de/daphne4nfdi/xafsdb:latest
     depends_on:
-      - backend
+      - scicat
     labels:
-      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
-      - "traefik.http.routers.frontend.entrypoints=web"
-  #    volumes:
-
+      - "traefik.http.routers.xafsdb.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.xafsdb.entrypoints=web"
+    volumes:
+      - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
      
       
   #~ search-api:
