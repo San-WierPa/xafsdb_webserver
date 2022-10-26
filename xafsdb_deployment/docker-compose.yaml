@@ -27,16 +27,27 @@ services:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api`, `/auth`, `/explorer`)"
       - "traefik.http.routers.backend.entrypoints=web"
       
-  scicat_frontend:
-    image: ghcr.io/scicatproject/frontend:latest
+  #scicat_frontend:
+  #  image: ghcr.io/scicatproject/frontend:latest
+  #  depends_on:
+  #    - scicat_backend
+  #  labels:
+  #    - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+  #    - "traefik.http.routers.frontend.entrypoints=web"
+  #  volumes:
+  #    - ./config/frontend/config.json:/usr/share/nginx/html/assets/config.json 
+  #    - ./config/frontend/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png
+  
+  xafsdb:
+    image: registry.hzdr.de/daphne4nfdi/xafsdb:latest
     depends_on:
-      - scicat_backend
+      - backend
     labels:
       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend.entrypoints=web"
-    volumes:
-      - ./config/frontend/config.json:/usr/share/nginx/html/assets/config.json 
-      - ./config/frontend/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png
+  #    volumes:
+
+     
       
   #~ search-api:
     #~ image: dacat/panosc-search-api:latest
