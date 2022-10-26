@@ -1,0 +1,72 @@
+services:
+
+  reverse-proxy:
+    image: traefik:2.5
+    command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
+    ports:
+      - "80:80"
+    #  - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+  mongodb:
+    image: bitnami/mongodb:4.2
+    volumes:
+      - "/srv/mongodb:/bitnami/mongodb"     # check that is mount exists on local filesystem
+
+  scicat_backend:
+    image: ghcr.io/scicatproject/backend-next:latest
+    depends_on:
+      - mongodb
+    volumes:
+      - ./config/backend/config.env:/home/node/app/.env
+     # - ./config/backend/config.local.js:/home/node/app/server/config.local.js
+      - ./config/backend/functionalAccounts.json:/home/node/app/functionalAccounts.json
+
+    labels:
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api`, `/auth`, `/explorer`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      
+  scicat_frontend:
+    image: ghcr.io/scicatproject/frontend:latest
+    depends_on:
+      - backend
+    labels:
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+    volumes:
+      - ./config/frontend/config.json:/usr/share/nginx/html/assets/config.json 
+      - ./config/frontend/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png
+      
+  #~ search-api:
+    #~ image: dacat/panosc-search-api:latest
+    #~ depends_on: 
+      #~ - backend
+    #~ labels:
+      #~ - "traefik.http.routers.panosc-search-api.rule=PathPrefix(`/panosc-api`, `/panosc-explorer`)"
+      #~ - "traefik.http.routers.panosc-search-api.entrypoints=web"
+    #~ environment:
+      #~ BASE_URL: "http://backend:3000/api/v3"
+      #~ FACILITY: "SAMPLE-SITE"
+
+  mongo-express:
+    image: mongo-express
+    environment:
+        - ME_CONFIG_MONGODB_SERVER=mongodb
+        - ME_CONFIG_MONGODB_PORT=27017
+        - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+        - "ME_CONFIG_BASICAUTH_USERNAME="
+        - "ME_CONFIG_BASICAUTH_PASSWORD="
+        - "ME_CONFIG_SITE_BASEURL=/mongodb/"
+    depends_on:
+        - mongodb
+        - frontend
+    labels:
+       - traefik.http.routers.mongo-express.rule=PathPrefix(`/mongodb`)
+       - traefik.http.services.mongo-express.loadbalancer.server.port=8081
+       - "traefik.http.routers.mongo-express.middlewares=auth"
+       - "traefik.http.middlewares.auth.basicauth.users=admin:$$2a$$12$$vyTh8.zQ85OygVq1q4cX4u50QJXfW1tSJn/dr2zuQFzAW6F31VUtq"
+         # the default user pre-perpeared here uses the admin login of scicatlive
+         # use bcrypt e.g. https://bcrypt-generator.com/
+
+
