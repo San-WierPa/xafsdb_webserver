@@ -30,7 +30,7 @@ services:
   scicat_frontend:
     image: ghcr.io/scicatproject/frontend:latest
     depends_on:
-      - backend
+      - scicat_backend
     labels:
       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend.entrypoints=web"
@@ -60,7 +60,7 @@ services:
         - "ME_CONFIG_SITE_BASEURL=/mongodb/"
     depends_on:
         - mongodb
-        - frontend
+#        - frontend
     labels:
        - traefik.http.routers.mongo-express.rule=PathPrefix(`/mongodb`)
        - traefik.http.services.mongo-express.loadbalancer.server.port=8081
