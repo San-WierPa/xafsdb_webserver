@@ -1,43 +1,75 @@
+
+
+     <script src=
+     "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+         </script>
+    <script type="text/javascript">
+        function showHideRow(row) {
+            $("#" + row).toggle();
+        }
+    </script>
+
+    <style>
+        #table_detail {
+            border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid var(--lavender);
+    font-family: "Sen", sans-serif;
+        }
+  
+        #table_detail .hidden_row {
+            display: none;
+        }
+
+
+        .arrow {
+            border: 1px solid var(--xafs-green);
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+          }
+        .down {
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+          }
+    </style>
+
+
 <div class="container">
     <!--<div class="menu_column">content_section content_hight content-
     </div>
     <div class="menu_column_spacer">
     </div>content_column-->
     <div class="content-container">
-        <h2> {{ dataset_meta.datasetName }} </h2>
+        <h2> {{ dataset_meta.title }} </h2>
         <center><img src="http://127.0.0.1:8000/api/v1/file/download?file_id={{ dataset_meta.preview_id }}"
             alt="Preview" height="400" width="600" style="object-fit:contain; border: 5px solid #555;"> </center>
         <div>
-            <table id="datatablesSimple">
-                <caption class="table-title">GeneralInfo</caption>
+            <table id="table_detail" >
+                <caption onclick="showHideRow('hidden_row1');"  class="table-title">Dataset Meta
+                    <button><i class="arrow down"></i> </button>
+                </caption>
+                
                 <thead>
-                    <tr>
+                    <tr id="hidden_row1" onclick="showHideRow('hidden_row2');" class="hidden_row">
                         <th>id</th>
                         <th>Title</th>
                         <th>Instrument ID</th>
                         <th>Bibliography ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td> {{ dataset_meta.id }} </td>
-                        <td style="max-width: 200px;">{{ dataset_meta.datasetName }}</td>
-                        <td>{{ dataset_meta.instrumentId }}</td>
-                        <td>{{ dataset_meta.bibliography_id }}</td>
-                    </tr>
-                </tbody>
-
-                <thead>
-                    <tr>
                         <th>History ID</th>
                         <th>General ID</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr id="hidden_row2" class="hidden_row">
+                        <td> {{ dataset_meta.id }} </td>
+                        <td style="max-width: 200px;">{{ dataset_meta.title }}</td>
+                        <td>{{ dataset_meta.instrument_id }}</td>
+                        <td>{{ dataset_meta.bibliography_id }}</td>
                         <td>{{ dataset_meta.history_id }}</td>
                         <td>{{ dataset_meta.general_id }}</td>
-                        <table>
+                        <table id="table_detail" >
                             <tr>
                                 <td> Abstract: {{ dataset_meta.abstract }}</td>
                             </tr>
@@ -45,8 +77,10 @@
                     </tr>
                 </tbody>
             </table>
-            <table id="datatablesSimple">
-                <caption class="table-title">Instrument</caption>
+            <table id="table_detail">
+                <caption onclick="showHideRow('hidden_row4');" class="table-title">Instrument
+                    <button><i class="arrow down"></i> </button>
+                </caption>
                 <!--<thead>
                     <tr>
                         <th>id</th>
@@ -89,28 +123,30 @@
                     
                 </tbody>-->
                 <thead>
-                    <tr>
+                    <tr id="hidden_row4" onclick="showHideRow('hidden_row5');" class="hidden_row">
                         <th>id</th>
                         <th>Facility</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr id="hidden_row5" class="hidden_row">
                         <td> {{ instrument_meta.id }} </td>
                         <td>{{ instrument_meta.facility }}</td>
                     </tr>
                 </tbody>
             </table>
-            <table id="datatablesSimple">
-                <caption class="table-title">Bibliography</caption>
+            <table id="table_detail">
+                <caption onclick="showHideRow('hidden_row6');" class="table-title">Bibliography
+                    <button><i class="arrow down"></i> </button>
+                </caption>
                 <thead>
-                    <tr>
+                    <tr id="hidden_row6" onclick="showHideRow('hidden_row7');" class="hidden_row">
                         <th>id</th>
                         <th>Author Name</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr id="hidden_row7" class="hidden_row">
                         <td> {{ bibliography_meta.id }} </td>
                         <td>{{ bibliography_meta.author_name }}</td>
                     </tr>
