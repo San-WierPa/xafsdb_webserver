@@ -1,4 +1,4 @@
-FROM python:3.10.7
+FROM python:3.10-slim-bullseye
 
 RUN pip install --upgrade pip
 
