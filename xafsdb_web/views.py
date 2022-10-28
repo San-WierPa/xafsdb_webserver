@@ -1,5 +1,4 @@
 import scicat_py
-#import xafsdbpy
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import Paginator
@@ -11,8 +10,6 @@ from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
 
 from ._auth_constants import CONFIGURATION
 from .utils import get_access, get_all_datasets, term_checker
-
-URL_REST_API = URL_REST_API
 
 
 async def dataset_list(request):
@@ -55,7 +52,7 @@ class SearchView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         term = self.request.GET.get("term")
-        paginated_by = 1
+        paginated_by = 10
 
         allDatasets = get_all_datasets()
         datasetList = []
