@@ -42,8 +42,8 @@
     <div class="menu_column_spacer">
     </div>content_column-->
     <div class="content-container">
-        <h2> {{ dataset_meta.title }} </h2>
-        <center><img src="http://127.0.0.1:8000/api/v1/file/download?file_id={{ dataset_meta.preview_id }}"
+        <h2> {{ dataset_meta.datasetName }} </h2>
+        <center><img src="data:image/png;base64,{{ plot_div }}"
             alt="Preview" height="400" width="600" style="object-fit:contain; border: 5px solid #555;"> </center>
         <div>
             <table id="table_detail" >

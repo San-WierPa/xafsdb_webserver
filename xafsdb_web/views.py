@@ -1,4 +1,3 @@
-import scicat_py
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import Paginator
@@ -6,10 +5,11 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 
+import scicat_py
 from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
 
 from ._auth_constants import CONFIGURATION
-from .utils import get_access, get_all_datasets, term_checker
+from .utils import display_thumbnail, get_access, get_all_datasets, term_checker
 
 
 async def dataset_list(request):
@@ -35,12 +35,24 @@ async def dataset_details(request, dataset_id: str):
         api_instance_dataset = scicat_py.DatasetsApi(api_client)
         # api_items = xafsdbpy.ItemApi(api_client=api_client)
         dataset_meta = api_instance_dataset.datasets_controller_find_by_id(dataset_id)
+
+        attachment_response = (
+            api_instance_dataset.datasets_controller_find_all_attachments(dataset_id)
+        )
+
+        try:
+            plot_div = display_thumbnail(attachment_response[0].thumbnail)
+        except IndexError:
+            # return HttpResponse("Oops. Looks like you have note uploaded a picture yet.")
+            return redirect("home")
+
         # item_list = api_items.api_v1_item_list_get(dataset_id)
     return render(
         request,
         "landing/base.html",
         {
             "dataset_meta": dataset_meta,
+            "plot_div": plot_div,
             # "item_list": item_list,
         },
     )

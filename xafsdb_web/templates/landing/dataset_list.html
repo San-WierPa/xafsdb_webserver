@@ -36,7 +36,7 @@
                     <table>
                         <tr>
                             <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
-                            <td><img src="http://127.0.0.1:8000/api/v1/file/download?file_id={{ dataset_meta.preview_id }}"
+                            <td><img src="data:image/png;base64,{{ plot_div }}"
                                 alt="Preview" style="border: 5px solid #555;" height="100" width="150">
                         </td>
                         </tr>
