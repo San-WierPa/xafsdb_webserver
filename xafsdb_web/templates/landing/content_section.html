@@ -43,7 +43,7 @@
     </div>content_column-->
     <div class="content-container">
         <h2> {{ dataset_meta.datasetName }} </h2>
-        <center><img src="data:image/png;base64,{{ plot_div }}"
+        <center><img src="{{ plot_div }}" 
             alt="Preview" height="400" width="600" style="object-fit:contain; border: 5px solid #555;"> </center>
         <div>
             <table id="table_detail" >

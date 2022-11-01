@@ -22,8 +22,34 @@ async def dataset_list(request):
         dataset_meta_list = api_instance_dataset.datasets_controller_find_all(
             filter=filter
         )
+        all_ids = [i['id'] for i in dataset_meta_list]
+        #print(all_ids)
+        all_attachment_responses = []
+        for dataset_id in all_ids:
+            all_attachment_responses_list = api_instance_dataset.datasets_controller_find_all_attachments(dataset_id)
+            all_attachment_responses.append(all_attachment_responses_list)
+        
+        #plot_div_list = []
+        for i in range(len(all_attachment_responses)):
+            #print(all_attachment_responses[i][0].id)
+            plot_div = (all_attachment_responses[i][0].thumbnail) #display_thumbnail
+            #print(plot_div_list)
+            #plot_div_list.append(plot_div)
+            #print(plot_div)
+
+        #for i in range(len(all_attachment_responses)):
+        #    try:
+        #        #print(all_attachment_responses[i][0].thumbnail)
+        #        plot_div = display_thumbnail(all_attachment_responses[i])
+        #    except IndexError:
+        #        plot_div = 'null'
+
     return render(
-        request, "landing/dataset_list.html", {"dataset_meta_list": dataset_meta_list}
+        request, "landing/dataset_list.html", 
+        {
+            "dataset_meta_list": dataset_meta_list,
+            "plot_div": plot_div,
+        }
     )
 
 
@@ -35,13 +61,15 @@ async def dataset_details(request, dataset_id: str):
         api_instance_dataset = scicat_py.DatasetsApi(api_client)
         # api_items = xafsdbpy.ItemApi(api_client=api_client)
         dataset_meta = api_instance_dataset.datasets_controller_find_by_id(dataset_id)
+        print(dataset_id, dataset_meta["id"])
 
         attachment_response = (
             api_instance_dataset.datasets_controller_find_all_attachments(dataset_id)
         )
 
         try:
-            plot_div = display_thumbnail(attachment_response[0].thumbnail)
+            plot_div = (attachment_response[0].thumbnail) #display_thumbnail
+            #print(attachment_response[0].thumbnail)
         except IndexError:
             # return HttpResponse("Oops. Looks like you have note uploaded a picture yet.")
             return redirect("home")

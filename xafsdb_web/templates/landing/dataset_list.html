@@ -36,9 +36,11 @@
                     <table>
                         <tr>
                             <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
-                            <td><img src="data:image/png;base64,{{ plot_div }}"
+
+                            <td><img src="{{ plot_div }}"
                                 alt="Preview" style="border: 5px solid #555;" height="100" width="150">
-                        </td>
+                            </td>
+    
                         </tr>
                     </table>
                 </td>
