@@ -4,9 +4,8 @@ from io import BytesIO
 from typing import Any
 
 import matplotlib.pyplot as plt
-from PIL import Image
-
 import scicat_py
+from PIL import Image
 
 from ._auth_constants import CONFIGURATION, PASSWORD, USERNAME
 
