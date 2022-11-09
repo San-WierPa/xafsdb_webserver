@@ -1,5 +1,13 @@
 from django.contrib import admin
+from xafsdb_web.models import Files
 
-# from xafsdbpy.api.dataset_api import DatasetApi
 
-# await DatasetApi.api_v1_dataset_create_post()
+class FilesAdmin(admin.ModelAdmin):
+    list_display = (
+        "dataset_id",
+        "file_name",
+        "file",
+    )
+
+
+admin.site.register(Files, FilesAdmin)

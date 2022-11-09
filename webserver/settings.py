@@ -12,7 +12,12 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 
-# import django_heroku
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6l_w9r-y4p!y3y$pon1wify3#awc)^g@j1pkjhcaa)ymcy2$w@"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,21 +54,23 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "xafsdb_web",
+    "rest_framework",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    # "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     # "django.middleware.common.CommonMiddleware",
     # "django.middleware.csrf.CsrfViewMiddleware",
-    # "django.contrib.auth.middleware.AuthenticationMiddleware",
-    # "django.contrib.messages.middleware.MessageMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
     # "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ROOT_URLCONF = "webserver.urls"
 
@@ -146,12 +153,38 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_ROOT = os.path.join("landing", "static")
-STATIC_URL = "/static/"
+# STATIC_ROOT = os.path.join("landing", "static")
+# STATIC_URL = "/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# django_heroku.settings(locals())
+# S3 Object Storage
+# AWS_ACCESS_KEY_ID = config(AMAZON_ACCESS_KEY_ID)  # For Digital Ocean Set region same as to your Digital Ocean Access Key
+# AWS_SECRET_ACCESS_KEY = config(AMAZON_SECRET_ACCESS_KEY)  # For Digital Ocean Set region same as to your Digital Ocean Secret Key
+# AWS_STORAGE_BUCKET_NAME = config(AMAZON_STORAGE_BUCKET_NAME)
+# AWS_REGION = config("AWS_REGION", "eu-central-1")  # For Digital Ocean Set region same as to your Digital Ocean region (such as nyc3 or sfo2)
+# AWS_S3_REGION_NAME = config("AWS_REGION", "eu-central-1")
+AWS_ACCESS_KEY_ID = env(
+    "AMAZON_ACCESS_KEY_ID"
+)  # For Digital Ocean Set region same as to your Digital Ocean Access Key
+AWS_SECRET_ACCESS_KEY = env(
+    "AMAZON_SECRET_ACCESS_KEY"
+)  # For Digital Ocean Set region same as to your Digital Ocean Secret Key
+AWS_STORAGE_BUCKET_NAME = env("AMAZON_STORAGE_BUCKET_NAME")
+# AWS_REGION = ("eu-central-1")  # For Digital Ocean Set region same as to your Digital Ocean region (such as nyc3 or sfo2)
+AWS_S3_REGION_NAME = "eu-central-1"
+AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+# For Digital Ocean Uncomment below line and comment above line.
+# AWS_S3_ENDPOINT_URL = f"https://${AWS_S3_REGION_NAME}.digitaloceanspaces.com"
+AWS_S3_USE_SSL = True
+AWS_QUERYSTRING_AUTH = True
+AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+AWS_LOCATION = "static"
+MEDIA_LOCATION = "media"
+DEFAULT_FILE_STORAGE = "webserver.backends.PublicMediaStorage"
+STATICFILES_STORAGE = "webserver.backends.StaticsMediaStorage"
+STATIC_URL = f"https://{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/"
+MEDIA_URL = f"https://{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/"
