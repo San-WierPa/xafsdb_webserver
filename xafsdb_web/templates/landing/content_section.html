@@ -7,6 +7,26 @@
         function showHideRow(row) {
             $("#" + row).toggle();
         }
+
+                function toggleTable() {
+            var lTable = document.getElementById("loginTable");
+            lTable.style.display = (lTable.style.display == "table") ? "none" : "table";
+        }
+
+            function toggle(thisname) {
+             tr=document.getElementsByTagName('tr')
+             for (i=0;i<tr.length;i++){
+              if (tr[i].getAttribute(thisname)){
+               if ( tr[i].style.display=='none' ){
+                 tr[i].style.display = '';
+               }
+               else {
+                tr[i].style.display = 'none';
+               }
+              }
+             }
+            }
+
     </script>
 
     <style>
@@ -20,6 +40,26 @@
   
         #table_detail .hidden_row {
             display: none;
+        }
+
+        .subh {
+            padding-left: 30px;
+        }
+
+        .subsubh {
+            padding-left: 60px;
+        }
+
+        .subsubsubh {
+            padding-left: 90px;
+        }
+
+        .subd {
+            padding-left: 200px;
+        }
+
+        .subsubd {
+            padding-left: 230px;
         }
 
 
@@ -47,7 +87,7 @@
             alt="Preview" height="400" width="600" style="object-fit:contain; border: 5px solid #555;"> </center>
         <div>
             <table id="table_detail" >
-                <caption onclick="showHideRow('hidden_row1');"  class="table-title">Dataset Meta
+                <caption onclick="showHideRow('hidden_row1');"  class="table-title">General Info
                     <button><i class="arrow down"></i> </button>
                 </caption>
                 
@@ -55,7 +95,7 @@
                     <tr id="hidden_row1" onclick="showHideRow('hidden_row2');" class="hidden_row">
                         <th>id</th>
                         <th>Title</th>
-                        <th>Instrument ID</th>
+                        <th>Owner group</th>
                         <th>Bibliography ID</th>
                         <th>History ID</th>
                         <th>General ID</th>
@@ -64,14 +104,14 @@
                 <tbody>
                     <tr id="hidden_row2" class="hidden_row">
                         <td> {{ dataset_meta.id }} </td>
-                        <td style="max-width: 200px;">{{ dataset_meta.title }}</td>
-                        <td>{{ dataset_meta.instrument_id }}</td>
+                        <td style="max-width: 200px;">{{ dataset_meta.datasetName }}</td>
+                        <td>{{ dataset_meta.ownerGroup }}</td>
                         <td>{{ dataset_meta.bibliography_id }}</td>
                         <td>{{ dataset_meta.history_id }}</td>
                         <td>{{ dataset_meta.general_id }}</td>
                         <table id="table_detail" >
                             <tr>
-                                <td> Abstract: {{ dataset_meta.abstract }}</td>
+                                <td> Abstract: {{ dataset_meta.scientificMetadata.Abstract }}</td>
                             </tr>
                         </table>
                     </tr>
@@ -143,12 +183,16 @@
                     <tr id="hidden_row6" onclick="showHideRow('hidden_row7');" class="hidden_row">
                         <th>id</th>
                         <th>Author Name</th>
+                        <th>Author Institut</th>
+                        <th>Contact Mail</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr id="hidden_row7" class="hidden_row">
                         <td> {{ bibliography_meta.id }} </td>
-                        <td>{{ bibliography_meta.author_name }}</td>
+                        <td>{{ dataset_meta.owner }}</td>
+                        <td>{{ dataset_meta.ownerGroup }}</td>
+                        <td>{{ dataset_meta.contactEmail }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -168,18 +212,120 @@
                 </tbody>
             </table>
             <table id="datatablesSimple">
-                <caption class="table-title">General</caption>
+                <caption onClick="toggle('nameit');" class="table-title">Scientific metadata
+                    <button><i class="arrow down"></i> </button>
+                </caption>
                 <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>Collection code</th>
-                    </tr>
+                    <tr><th>SYNCHROTRON:</th></tr>
+                    <tr nameit=fred> <th class="subh">ABSORPTION:</th></tr>
+                    <tr nameit=fred id="hidethis"> <th class="subsubh">RAW:</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td> {{ general_meta.id }} </td>
-                        <td>{{ general_meta.collection_code }}</td>
+                    <tr nameit=fred> 
+                        <th class="subsubsubh">EDGE STEP:</th>
                     </tr>
+                    <tr nameit=fred> <td class="subd">MIN: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.edge_step.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.edge_step.max }} 
+                        | UNIT: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.edge_step.unit }} 
+                        | DOCUMENTATION: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.edge_step.documentation }}
+                    </td></tr>
+                    <tr nameit=fred> 
+                        <th class="subsubsubh"> K MAX:</th>
+                    </tr>
+                    <tr nameit=fred> <td class="subd">MIN: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.k_max.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.k_max.max }} 
+                        | UNIT: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.k_max.unit }} 
+                        | DOCUMENTATION: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.k_max.documentation }}
+                    </td></tr>
+                    <tr nameit=fred> 
+                        <th class="subsubsubh">NOISE:</th>
+                    </tr>
+                    <tr nameit=fred> <td class="subd">MIN: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.noise.min }}
+                        | MAX: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.noise.max }} 
+                        | UNIT: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.noise.unit }} 
+                        | DOCUMENTATION: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.noise.documentation }}
+                    </td></tr>
+                    <tr nameit=fred> 
+                        <th class="subsubsubh">ENERGY RESOLUTION:</th>
+                    </tr>
+                    <tr nameit=fred> <td class="subd">MIN: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.energy_resolution.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.energy_resolution.max }} 
+                        | UNIT: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.energy_resolution.unit }} 
+                        | DOCUMENTATION: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.RAW.energy_resolution.documentation }}
+                    </td></tr>
+                </tbody>
+                <thead>
+                    <tr nameit=fred> <th class="subsubh">PROCESSED:</th></tr>
+                </thead>
+                <tbody>
+                    <tr nameit=fred> 
+                        <th class="subsubsubh">AMPLITUDE REDUCTION FACTOR:</th>
+                    </tr>
+                    <tr nameit=fred> <td class="subd">Z-RANGES:</td></tr>
+                    <tr nameit=fred> <td class="subsubd">[10,40[ : MIN: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.PROCESSED.amplitude_reduction_factor.Z_ranges.tentoforty.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.PROCESSED.amplitude_reduction_factor.Z_ranges.tentoforty.max }} 
+                    </td></tr>
+                    <tr nameit=fred> <td class="subsubd">[40,80[ : MIN: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.PROCESSED.amplitude_reduction_factor.Z_ranges.fortytoeighty.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.PROCESSED.amplitude_reduction_factor.Z_ranges.fortytoeighty.max }} 
+                    </td></tr>
+                    <tr nameit=fred> <td class="subd">UNIT: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.PROCESSED.amplitude_reduction_factor.unit }}</td></tr>
+                    <tr nameit=fred> <td class="subd">DOCUMENTATION: {{ dataset_meta.scientificMetadata.SYNCHROTRON.ABSORPTION.PROCESSED.amplitude_reduction_factor.documentation }}</td></tr>
+                </tbody>
+                <thead>
+                    <tr><th>LABORATORY:</th></tr>
+                    <tr> <th class="subh">ABSORPTION:</th></tr>
+                    <tr> <th class="subsubh">RAW:</th></tr>
+                </thead>
+                <tbody>
+                    <tr> 
+                        <th class="subsubsubh">EDGE STEP:</th>
+                    </tr>
+                    <tr> <td class="subd">MIN: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.edge_step.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.edge_step.max }} 
+                        | UNIT: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.edge_step.unit }} 
+                        | DOCUMENTATION: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.edge_step.documentation }}
+                    </td></tr>
+                    <tr> 
+                        <th class="subsubsubh"> K MAX:</th>
+                    </tr>
+                    <tr> <td class="subd">MIN: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.k_max.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.k_max.max }} 
+                        | UNIT: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.k_max.unit }} 
+                        | DOCUMENTATION: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.k_max.documentation }}
+                    </td></tr>
+                    <tr> 
+                        <th class="subsubsubh">NOISE:</th>
+                    </tr>
+                    <tr> <td class="subd">MIN: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.noise.min }}
+                        | MAX: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.noise.max }} 
+                        | UNIT: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.noise.unit }} 
+                        | DOCUMENTATION: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.noise.documentation }}
+                    </td></tr>
+                    <tr> 
+                        <th class="subsubsubh">ENERGY RESOLUTION:</th>
+                    </tr>
+                    <tr> <td class="subd">MIN: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.energy_resolution.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.energy_resolution.max }} 
+                        | UNIT: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.energy_resolution.unit }} 
+                        | DOCUMENTATION: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.RAW.energy_resolution.documentation }}
+                    </td></tr>
+                </tbody>
+                <thead>
+                    <tr> <th class="subsubh">PROCESSED:</th></tr>
+                </thead>
+                <tbody>
+                    <tr> 
+                        <th class="subsubsubh">AMPLITUDE REDUCTION FACTOR:</th>
+                    </tr>
+                    <tr> <td class="subd">Z-RANGES:</td></tr>
+                    <tr> <td class="subsubd">[10,40[ : MIN: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.PROCESSED.amplitude_reduction_factor.Z_ranges.tentoforty.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.PROCESSED.amplitude_reduction_factor.Z_ranges.tentoforty.max }} 
+                    </td></tr>
+                    <tr> <td class="subsubd">[40,80[ : MIN: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.PROCESSED.amplitude_reduction_factor.Z_ranges.fortytoeighty.min }} 
+                        | MAX: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.PROCESSED.amplitude_reduction_factor.Z_ranges.fortytoeighty.max }} 
+                    </td></tr>
+                    <tr> <td class="subd">UNIT: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.PROCESSED.amplitude_reduction_factor.unit }}</td></tr>
+                    <tr> <td class="subd">DOCUMENTATION: {{ dataset_meta.scientificMetadata.LABORATORY.ABSORPTION.PROCESSED.amplitude_reduction_factor.documentation }}</td></tr>
                 </tbody>
             </table>
 
@@ -204,7 +350,7 @@
             <td> {{ item.file_type }} </td>
             <td> {{ item.comment }} </td>
             <td> {{ item.size }} </td>
-            <td> <a href="http://127.0.0.1:8000/api/v1/file/download?file_id={{ item.file_id }}">{{ item.file_id }}</a> </td>
+            <td> <a href="{{ item.file.url }}">Download</a> </td>
         </tr>
 
     </tbody>
