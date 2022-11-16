@@ -3,3 +3,9 @@ Django==4.0.6
 python-decouple==3.6
 whitenoise==6.2.0
 uvicorn>=0.17.6
+django-environ>=0.9.0
+djangorestframework>=3.14.0
+drf-yasg>=1.21.4
+django-storages>=1.13.1
+boto3>=1.26.4
+botocore>=1.29.4

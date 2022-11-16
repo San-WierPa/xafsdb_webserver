@@ -13,8 +13,8 @@ from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
 from ._auth_constants import CONFIGURATION
 from .models import Files
 from .serializers import FileCreateUpdateSerializer, FileSerializer
-from .utils import (display_thumbnail, get_access, get_all_datasets,
-                    term_checker)
+from .utils import (get_access, get_all_datasets,
+                    term_checker) #display_thumbnail
 
 
 async def dataset_list(request):

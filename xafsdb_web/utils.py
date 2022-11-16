@@ -1,11 +1,11 @@
-import base64
-import urllib
-from io import BytesIO
+#import base64
+#import urllib
+#from io import BytesIO
 from typing import Any
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import scicat_py
-from PIL import Image
+#from PIL import Image
 
 from ._auth_constants import CONFIGURATION, PASSWORD, USERNAME
 
@@ -36,13 +36,13 @@ def get_access() -> str:
         return access_token
 
 
-def display_thumbnail(thumbnail: str) -> str:
-    """Returns string"""
-    img_thumbnail = Image.open(BytesIO(base64.b64decode(thumbnail)))
-    plt.imshow(img_thumbnail)
-    fig = plt.gcf()
-    buf = BytesIO()
-    fig.savefig(buf, format="png")
-    buf.seek(0)
-    string = base64.b64encode(buf.read())
-    return urllib.parse.quote(string)
+#def display_thumbnail(thumbnail: str) -> str:
+#    """Returns string"""
+#    img_thumbnail = Image.open(BytesIO(base64.b64decode(thumbnail)))
+#    plt.imshow(img_thumbnail)
+#    fig = plt.gcf()
+#    buf = BytesIO()
+#    fig.savefig(buf, format="png")
+#    buf.seek(0)
+#    string = base64.b64encode(buf.read())
+#    return urllib.parse.quote(string)
