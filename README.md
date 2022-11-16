@@ -98,3 +98,27 @@ docker-compose up
 ```shell
 docker-compose up -d
 ```
+
+**TODO**
++ Add/connect `db.sqlite3` to `docker-compose.yml`
++ Add/connect `.env` to `docker-compose.yml` or `Dockerfile` (?)
+
+### Dataset upload to google-vm
+
++ xafsdb_deployment/config/xafsdb/_auth_constants.py
+```python
+import scicat_py
+
+USERNAME = "admin"
+# OLD -> PASSWORD = "2jf70TPNZsS"
+PASSWORD = "2jf70TPNZsS_xafs"
+
+CONFIGURATION = scicat_py.Configuration(
+    # OLD -> host="http://35.205.92.39",
+    host="http://35.233.84.253",
+)
+```
+
+**TODO** 
++ `USERNAME` and `PASSWORD` must be used in .env (as it is already on branch `master`) and overwritten by `docker-compose.yml`
++ `CONFIGURATION`: host can be public (also overwritten by `docker-compose.yml`) and `_auth_constants.py` can be deleted
