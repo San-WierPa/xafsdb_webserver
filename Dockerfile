@@ -8,7 +8,9 @@ COPY webserver /app/webserver
 
 COPY xafsdb_web /app/xafsdb_web
 
-COPY manage.py /app/
+COPY manage.py /app
+
+COPY db.sqlite3 /app
 
 COPY scicat_py /app
 RUN pip install -e ./app
