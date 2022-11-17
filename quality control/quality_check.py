@@ -296,37 +296,37 @@ class check_quality(object):
 ## end examples/feffit/doc_feffit1.lar
         
 ### define data input
-cq_json = os.path.abspath(os.curdir)+'/Criteria.json'
-
-folder = os.path.abspath(os.curdir)+'/example data/LABORATORY/'
-files = glob(folder+'*.dat')[0:1]
-# files = [os.path.abspath(os.curdir)+'/example data/LABORATORY/Ni-K-Ni-foil-2mu.dat']
-# files = ['/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/example data/LABORATORY/Co 5 mu.dat']
-# files = ['/home/frank/Doktorarbeit/DAPHNE/Measurement Data/Laboratory/foils/Ni-K-Ni-foil-2mu.dat']
-
-### TODO Spektrum beschneiden  >>> Sache des Users
-### 10 % 
-### EXAFS 600 eV
-cq = check_quality(quality_criteria_json=cq_json)
-for file in files:
-    print('file:\t', file)
-    if 'win' in platform:
-        name = file.split('\\')[-1].split('.')[0]
-    else:
-        name = file.split('/')[-1].split('.')[0]
-    qc_list = []
-    meas_data = np.loadtxt(file, skiprows = 1)
-    cq.load_data(meas_data, 
-                 source = 'LABORATORY',
-                 name = name)
-    data = cq.preprocess_data()
-    fig_data = cq.plot_background()
-    fig_k = cq.plot_k()
-    fig_R = cq.plot_R()
-    qc_list.append(cq.check_edge_step())
-    qc_list.append(cq.check_energy_resolution())
-    qc_list.append(cq.check_k())
-    # if all(qc_list):
-    #     cq.create_data_json()
-    cq.first_shell_fit()
+#cq_json = os.path.abspath(os.curdir)+'/Criteria.json'
+#
+#folder = os.path.abspath(os.curdir)+'/example data/LABORATORY/'
+#files = glob(folder+'*.dat')[0:1]
+## files = [os.path.abspath(os.curdir)+'/example data/LABORATORY/Ni-K-Ni-foil-2mu.dat']
+## files = ['/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/example data/LABORATORY/Co 5 mu.dat']
+## files = ['/home/frank/Doktorarbeit/DAPHNE/Measurement Data/Laboratory/foils/Ni-K-Ni-foil-2mu.dat']
+#
+#### TODO Spektrum beschneiden  >>> Sache des Users
+#### 10 % 
+#### EXAFS 600 eV
+#cq = check_quality(quality_criteria_json=cq_json)
+#for file in files:
+#    print('file:\t', file)
+#    if 'win' in platform:
+#        name = file.split('\\')[-1].split('.')[0]
+#    else:
+#        name = file.split('/')[-1].split('.')[0]
+#    qc_list = []
+#    meas_data = np.loadtxt(file, skiprows = 1)
+#    cq.load_data(meas_data, 
+#                 source = 'LABORATORY',
+#                 name = name)
+#    data = cq.preprocess_data()
+#    fig_data = cq.plot_background()
+#    fig_k = cq.plot_k()
+#    fig_R = cq.plot_R()
+#    qc_list.append(cq.check_edge_step())
+#    qc_list.append(cq.check_energy_resolution())
+#    qc_list.append(cq.check_k())
+#    # if all(qc_list):
+#    #     cq.create_data_json()
+#    cq.first_shell_fit()
         
