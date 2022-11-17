@@ -16,6 +16,7 @@ from larch import Group, fitting
 # from larch.io import read_ascii
 import numpy as np
 import matplotlib.pyplot as plt
+plt.ioff()
 plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['xtick.top'] = True
 plt.rcParams['ytick.direction'] = 'in'
@@ -25,6 +26,8 @@ from datetime import datetime
 import os
 from sys import platform
 print('running on ', platform)
+import io
+import base64
 ##############################################################################
 ### define ###
 ##############################################################################
@@ -119,7 +122,7 @@ class check_quality(object):
         return self.data
     
     
-    def plot_background(self, ):
+    def plot_background(self, show = False, save_path = None):
         ### define figures
         self.fig_data = plt.figure('{}'.format(self.name), 
                                    figsize = (10,6.25))
@@ -143,12 +146,13 @@ class check_quality(object):
         self.ax_data.legend(loc = 1)
         self.ax_data.set_xticks(major_ticks)
         self.ax_data.set_xticks(minor_ticks, minor = True)
-        # self.ax_data.grid('both')
-        # self.ax_data.grid(which = 'minor', alpha = 0.5)
+        if show: self.fig_data.show()
+        if save_path:
+            self.fig_data.savefig(save_path)
         return self.fig_data
     
     
-    def plot_k(self, ):
+    def plot_k(self, show = False, save_path = None):
         self.fig_k = plt.figure('k {}'.format(self.name),
                                 figsize = (10,6.25))
         self.fig_k.clf()
@@ -164,10 +168,13 @@ class check_quality(object):
         self.ax_k.set_xticks(np.arange(self.data.k[0], self.data.k[-1], 0.5), minor = True)
         self.ax_k.set_ylim(-np.max(self.data.chi)-0.01, 
                            np.max(self.data.chi)+0.01)
+        if show: self.fig_k.show()
+        if save_path:
+            self.fig_k.savefig(save_path)
         return self.fig_k
     
         
-    def plot_R(self, ):
+    def plot_R(self, show = False, save_path = None):
         self.fig_R = plt.figure('r {}'.format(self.name),
                                 figsize = (10,6.25))
         self.fig_R.clf()
@@ -182,6 +189,9 @@ class check_quality(object):
         self.ax_R.set_xticks(np.arange(self.data.r[0], self.data.r[-1], 2))
         self.ax_R.set_xticks(np.arange(self.data.r[0], self.data.r[-1], 0.5), minor = True)
         self.ax_R.set_ylim(0)
+        if show: self.fig_R.show()
+        if save_path:
+            self.fig_R.savefig(save_path)
         return self.fig_R
         
         
@@ -191,7 +201,7 @@ class check_quality(object):
         """
         if self.quality_criteria_sample['edge step']['min'] <= self.data.edge_step <= self.quality_criteria_sample['edge step']['max']:
             print('\u2705 edge step of good quality: ', self.data.edge_step)
-            return True
+            return True, self.data.edge_step
         else:
             print("\u274e edge step doesn't meet standards: ", self.data.edge_step)
             return False
@@ -205,7 +215,7 @@ class check_quality(object):
         self.data.energy_resolution = self.data.energy[1]-self.data.energy[0]
         if self.quality_criteria_sample['energy resolution']['min'] <= self.data.energy_resolution <= self.quality_criteria_sample['energy resolution']['max']:
             print('\u2705 energy resolution of good quality: ', self.data.energy_resolution, 'eV')
-            return True
+            return True, self.data.energy_resolution
         else:
             print("\u274e energy resolution doesn't meet standards: ", self.data.energy_resolution, 'eV')
             return False
@@ -217,7 +227,7 @@ class check_quality(object):
         """
         if self.quality_criteria_sample['k max']['min'] <= self.data.k[-1] <= self.quality_criteria_sample['k max']['max']:
             print(u'\u2705 k max of good quality: ', self.data.k[-1], u"\u212b⁻¹")
-            return True
+            return True, self.data.k[-1]
         else:
             print(u"\u274e k max doesn't meet standards: ", self.data.k[-1], u"\u212b⁻¹")
             return False
@@ -292,41 +302,56 @@ class check_quality(object):
         #     fout.close()
         # except:
         #     print('could not write doc_feffit1.out')
-
+        
+        
+    def encode_base64_figure(self, figure):
+        stringIObytes = io.BytesIO()
+        figure.savefig(stringIObytes, format='jpg')
+        stringIObytes.seek(0)
+        base64_jpgData = base64.b64encode(stringIObytes.read())
+        return base64_jpgData
 ## end examples/feffit/doc_feffit1.lar
-        
-### define data input
-#cq_json = os.path.abspath(os.curdir)+'/Criteria.json'
-#
-#folder = os.path.abspath(os.curdir)+'/example data/LABORATORY/'
-#files = glob(folder+'*.dat')[0:1]
-## files = [os.path.abspath(os.curdir)+'/example data/LABORATORY/Ni-K-Ni-foil-2mu.dat']
-## files = ['/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/example data/LABORATORY/Co 5 mu.dat']
-## files = ['/home/frank/Doktorarbeit/DAPHNE/Measurement Data/Laboratory/foils/Ni-K-Ni-foil-2mu.dat']
-#
-#### TODO Spektrum beschneiden  >>> Sache des Users
-#### 10 % 
-#### EXAFS 600 eV
-#cq = check_quality(quality_criteria_json=cq_json)
-#for file in files:
-#    print('file:\t', file)
-#    if 'win' in platform:
-#        name = file.split('\\')[-1].split('.')[0]
-#    else:
-#        name = file.split('/')[-1].split('.')[0]
-#    qc_list = []
-#    meas_data = np.loadtxt(file, skiprows = 1)
-#    cq.load_data(meas_data, 
-#                 source = 'LABORATORY',
-#                 name = name)
-#    data = cq.preprocess_data()
-#    fig_data = cq.plot_background()
-#    fig_k = cq.plot_k()
-#    fig_R = cq.plot_R()
-#    qc_list.append(cq.check_edge_step())
-#    qc_list.append(cq.check_energy_resolution())
-#    qc_list.append(cq.check_k())
-#    # if all(qc_list):
-#    #     cq.create_data_json()
-#    cq.first_shell_fit()
-        
+test_cq = True
+if test_cq:        
+    ### define data input
+    cq_json = os.path.abspath(os.curdir)+'/Criteria.json'
+    
+    folder = os.path.abspath(os.curdir)+'/example data/LABORATORY/'
+    files = glob(folder+'*.dat')[0:1]
+    # files = [os.path.abspath(os.curdir)+'/example data/LABORATORY/Ni-K-Ni-foil-2mu.dat']
+    # files = ['/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/example data/LABORATORY/Co 5 mu.dat']
+    # files = ['/home/frank/Doktorarbeit/DAPHNE/Measurement Data/Laboratory/foils/Ni-K-Ni-foil-2mu.dat']
+    
+    ### TODO Spektrum beschneiden  >>> Sache des Users
+    ### 10 % 
+    ### EXAFS 600 eV
+    cq = check_quality(quality_criteria_json=cq_json)
+    for file in files:
+        print('file:\t', file)
+        if 'win' in platform:
+            name = file.split('\\')[-1].split('.')[0]
+        else:
+            name = file.split('/')[-1].split('.')[0]
+        qc_list = []
+        meas_data = np.loadtxt(file, skiprows = 1)
+        cq.load_data(meas_data, 
+                    source = 'LABORATORY',
+                    name = name)
+        data = cq.preprocess_data()
+        fig_data = cq.plot_background(show = False,
+                                      save_path = None)
+        fig_data_base64 = cq.encode_base64_figure(fig_data)
+        fig_k = cq.plot_k(show = False,
+                          save_path = None)
+        fig_k_base64 = cq.encode_base64_figure(fig_k)
+        fig_R = cq.plot_R(show = False,
+                          save_path = None)
+        fig_R_base64 = cq.encode_base64_figure(fig_R)
+        qc_list.append(cq.check_edge_step())
+        qc_list.append(cq.check_energy_resolution())
+        qc_list.append(cq.check_k())
+        if all(qc_list):
+            print('quality approved')
+        #     cq.create_data_json()
+        cq.first_shell_fit()
+            
