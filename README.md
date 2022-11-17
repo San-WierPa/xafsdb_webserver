@@ -129,3 +129,15 @@ CONFIGURATION = scicat_py.Configuration(
 ```
 http://35.233.84.253/mongodb/db/scicat/Dataset
 ```
+
+## PIPELINE
+
+**TODO**
++ Following steps ought to be automated (see also gitlab CI):
+
++ Change in vscode (locally):
+  - `commit` AND `push` to gitlab
+  - `docker build` AND `docker push registry.hzdr.de/daphne4nfdi/xafsdb`
++ Google-vm -> in `paripsa_uni_wuppertal_de@wupp-1:/sebastian/xafsdb/`:
+  - `git pull` AND `docker pull registry.hzdr.de/daphne4nfdi/xafsdb`
+  - Then `cd xafsdb_deployment` AND `docker-compose up -d`
