@@ -55,7 +55,7 @@
                     "documentation": "height of the detected edge step"
                 },
                 "k max": {
-                    "min": 15.0,
+                    "min": 10.0,
                     "max": 20.0,
                     "unit": "1/angstrom",
                     "documentation": "considered angular wavenumber"

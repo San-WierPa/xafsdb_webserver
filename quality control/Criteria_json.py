@@ -39,7 +39,7 @@ criteria = {'SYNCHROTRON': {'ABSORPTION' : {'RAW' : {'edge step' : {'min' : 0.5,
                                                                                         'max' : 2.,
                                                                                         'unit' : '1',
                                                                                         'documentation' : 'height of the detected edge step'},
-                                                             'k max' : {'min' : 15.,
+                                                             'k max' : {'min' : 10.,
                                                                         'max' : 20.,
                                                                         'unit' : '1/angstrom',
                                                                         'documentation' : 'considered angular wavenumber'},
@@ -61,7 +61,8 @@ criteria = {'SYNCHROTRON': {'ABSORPTION' : {'RAW' : {'edge step' : {'min' : 0.5,
                                            },
                            },
             }
-criteria_path = os.environ['HOME']+'/Doktorarbeit/DAPHNE/Quality Criteria/Criteria.json'
+
+criteria_path = os.path.abspath(os.path.curdir)+'/Criteria.json'
 with open(criteria_path, 'w') as tofile:
     json.dump(criteria, fp = tofile, indent = 4,
               ensure_ascii = False)

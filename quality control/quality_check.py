@@ -12,12 +12,19 @@ from glob import glob
 # from time import time
 from larch import xafs
 import json
-from larch import Group
+from larch import Group, fitting
 # from larch.io import read_ascii
 import numpy as np
 import matplotlib.pyplot as plt
+plt.rcParams['xtick.direction'] = 'in'
+plt.rcParams['xtick.top'] = True
+plt.rcParams['ytick.direction'] = 'in'
+plt.rcParams['ytick.right'] = True
+plt.rcParams['axes.grid.which'] = 'both'
 from datetime import datetime
 import os
+from sys import platform
+print('running on ', platform)
 ##############################################################################
 ### define ###
 ##############################################################################
@@ -33,22 +40,11 @@ class check_quality(object):
         with open(quality_criteria_json, 'r') as f:
             self.quality_criteria = json.load(f)
             
-        self.fig_data = plt.figure('processed data')
-        self.fig_data.clf()
-        self.ax_data = self.fig_data.subplots()
-        self.ax_data.grid()
-        
-        self.fig_k = plt.figure('k')
-        self.fig_k.clf()
-        self.ax_k = self.fig_k.subplots()
-        self.ax_k.grid()
-        
-    
-    
     def load_data(self,  measurement_data, 
                   source = 'SYNCHROTRON', 
                   mode = 'ABSORPTION',
-                  processed = 'RAW', 
+                  processed = 'RAW',
+                  name = None,
                   plot = True):
         """
         This function loads the data to process it further.
@@ -71,11 +67,15 @@ class check_quality(object):
         None.
 
         """
+        if name is None:
+            self.name = 'sample'
+        else:
+            self.name = name
         self.plot = plot
         self.source = source
         self.mode = mode
         self.processed = processed
-        self.quality_criteria = self.quality_criteria[self.source][self.mode][self.processed]
+        self.quality_criteria_sample = self.quality_criteria[self.source][self.mode][self.processed]
         self.data = Group()
         self.data.energy = measurement_data[:,0]
         self.data.mu = measurement_data[:,1]
@@ -97,7 +97,7 @@ class check_quality(object):
                       e0 = self.data.e0,
                       group = self.data,
                       pre1 = -140,
-                       pre2 = -10,
+                      pre2 = -30,
                       make_flat = True,
                       nvict = 3
                       )  
@@ -119,30 +119,77 @@ class check_quality(object):
         return self.data
     
     
-    def plot_results(self, ):
-        ### plot data
-        self.ax_data.plot(self.data.energy, self.data.mu, label = 'measurement edge scan')
-        self.ax_data.plot(self.data.e0, self.data.mu[np.where(self.data.e0 == self.data.energy)], 'r*', label = 'edge position')
-        self.ax_data.plot(self.data.energy, self.data.pre_edge, label = 'pre edge estimation')
-        self.ax_data.plot(self.data.energy, self.data.post_edge, label = 'post edge estimation')
-        self.ax_data.plot(self.data.energy, self.data.flat, label = 'flattened normed edge scan')
-        self.ax_data.set_xlabel('energy | keV')
-        self.ax_data.set_ylabel('absorption | a.u.')
-        self.ax_data.set_xlim(self.data.energy[0], self.data.energy[-1])
-        self.ax_data.legend()
+    def plot_background(self, ):
+        ### define figures
+        self.fig_data = plt.figure('{}'.format(self.name), 
+                                   figsize = (10,6.25))
+        self.fig_data.clf()
+        self.ax_data = self.fig_data.subplots()
+        self.ax_data.grid()
+        major_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 100)
+        minor_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 20)
         
+        ### plot data
+        self.ax_data.plot(self.data.energy, self.data.mu, label = 'Measuement {}'.format(self.name))
+        self.ax_data.plot(self.data.e0, self.data.mu[np.where(self.data.e0 == self.data.energy)], 'r*', label = 'edge position')
+        self.ax_data.plot(self.data.energy, self.data.pre_edge, label = 'Pre Edge Background')
+        self.ax_data.plot(self.data.energy, self.data.post_edge, label = 'Post Edge Background')
+        self.ax_data.plot(self.data.energy, self.data.flat, label = 'Flattened Normalized {}'.format(self.name))
+        self.ax_data.set_title(self.name)
+        self.ax_data.set_xlabel(r' Energy | eV')
+        self.ax_data.set_ylabel(r'$\mu (E)$ | a.u.')
+        self.ax_data.set_xlim(self.data.energy[0], self.data.energy[-1])
+        self.ax_data.set_ylim(0.)
+        self.ax_data.legend(loc = 1)
+        self.ax_data.set_xticks(major_ticks)
+        self.ax_data.set_xticks(minor_ticks, minor = True)
+        # self.ax_data.grid('both')
+        # self.ax_data.grid(which = 'minor', alpha = 0.5)
+        return self.fig_data
+    
+    
+    def plot_k(self, ):
+        self.fig_k = plt.figure('k {}'.format(self.name),
+                                figsize = (10,6.25))
+        self.fig_k.clf()
+        self.ax_k = self.fig_k.subplots()
+        self.ax_k.grid()
         self.ax_k.plot(self.data.k, self.data.chi, label = 'k')
-        self.ax_k.set_xlabel(u'\u03c7(k) | \u212b⁻¹')
-        self.ax_k.set_ylabel('k\u03c7(k) | a.u.')
+        self.ax_k.set_title(self.name)
+        self.ax_k.set_xlabel(u'k | $\AA^{-1}$')
+        self.ax_k.set_ylabel(r'$k\chi(k)$ | a.u.')
         self.ax_k.set_xlim(self.data.k[0], self.data.k[-1])
-        self.ax_k.legend()
+        self.ax_k.legend(loc = 1)
+        self.ax_k.set_xticks(np.arange(self.data.k[0], self.data.k[-1], 2))
+        self.ax_k.set_xticks(np.arange(self.data.k[0], self.data.k[-1], 0.5), minor = True)
+        self.ax_k.set_ylim(-np.max(self.data.chi)-0.01, 
+                           np.max(self.data.chi)+0.01)
+        return self.fig_k
+    
+        
+    def plot_R(self, ):
+        self.fig_R = plt.figure('r {}'.format(self.name),
+                                figsize = (10,6.25))
+        self.fig_R.clf()
+        self.ax_R = self.fig_R.subplots()
+        self.ax_R.grid()
+        self.ax_R.plot(self.data.r, np.abs(self.data.chir), label = 'R')
+        self.ax_R.set_title(self.name)
+        self.ax_R.set_xlabel(r'$R(\AA)$')
+        self.ax_R.set_ylabel(r'$\left| \chi(R) \right| \AA^{-3}$')
+        self.ax_R.set_xlim(self.data.r[0], self.data.r[-1])
+        self.ax_R.legend(loc = 1)
+        self.ax_R.set_xticks(np.arange(self.data.r[0], self.data.r[-1], 2))
+        self.ax_R.set_xticks(np.arange(self.data.r[0], self.data.r[-1], 0.5), minor = True)
+        self.ax_R.set_ylim(0)
+        return self.fig_R
         
         
     def check_edge_step(self,):
         """
         this function automatically evaluates the edge step of the given data
         """
-        if self.quality_criteria['edge step']['min'] <= self.data.edge_step <= self.quality_criteria['edge step']['max']:
+        if self.quality_criteria_sample['edge step']['min'] <= self.data.edge_step <= self.quality_criteria_sample['edge step']['max']:
             print('\u2705 edge step of good quality: ', self.data.edge_step)
             return True
         else:
@@ -156,7 +203,7 @@ class check_quality(object):
         given data
         """
         self.data.energy_resolution = self.data.energy[1]-self.data.energy[0]
-        if self.quality_criteria['energy resolution']['min'] <= self.data.energy_resolution <= self.quality_criteria['energy resolution']['max']:
+        if self.quality_criteria_sample['energy resolution']['min'] <= self.data.energy_resolution <= self.quality_criteria_sample['energy resolution']['max']:
             print('\u2705 energy resolution of good quality: ', self.data.energy_resolution, 'eV')
             return True
         else:
@@ -168,7 +215,7 @@ class check_quality(object):
         """
         this function automatically evaluates the k range of the given data
         """
-        if self.quality_criteria['k max']['min'] <= self.data.k[-1] <= self.quality_criteria['k max']['max']:
+        if self.quality_criteria_sample['k max']['min'] <= self.data.k[-1] <= self.quality_criteria_sample['k max']['max']:
             print(u'\u2705 k max of good quality: ', self.data.k[-1], u"\u212b⁻¹")
             return True
         else:
@@ -182,7 +229,7 @@ class check_quality(object):
         the given data
         """
         
-        if self.quality_criteria['noise']['min'] <= self.data.k[-1] <= self.quality_criteria['noise']['max']:
+        if self.quality_criteria_sample['noise']['min'] <= self.data.k[-1] <= self.quality_criteria_sample['noise']['max']:
             print(u'\u2705 k max of good quality: ', self.data.k[-1], u"\u212b⁻¹")
             return True
         else:
@@ -208,32 +255,78 @@ class check_quality(object):
                                      "mode": "ABSORPTION",
                                      "processed": "RAW",}
               }
-        with open(os.path.abspath(os.path.curdir)+'/example data/LABORATORY/evaluatiob.json', 'w') as tofile: ### !TODO path to be given to class
-            json.dump(data, tofile,
+        with open(os.path.abspath(os.curdir)+'/example data/LABORATORY/{}.json'.format(self.name),
+                  'w') as tofile:
+            json.dump(data, 
+                      tofile,
                       indent = 4,
                       ensure_ascii = False)
+            
+    def first_shell_fit(self,):
+        pars = fitting.param_group(amp = fitting.param(1.0, vary = True),
+                                   del_e0 = fitting.param(0.0, vary = True),
+                                   sig2 = fitting.param(0.0, vary = True),
+                                   del_r = fitting.guess(0.0, vary = True),
+                                   )
+        # path1 = xafs.feffpath('fit_path_test.dat',
+        #                       s02    = 'amp',
+        #                       e0     = 'del_e0',
+        #                       sigma2 = 'sig2',
+        #                       deltar = 'del_r')
+        
+        # trans = xafs.feffit_transform(kmin=3, 
+        #                               kmax=17,
+        #                               kw=2, 
+        #                               dk=4, 
+        #                               window='kaiser',
+        #                               rmin=1.4, 
+        #                               rmax=3.0)
+        # define dataset to include data, pathlist, transform
+        # dset = xafs.feffit_dataset(data=self.data, pathlist=[path1], transform=trans)
+        # perform fit!
+        # out = xafs.feffit(pars, dset)
+        # print(xafs.feffit_report(out))
+        # try:
+        #     fout = open('doc_feffit1.out', 'w')
+        #     fout.write("%s\n" % feffit_report(out))
+        #     fout.close()
+        # except:
+        #     print('could not write doc_feffit1.out')
+
+## end examples/feffit/doc_feffit1.lar
         
 ### define data input
-cq_json = os.path.abspath(os.path.curdir)+'/Criteria.json'
+cq_json = os.path.abspath(os.curdir)+'/Criteria.json'
 
-folder = os.path.abspath(os.path.curdir)+'/example data/LABORATORY/'
-files = glob(folder+'*.dat')
-files = [os.path.abspath(os.path.curdir)+'/example data/LABORATORY/Co 5 mu.dat']
+folder = os.path.abspath(os.curdir)+'/example data/LABORATORY/'
+files = glob(folder+'*.dat')[0:1]
+# files = [os.path.abspath(os.curdir)+'/example data/LABORATORY/Ni-K-Ni-foil-2mu.dat']
+# files = ['/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/example data/LABORATORY/Co 5 mu.dat']
+# files = ['/home/frank/Doktorarbeit/DAPHNE/Measurement Data/Laboratory/foils/Ni-K-Ni-foil-2mu.dat']
 
-### !TODO cut spectra
-### 10 % pre edge and 40% post edge for laboratory (EXAFS 600 eV)
-
+### TODO Spektrum beschneiden  >>> Sache des Users
+### 10 % 
+### EXAFS 600 eV
+cq = check_quality(quality_criteria_json=cq_json)
 for file in files:
+    print('file:\t', file)
+    if 'win' in platform:
+        name = file.split('\\')[-1].split('.')[0]
+    else:
+        name = file.split('/')[-1].split('.')[0]
     qc_list = []
     meas_data = np.loadtxt(file, skiprows = 1)
-    cq = check_quality(quality_criteria_json=cq_json)
-    cq.load_data(meas_data)
+    cq.load_data(meas_data, 
+                 source = 'LABORATORY',
+                 name = name)
     data = cq.preprocess_data()
-    cq.plot_results()
+    fig_data = cq.plot_background()
+    fig_k = cq.plot_k()
+    fig_R = cq.plot_R()
     qc_list.append(cq.check_edge_step())
     qc_list.append(cq.check_energy_resolution())
     qc_list.append(cq.check_k())
     # if all(qc_list):
     #     cq.create_data_json()
-    
+    cq.first_shell_fit()
         
