@@ -8,6 +8,7 @@
     --white-70: rgb(255, 255, 255, 0.7);
     --bluish-dark-extra: rgb(12, 17, 24);
     --black: #222;
+    --darker-black: #111111;
     --light-grey: #555;
     --modern-green: #04AA6D;
     --xafs-green: #4dbf00;
@@ -188,11 +189,70 @@ a {
     width: 200px;
 }
 
-/*
-===============
-Page
-===============
-*/
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+
+  padding: 16px;
+  margin-top: -140px;
+  color: black;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+/* Caption text */
+.text {
+  color: black;
+  font-size: 15px;
+  padding: 8px 12px;
+
+
+  width: 100%;
+  text-align: center;
+}
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #999999;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+.active,
+.dot:hover {
+  background-color: var(--darker-black);
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .prev,
+  .next,
+  .text {
+    font-size: 11px
+  }
+}
+
+/*=================================================================
+  Page
+==================================================================*/
 
 .page {
     width: 90vw;
@@ -205,11 +265,9 @@ Page
     min-height: calc(100vh - (6rem + 4rem));
 }
 
-/*
-===============
-Hero
-===============
-*/
+/*=================================================================
+  Hero
+==================================================================*/
 
 .hero {
     height: 40vh;
@@ -319,6 +377,50 @@ tr:hover {
     text-overflow: ellipsis;
 }
 
+#table_detail {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid var(--lavender);
+    font-family: "Sen", sans-serif;
+}
+
+#table_detail .hidden_row {
+    display: none;
+}
+
+.subh {
+    padding-left: 30px;
+}
+
+.subsubh {
+    padding-left: 60px;
+}
+
+.subsubsubh {
+    padding-left: 90px;
+}
+
+.subd {
+    padding-left: 200px;
+}
+
+.subsubd {
+    padding-left: 230px;
+}
+
+
+.arrow {
+    border: 1px solid var(--xafs-green);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+  }
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+
 
 /*=================================================================
   Navbar
@@ -377,7 +479,7 @@ tr:hover {
     margin-right: 30px;
 }
 
-.menu-list-item.active {
+.menu-list-item.active_nav {
     font-weight: bold;
 }
 
@@ -505,27 +607,6 @@ input {
     align-items: center;
     transition: 0.4s;
 }
-
-/*
-@media screen and (max-width: 600px) {
-    .search-container {
-        float: none;
-    }
-
-    input[type=text],
-    .search-container button {
-        float: none;
-        display: block;
-        text-align: left;
-        width: 100%;
-        margin: 0;
-        padding: 14px;
-    }
-
-    input[type=text] {
-        border: 1px solid #ccc;
-    }
-}*/
 
 /*=================================================================
   Footer
