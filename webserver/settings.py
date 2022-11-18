@@ -153,8 +153,8 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_ROOT = os.path.join("landing", "static")
-STATIC_URL = "/static/"
+#STATIC_ROOT = os.path.join("landing", "static")
+#STATIC_URL = "/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -185,6 +185,6 @@ AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 AWS_LOCATION = "static"
 MEDIA_LOCATION = "media"
 DEFAULT_FILE_STORAGE = "webserver.backends.PublicMediaStorage"
-#STATICFILES_STORAGE = "webserver.backends.StaticsMediaStorage"
-#STATIC_URL = f"https://{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/"
+STATICFILES_STORAGE = "webserver.backends.StaticsMediaStorage"
+STATIC_URL = f"https://{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/"
 MEDIA_URL = f"https://{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/"
