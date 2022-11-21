@@ -32,7 +32,7 @@ urlpatterns = [
     ),
     path("contact", views.contact, name="contact"),
     path("search/", SearchView.as_view(), name="pg_search"),
-    path("api/v1/", include(router.urls)),
+    path("file/", include(router.urls)),
     re_path(
         r"^api/swagger(?P<format>\.json|\.yaml)$",
         schema_view.without_ui(cache_timeout=0),
