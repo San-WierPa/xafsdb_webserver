@@ -15,6 +15,7 @@ import json
 from larch import Group, fitting
 # from larch.io import read_ascii
 import numpy as np
+from PIL import Image
 import matplotlib.pyplot as plt
 plt.ioff()
 plt.rcParams['xtick.direction'] = 'in'
@@ -25,7 +26,7 @@ plt.rcParams['axes.grid.which'] = 'both'
 from datetime import datetime
 import os
 from sys import platform
-print('running on ', platform)
+# print('running on ', platform)
 import io
 import base64
 ##############################################################################
@@ -305,13 +306,22 @@ class check_quality(object):
         
         
     def encode_base64_figure(self, figure):
-        stringIObytes = io.BytesIO()
-        figure.savefig(stringIObytes, format='jpg')
-        stringIObytes.seek(0)
-        base64_jpgData = base64.b64encode(stringIObytes.read())
-        return base64_jpgData
+        buffer = io.BytesIO()
+        figure.savefig(buffer, format = 'jpeg')
+        data = base64.b64encode(buffer.getbuffer()).decode('ascii')
+        return f"data:image/jpeg;base64,{data}"
+        
+    
+    def decode_base64_figure(self, base64_string):
+        image_base64 = base64_string.replace('data:image/jpeg;base64,','')
+        image_base64 = base64.b64decode(image_base64)
+        image_data = io.BytesIO(image_base64)
+        image = Image.open(image_data) 
+        return image
+    
+    
 ## end examples/feffit/doc_feffit1.lar
-test_cq = True
+test_cq = False
 if test_cq:        
     ### define data input
     cq_json = os.path.abspath(os.curdir)+'/Criteria.json'
@@ -354,4 +364,6 @@ if test_cq:
             print('quality approved')
         #     cq.create_data_json()
         cq.first_shell_fit()
-            
+        image_data = cq.decode_base64_figure(base64_string = fig_data_base64)
+        image_k = cq.decode_base64_figure(base64_string = fig_k_base64)
+        image_R = cq.decode_base64_figure(base64_string = fig_R_base64)
