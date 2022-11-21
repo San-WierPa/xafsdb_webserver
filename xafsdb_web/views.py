@@ -72,8 +72,10 @@ def dataset_details(request, dataset_id: str):
         )
 
         try:
-            plot_div = attachment_response[0].thumbnail  # display_thumbnail
+            data_fig = attachment_response[0].thumbnail  # display_thumbnail
             # print(attachment_response[0].thumbnail)
+            k_fig = attachment_response[1].thumbnail
+            R_fig = attachment_response[2].thumbnail
         except IndexError:
             # return HttpResponse("Oops. Looks like you have note uploaded a picture yet.")
             return redirect("home")
@@ -84,7 +86,9 @@ def dataset_details(request, dataset_id: str):
         "landing/base.html",
         {
             "dataset_meta": dataset_meta,
-            "plot_div": plot_div,
+            "data_fig": data_fig,
+            "k_fig": k_fig,
+            "R_fig": R_fig,
             "item_list": item_list,
         },
     )
