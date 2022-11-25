@@ -457,8 +457,8 @@ tr:hover {
 }
 
 .responsive_coll {
-    width: 75%;
-    max-width: 300px;
+    width: 50%;
+    max-width: 200px;
     min-width: 50px;
     height: auto;
     padding: 30px;
@@ -466,8 +466,8 @@ tr:hover {
 }
 
 .responsive_daph {
-    width: 50%;
-    max-width: 300px;
+    width: 30%;
+    max-width: 200px;
     min-width: 50px;
     height: auto;
     padding: 30px;
