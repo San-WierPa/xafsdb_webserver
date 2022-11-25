@@ -16,7 +16,8 @@ def get_all_datasets() -> list:
 def term_checker(dataset: dict, term: str, array_accumulator: list) -> list:
     if term.lower() in dataset["datasetName"]:
         array_accumulator.append(dataset)
-
+    elif term.upper() in dataset["datasetName"]:
+        array_accumulator.append(dataset)
 
 def get_access() -> str:
     """Returns cached access token"""
