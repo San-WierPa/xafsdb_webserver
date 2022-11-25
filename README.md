@@ -1,6 +1,6 @@
 ## Docker
 
-+ Check requirements (imports) and add them if necessary to 
++ Check requirements (imports) and add them if necessary to
   `requirements.txt`
 
 + Login to docker (atm via hzdr gitlab):
@@ -76,13 +76,13 @@ docker-compose ps
 ```
 + Out:
 ```shell
-$               Name                             Command               State                 Ports              
+$               Name                             Command               State                 Ports
 --------------------------------------------------------------------------------------------------------------
-xafsdb_deployment_mongo-express_1   tini -- /docker-entrypoint ...   Exit 1                                   
-xafsdb_deployment_mongodb_1         /opt/bitnami/scripts/mongo ...   Up       27017/tcp                       
+xafsdb_deployment_mongo-express_1   tini -- /docker-entrypoint ...   Exit 1
+xafsdb_deployment_mongodb_1         /opt/bitnami/scripts/mongo ...   Up       27017/tcp
 xafsdb_deployment_reverse-proxy_1   /entrypoint.sh --api.insec ...   Up       0.0.0.0:80->80/tcp,:::80->80/tcp
-xafsdb_deployment_scicat_1          docker-entrypoint.sh node  ...   Up       3000/tcp                        
-xafsdb_deployment_xafsdb_1          uvicorn --host 0.0.0.0 web ...   Up       8000/tcp 
+xafsdb_deployment_scicat_1          docker-entrypoint.sh node  ...   Up       3000/tcp
+xafsdb_deployment_xafsdb_1          uvicorn --host 0.0.0.0 web ...   Up       8000/tcp
 ```
 
 + Stop all docker-compose processes:
@@ -114,21 +114,38 @@ USERNAME = "admin"
 PASSWORD = "2jf70TPNZsS_xafs"
 
 CONFIGURATION = scicat_py.Configuration(
-    # OLD -> host="http://35.205.92.39",
     host="http://35.233.84.253",
 )
 ```
 
-**TODO** 
+**TODO**
 + `USERNAME` and `PASSWORD` must be used in .env (as it is already on branch `master`) and overwritten by `docker-compose.yml`
 + `CONFIGURATION`: host can be public (also overwritten by `docker-compose.yml`) and `_auth_constants.py` can be deleted
+
+## Databases
+
+### Sqlite3
+
++ Contains entries for object storage
+
++ Deleting datasets is easy:
+```shell
+python manage.py flush
+python manage.py makemigrations # optional?
+python manage.py migrate
+```
 
 ### MongoDB
 
 + Access mongodb-express (browser) via (use admin and password out of `_auth_constants.py`):
 ```
-http://35.233.84.253/mongodb/db/scicat/Dataset
+http://35.233.84.253/mongodb/db/scicat/
 ```
+
++ For deleting (flush) datasets, do not forget to delete ALL relational entries in the database (e.g. attachment with the same datasetId)
+**NOTE** Deleting atm only manually, since the db is persistent and the vm does not have a mongosh!
+
+
 
 ## PIPELINE
 

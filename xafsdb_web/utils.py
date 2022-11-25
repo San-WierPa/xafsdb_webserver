@@ -17,6 +17,7 @@ def term_checker(dataset: dict, term: str, array_accumulator: list) -> list:
     if term.lower() in dataset["datasetName"]:
         array_accumulator.append(dataset)
 
+
 def get_access() -> str:
     """Returns cached access token"""
     with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
