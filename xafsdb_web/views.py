@@ -1,7 +1,11 @@
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import (HttpResponse, HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponseNotFound,
+    HttpResponseServerError,
+)
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
@@ -128,12 +132,68 @@ class FileViewSets(ModelViewSet):
         return serializer
 
 
-def page_not_found(request, exception):
-    return render(request, "landing/404.html", status=404)
-
-
 def home(request):
     return render(request, "landing/home.html", CONTEXT)
+
+
+def page_not_found(request, exception):
+    return HttpResponseNotFound(
+        render(
+            request,
+            "landing/error.html",
+            CONTEXT
+            | {
+                "ERROR_CODE": "Error 404",
+                "ERROR_DESCR": "Page not found.",
+            },
+        )
+    )
+
+
+def server_error(request, exception):
+    return HttpResponseServerError(
+        render(
+            request,
+            "landing/error.html",
+            CONTEXT
+            | {
+                "ERROR_CODE": "Error 500",
+                "ERROR_DESCR": "Server error.",
+            },
+        )
+    )
+
+
+def bad_request(request, exception):
+    return HttpResponseBadRequest(
+        render(
+            request,
+            "landing/error.html",
+            CONTEXT
+            | {
+                "ERROR_CODE": "Error 400",
+                "ERROR_DESCR": "Bad request.",
+            },
+        )
+    )
+
+
+def permission_denied(request, exception):
+    return HttpResponseForbidden(
+        render(
+            request,
+            "landing/error.html",
+            CONTEXT
+            | {
+                "ERROR_CODE": "Error 403",
+                "ERROR_DESCR": "Permission denied.",
+            },
+        )
+    )
+
+
+def error(request, exception):
+    return render(request, "landing/error.html", CONTEXT)
 
 
 class ContactForm(forms.Form):
