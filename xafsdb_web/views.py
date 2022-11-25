@@ -150,7 +150,7 @@ def page_not_found(request, exception):
     )
 
 
-def server_error(request, exception):
+def server_error(request):
     return HttpResponseServerError(
         render(
             request,
