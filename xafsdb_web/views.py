@@ -1,4 +1,3 @@
-import scicat_py
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import Paginator
@@ -8,13 +7,13 @@ from django.views.generic.base import TemplateView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
+import scicat_py
 from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
 
 from ._auth_constants import CONFIGURATION
 from .models import Files
 from .serializers import FileCreateUpdateSerializer, FileSerializer
-from .utils import (get_access, get_all_datasets,
-                    term_checker) #display_thumbnail
+from .utils import get_access, get_all_datasets, term_checker
 
 
 async def dataset_list(request):
