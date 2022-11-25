@@ -456,6 +456,23 @@ tr:hover {
     flex: 6;
 }
 
+.responsive_coll {
+    width: 75%;
+    max-width: 300px;
+    min-width: 50px;
+    height: auto;
+    padding: 30px;
+    padding-bottom: 20px;
+}
+
+.responsive_daph {
+    width: 50%;
+    max-width: 300px;
+    min-width: 50px;
+    height: auto;
+    padding: 30px;
+}
+
 .btn {
     cursor: pointer;
     color: var(--white);
