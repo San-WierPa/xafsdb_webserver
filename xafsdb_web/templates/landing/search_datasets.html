@@ -12,7 +12,7 @@
     {% block title %}
         <title>xafsDB - Search results</title>
     {% endblock %}
-    
+
     <!-- favicon -->
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
 </header>
@@ -70,11 +70,11 @@
                     <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page=1">&laquo;</a>
                     <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ datasetList.previous_page_number }}">&lsaquo;</a>
                 {% endif %}
-            
+
                 <span class="current">
                     {{ datasetList.number }} of {{ datasetList.paginator.num_pages }}
                 </span>
-            
+
                 {% if datasetList.has_next %}
                     <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ datasetList.next_page_number }}">&rsaquo;</a>
                     <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ datasetList.paginator.num_pages }}">&raquo;</a>

@@ -37,8 +37,6 @@
                         <tr>
                             <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
 
-     
-    
                         </tr>
                     </table>
                 </td>
@@ -53,6 +51,28 @@
         {% endfor %}
 
     </table>
+
+    {% block pagination %}
+        {% if dataset_meta_list.paginator.count > 0 %}
+          <div class="pagination">
+            <span class="step-links">
+                {% if dataset_meta_list.has_previous %}
+                    <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page=1">&laquo;</a>
+                    <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ dataset_meta_list.previous_page_number }}">&lsaquo;</a>
+                {% endif %}
+
+                <span class="current">
+                    {{ dataset_meta_list.number }} of {{ dataset_meta_list.paginator.num_pages }}
+                </span>
+
+                {% if dataset_meta_list.has_next %}
+                    <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ dataset_meta_list.next_page_number }}">&rsaquo;</a>
+                    <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ dataset_meta_list.paginator.num_pages }}">&raquo;</a>
+                {% endif %}
+            </span>
+          </div>
+        {% endif %}
+    {% endblock %}
 
 </main>
 
