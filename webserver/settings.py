@@ -40,7 +40,7 @@ ALLOWED_HOSTS = ["*"]
 URL_REST_API = "http://127.0.0.1:8000"
 
 CONTEXT = {
-    "url": "http://127.0.0.1:8000",
+    "url": "http://127.0.0.1:8001",
 }
 
 
@@ -70,7 +70,7 @@ MIDDLEWARE = [
     # "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+#STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ROOT_URLCONF = "webserver.urls"
 
@@ -124,9 +124,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # gmail_send/settings.py
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "sebastian.wiercinski2011@gmail.com"
-EMAIL_HOST_PASSWORD = "dmob kewo icul xjxy"  # past the key or password app here
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "default from email"
