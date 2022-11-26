@@ -100,10 +100,10 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": env("DB_NAME", "xafsdb_pg"),
-        "USER": env("DB_USER", "postgres"),
+        "USER": config("DB_USER", "postgres"),
         "PASSWORD": env("DB_PASSWORD", "root"),
         "HOST": env("DB_HOST", "localhost"),
-        "PORT": env("DB_PORT", ""),
+        "PORT": config("DB_PORT", ""),
     }
 }
 
