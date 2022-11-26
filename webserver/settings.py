@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # while giving remote access to the localhost via "pagekite.py 8001 xafsdb.pagekite.me"
 # uncomment following and change "test/" in urls.py to "" and "" to "test/":
@@ -190,5 +190,5 @@ AWS_LOCATION = "static"
 MEDIA_LOCATION = "media"
 DEFAULT_FILE_STORAGE = "webserver.backends.PublicMediaStorage"
 #STATICFILES_STORAGE = "webserver.backends.StaticsMediaStorage"
-#STATIC_URL = f"https://{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/"
+STATIC_URL = f"https://{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/"
 MEDIA_URL = f"https://{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/"

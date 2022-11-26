@@ -52,7 +52,7 @@ services:
   
   xafsdb:
     image: registry.hzdr.de/daphne4nfdi/xafsdb:latest
-    command: sh -c "python manage.py migrate && uvicorn --host 0.0.0.0 webserver.asgi:application"
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && uvicorn --host 0.0.0.0 webserver.asgi:application"
     depends_on:
       - scicat
       - db
