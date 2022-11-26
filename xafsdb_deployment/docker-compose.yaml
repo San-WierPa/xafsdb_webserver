@@ -60,7 +60,7 @@ services:
       - "traefik.http.routers.xafsdb.entrypoints=web"
     environment:
       - DB_PASSWORD=J45jflg8iRyIzTIJ226F
-      - DB_HOST=0.0.0.0
+      - DB_HOST=db
       - DB_NAME=xafsdb_pg
     volumes:
       - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
