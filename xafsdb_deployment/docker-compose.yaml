@@ -98,4 +98,6 @@ services:
          # the default user pre-perpeared here uses the admin login of scicatlive
          # use bcrypt e.g. https://bcrypt-generator.com/
 
+volumes:
+  PG_DATA:
 
