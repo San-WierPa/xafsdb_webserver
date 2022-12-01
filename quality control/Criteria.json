@@ -15,8 +15,8 @@
                     "documentation": "considered angular wavenumber"
                 },
                 "noise": {
-                    "min": 1,
-                    "max": 5,
+                    "min": 0,
+                    "max": 0.1,
                     "unit": "1",
                     "documentation": "noise of the measurement"
                 },
@@ -61,8 +61,8 @@
                     "documentation": "considered angular wavenumber"
                 },
                 "noise": {
-                    "min": 1,
-                    "max": 5,
+                    "min": 0,
+                    "max": 0.2,
                     "unit": "1",
                     "documentation": "noise of the measurement"
                 },

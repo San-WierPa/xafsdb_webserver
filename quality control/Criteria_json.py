@@ -17,8 +17,8 @@ criteria = {'SYNCHROTRON': {'ABSORPTION' : {'RAW' : {'edge step' : {'min' : 0.5,
                                                                          'max' : 20.,
                                                                          'unit' : '1/angstrom',
                                                                          'documentation' : 'considered angular wavenumber'},
-                                                              'noise' : {'min' : 1, ### not that clear, depends on method, Abhijeet will "figure it out"
-                                                                         'max' : 5, ### further discussion needed --> research methods define criteria (example SNR)
+                                                              'noise' : {'min' : 0, ### not that clear, depends on method, Abhijeet will "figure it out"
+                                                                         'max' : 0.1, ### further discussion needed --> research methods define criteria (example SNR)
                                                                          'unit' : '1',
                                                                          'documentation' : 'noise of the measurement'},
                                                               'energy resolution' : {'min' : 0.2,
@@ -43,8 +43,8 @@ criteria = {'SYNCHROTRON': {'ABSORPTION' : {'RAW' : {'edge step' : {'min' : 0.5,
                                                                         'max' : 20.,
                                                                         'unit' : '1/angstrom',
                                                                         'documentation' : 'considered angular wavenumber'},
-                                                             'noise' : {'min' : 1, ### not that clear, depends on method, Abhijeet will "figure it out"
-                                                                        'max' : 5, ### further discussion needed --> research methods define criteria (example SNR)
+                                                             'noise' : {'min' : 0, ### not that clear, depends on method, Abhijeet will "figure it out"
+                                                                        'max' : 0.2, ### further discussion needed --> research methods define criteria (example SNR)
                                                                         'unit' : '1',
                                                                         'documentation' : 'noise of the measurement'},
                                                              'energy resolution' : {'min' : 0.2,

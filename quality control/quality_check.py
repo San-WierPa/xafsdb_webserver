@@ -10,9 +10,9 @@ Created on Mon Mar 23 14:33:49 2020
 # import h5py
 from glob import glob
 # from time import time
-from larch import xafs
 import json
-from larch import Group, fitting
+from larch import fitting, Group, xafs, Interpreter
+# import larch
 # from larch.io import read_ascii
 import numpy as np
 from PIL import Image
@@ -113,13 +113,24 @@ class check_quality(object):
         xafs.xftf(k = self.data.k, 
                   chi = self.data.chi,
                   group = self.data)
+                
                   
-                  
-        ### estimate noise
-        # xafs.estimate_noise(k = self.data.k,
-        #                     chi = self.data.chi,
-        #                     group = self.data,
-        #                     )
+        ### estimate noise #TODO
+        xafs.estimate_noise(k = self.data.k,
+                            chi = self.data.chi,
+                            group = self.data,
+                            rmin = self.data.r.max()-self.data.r.max()*0.25,
+                            rmax = self.data.r.max(),
+                            # kweight = 1,
+                            # kmin = self.data.k.min(),
+                            # kmax = self.data.k.max(),
+                            # dk = 4,
+                            # dk2 = 1,
+                            # kstep = self.data.k[1]-self.data.k[0],
+                            # kwindow = 'kaiser',
+                            # nfft = 2048,
+                            _larch = Interpreter()
+                            )
         return self.data
     
     
@@ -159,16 +170,17 @@ class check_quality(object):
         self.fig_k.clf()
         self.ax_k = self.fig_k.subplots()
         self.ax_k.grid()
-        self.ax_k.plot(self.data.k, self.data.chi, label = 'k')
+        data = self.data.k**2*self.data.chi
+        self.ax_k.plot(self.data.k, data, label = 'data')
         self.ax_k.set_title(self.name)
         self.ax_k.set_xlabel(u'k | $\AA^{-1}$')
-        self.ax_k.set_ylabel(r'$k\chi(k)$ | a.u.')
+        self.ax_k.set_ylabel(r'$k^2\chi(k) | \AA^{-1}$')
         self.ax_k.set_xlim(self.data.k[0], self.data.k[-1])
         self.ax_k.legend(loc = 1)
         self.ax_k.set_xticks(np.arange(self.data.k[0], self.data.k[-1], 2))
         self.ax_k.set_xticks(np.arange(self.data.k[0], self.data.k[-1], 0.5), minor = True)
-        self.ax_k.set_ylim(-np.max(self.data.chi)-0.01, 
-                           np.max(self.data.chi)+0.01)
+        self.ax_k.set_ylim(-np.max(data)-0.01, 
+                           np.max(data)+0.01)
         if show: self.fig_k.show()
         if save_path:
             self.fig_k.savefig(save_path)
@@ -181,7 +193,7 @@ class check_quality(object):
         self.fig_R.clf()
         self.ax_R = self.fig_R.subplots()
         self.ax_R.grid()
-        self.ax_R.plot(self.data.r, np.abs(self.data.chir), label = 'R')
+        self.ax_R.plot(self.data.r, np.abs(self.data.chir), label = 'data')
         self.ax_R.set_title(self.name)
         self.ax_R.set_xlabel(r'$R(\AA)$')
         self.ax_R.set_ylabel(r'$\left| \chi(R) \right| \AA^{-3}$')
@@ -205,7 +217,7 @@ class check_quality(object):
             return True, self.data.edge_step
         else:
             print("\u274e edge step doesn't meet standards: ", self.data.edge_step)
-            return False
+            return False, self.data.edge_step
         
         
     def check_energy_resolution(self,):
@@ -219,7 +231,7 @@ class check_quality(object):
             return True, self.data.energy_resolution
         else:
             print("\u274e energy resolution doesn't meet standards: ", self.data.energy_resolution, 'eV')
-            return False
+            return False, self.data.energy_resolution
         
         
     def check_k(self,):
@@ -231,7 +243,7 @@ class check_quality(object):
             return True, self.data.k[-1]
         else:
             print(u"\u274e k max doesn't meet standards: ", self.data.k[-1], u"\u212b⁻¹")
-            return False
+            return False, self.data.k[-1]
         
     
     def estimate_noise(self,):
@@ -240,12 +252,12 @@ class check_quality(object):
         the given data
         """
         
-        if self.quality_criteria_sample['noise']['min'] <= self.data.k[-1] <= self.quality_criteria_sample['noise']['max']:
-            print(u'\u2705 k max of good quality: ', self.data.k[-1], u"\u212b⁻¹")
-            return True
+        if self.quality_criteria_sample['noise']['min'] <= self.data.epsilon_k <= self.quality_criteria_sample['noise']['max']:
+            print(u'\u2705 estimated noise of good quality: ', self.data.epsilon_k)
+            return True, self.data.epsilon_k
         else:
-            print(u"\u274e k max doesn't meet standards: ", self.data.k[-1], u"\u212b⁻¹")
-            return False
+            print(u"\u274e estimated noise doesn't meet standards: ", self.data.epsilon_k)
+            return False, self.data.epsilon_k
         
     
     def create_data_json(self,):
@@ -348,21 +360,24 @@ if test_cq:
                     source = 'LABORATORY',
                     name = name)
         data = cq.preprocess_data()
-        fig_data = cq.plot_background(show = False,
+        fig_data = cq.plot_background(show = True,
                                       save_path = None)
         fig_data_base64 = cq.encode_base64_figure(fig_data)
-        fig_k = cq.plot_k(show = False,
+        fig_k = cq.plot_k(show = True,
                           save_path = None)
         fig_k_base64 = cq.encode_base64_figure(fig_k)
-        fig_R = cq.plot_R(show = False,
+        fig_R = cq.plot_R(show = True,
                           save_path = None)
         fig_R_base64 = cq.encode_base64_figure(fig_R)
         qc_list.append(cq.check_edge_step())
         qc_list.append(cq.check_energy_resolution())
         qc_list.append(cq.check_k())
-        if all(qc_list):
+        qc_list.append(cq.estimate_noise())
+        if all(np.array(qc_list)[:,0]):
             print('quality approved')
         #     cq.create_data_json()
+        else:
+            print('data not approved')
         cq.first_shell_fit()
         image_data = cq.decode_base64_figure(base64_string = fig_data_base64)
         image_k = cq.decode_base64_figure(base64_string = fig_k_base64)
