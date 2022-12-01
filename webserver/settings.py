@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # while giving remote access to the localhost via "pagekite.py 8001 xafsdb.pagekite.me"
 # uncomment following and change "test/" in urls.py to "" and "" to "test/":
@@ -40,7 +40,7 @@ ALLOWED_HOSTS = ["*"]
 URL_REST_API = "http://127.0.0.1:8000"
 
 CONTEXT = {
-    "url": "http://127.0.0.1:8000",
+    "url": "http://127.0.0.1:8001",
 }
 
 
@@ -98,8 +98,12 @@ WSGI_APPLICATION = "webserver.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("DB_NAME", "xafsdb_pg"),
+        "USER": config("DB_USER", "postgres"),
+        "PASSWORD": config("DB_PASSWORD", "root"),
+        "HOST": config("DB_HOST", "localhost"),
+        "PORT": config("DB_PORT", ""),
     }
 }
 
@@ -124,9 +128,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # gmail_send/settings.py
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "sebastian.wiercinski2011@gmail.com"
-EMAIL_HOST_PASSWORD = "dmob kewo icul xjxy"  # past the key or password app here
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "default from email"
@@ -153,8 +157,8 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_ROOT = os.path.join("landing", "static")
-STATIC_URL = "/static/"
+# STATIC_ROOT = os.path.join("landing", "static")
+# STATIC_URL = "/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -185,6 +189,6 @@ AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 AWS_LOCATION = "static"
 MEDIA_LOCATION = "media"
 DEFAULT_FILE_STORAGE = "webserver.backends.PublicMediaStorage"
-#STATICFILES_STORAGE = "webserver.backends.StaticsMediaStorage"
-#STATIC_URL = f"https://{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/"
+STATICFILES_STORAGE = "webserver.backends.StaticsMediaStorage"
+STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_LOCATION}/"
 MEDIA_URL = f"https://{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/"

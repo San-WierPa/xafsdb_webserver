@@ -17,12 +17,20 @@
             </ul>
         </div>
 
+        <div>
+            <img class="responsive_coll" src="{% static 'img/collab_logo.png' %}" alt="daphne" style="object-fit:contain;" >
+        </div>
+
+        <div>
+            <img class="responsive_daph" src="{% static 'img/daphne.png' %}" alt="daphne" style="object-fit:contain;" >
+        </div>
+
         <!-- searchbar -->
         <div class="search-container">
             <form action="{% url 'pg_search' %}">
                 <input
                 type="search"
-                class="searchTerm" 
+                class="searchTerm"
                 id="form-busca"
                 name="term"
                 value="{{ request.GET.term }}"

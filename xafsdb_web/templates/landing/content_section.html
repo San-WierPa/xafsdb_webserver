@@ -2,7 +2,7 @@
 
      <head>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <style> * { box-sizing: border-box } </style>
+       
     </head>
 
 
@@ -15,18 +15,18 @@
             <div>
               <div class="mySlides ">
                 <br>
-                <center><img src="{{ plot_div }}" alt="Preview" height="400" width="600" style="object-fit:contain; border: 5px solid #555;"></center>
-                <div class="text">Absorption</div>
+                <center><img src="{{ data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                <div class="text">Raw and Normalized XAFS</div>
               </div>
               <div class="mySlides ">
                 <br>
-                <center><img src="{{ dataset_meta.scientificMetadata.second_img }}" alt="Preview" height="400" width="600" style="object-fit:contain; border: 5px solid #555;"></center>
+                <center><img src="{{ k_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
                 <div class="text">Chi(k)</div>
               </div>
               <div class="mySlides ">
                 <br>
-                <center><img src="{{ plot_div }}" alt="Preview" height="400" width="600" style="object-fit:contain; border: 5px solid #555;"></center>
-                <div class="text">R</div>
+                <center><img src="{{ R_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                <div class="text">Chi(R)</div>
               </div>
 
             </div>
@@ -266,7 +266,7 @@
                     <tr> <th class="subsubh">PROCESSED:</th></tr>
                 </thead>
                 <tbody>
-                    <tr> 
+                    <tr>
                         <th class="subsubsubh">AMPLITUDE REDUCTION FACTOR:</th>
                     </tr>
                     <tr> <td class="subd">Z-RANGES:</td></tr>
@@ -282,7 +282,6 @@
             </table>
 
         </div>
-    
 
     <table id="datatablesSimple">
         <caption class="table-title">Item List</caption>

@@ -12,9 +12,9 @@
     {% block title %}
         <title>xafsDB - Search results</title>
     {% endblock %}
-    
+
     <!-- favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
 </header>
 
 {% include "landing/navbar.html" %}
@@ -39,15 +39,12 @@
         {% for dataset_meta in datasetList %}
             <tbody>
                 <tr>
-                    <td> {{ dataset_meta.id }} </td>
+                    <td class="limit-id-length"> {{ dataset_meta.id }} </td>
                     <td class="table-title limit-title-length">
-                        {{ dataset_meta.title }}
+                        {{ dataset_meta.datasetName }}
                         <table>
                             <tr>
-                                <td class="limit-abstract-length"> Abstract: {{ dataset_meta.abstract }} </td>
-                                <td><img src="http://127.0.0.1:8000/api/v1/file/download?file_id={{ dataset_meta.preview_id }}"
-                                    alt="Preview" style="border: 5px solid #555;" height="100" width="150">
-                            </td>
+                                <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
                             </tr>
                         </table>
                     </td>
@@ -73,11 +70,11 @@
                     <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page=1">&laquo;</a>
                     <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ datasetList.previous_page_number }}">&lsaquo;</a>
                 {% endif %}
-            
+
                 <span class="current">
                     {{ datasetList.number }} of {{ datasetList.paginator.num_pages }}
                 </span>
-            
+
                 {% if datasetList.has_next %}
                     <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ datasetList.next_page_number }}">&rsaquo;</a>
                     <a class="btn" onclick="load_page()" href="?term={{request.GET.term}}&page={{ datasetList.paginator.num_pages }}">&raquo;</a>

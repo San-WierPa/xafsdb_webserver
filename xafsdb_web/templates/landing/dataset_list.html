@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <title>xafsDB - All Datasets</title>
     <!-- favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
 </header>
 
 {% include "landing/navbar.html" %}
@@ -37,8 +37,6 @@
                         <tr>
                             <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
 
-     
-    
                         </tr>
                     </table>
                 </td>
@@ -53,6 +51,14 @@
         {% endfor %}
 
     </table>
+
+    {% block pagination %}
+        {% if dataset_meta_list.paginator.count > 0 %}
+            {% block datasets_found %}
+                <p class="results-found">Currently <b>{{dataset_meta_list.paginator.count}}</b> datasets stored!</p>
+            {% endblock %}
+        {% endif %}
+    {% endblock %}
 
 </main>
 

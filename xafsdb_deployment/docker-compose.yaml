@@ -14,6 +14,18 @@ services:
     volumes:
       - "/srv/mongodb:/bitnami/mongodb"     # check that is mount exists on local filesystem
 
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=J45jflg8iRyIzTIJ226F
+      - POSTGRES_DB=xafsdb_pg
+    ports:
+      - '5432:5432'
+    volumes:
+      - PG_DATA:/var/lib/postgresql/data
+
   scicat:
     image: ghcr.io/scicatproject/backend-next:latest
     depends_on:
@@ -40,11 +52,17 @@ services:
   
   xafsdb:
     image: registry.hzdr.de/daphne4nfdi/xafsdb:latest
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && uvicorn --host 0.0.0.0 webserver.asgi:application"
     depends_on:
       - scicat
+      - db
     labels:
       - "traefik.http.routers.xafsdb.rule=PathPrefix(`/`)"
       - "traefik.http.routers.xafsdb.entrypoints=web"
+    environment:
+      - DB_PASSWORD=J45jflg8iRyIzTIJ226F
+      - DB_HOST=db
+      - DB_NAME=xafsdb_pg
     volumes:
       - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
      
@@ -80,4 +98,6 @@ services:
          # the default user pre-perpeared here uses the admin login of scicatlive
          # use bcrypt e.g. https://bcrypt-generator.com/
 
+volumes:
+  PG_DATA:
 

@@ -1,20 +1,25 @@
-import scicat_py
+"""
+@author: Sebastian Paripsa
+"""
+
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, HttpResponseNotFound,
+                         HttpResponseServerError)
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
+import scicat_py
 from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
 
 from ._auth_constants import CONFIGURATION
 from .models import Files
 from .serializers import FileCreateUpdateSerializer, FileSerializer
-from .utils import (get_access, get_all_datasets,
-                    term_checker) #display_thumbnail
+from .utils import get_access, get_all_datasets, term_checker
 
 
 async def dataset_list(request):
@@ -72,11 +77,13 @@ def dataset_details(request, dataset_id: str):
         )
 
         try:
-            plot_div = attachment_response[0].thumbnail  # display_thumbnail
+            data_fig = attachment_response[0].thumbnail  # display_thumbnail
             # print(attachment_response[0].thumbnail)
+            k_fig = attachment_response[1].thumbnail
+            R_fig = attachment_response[2].thumbnail
         except IndexError:
             # return HttpResponse("Oops. Looks like you have note uploaded a picture yet.")
-            return redirect("home")
+            return redirect("error")
 
         item_list = Files.objects.filter(dataset_id=dataset_id)
     return render(
@@ -84,7 +91,9 @@ def dataset_details(request, dataset_id: str):
         "landing/base.html",
         {
             "dataset_meta": dataset_meta,
-            "plot_div": plot_div,
+            "data_fig": data_fig,
+            "k_fig": k_fig,
+            "R_fig": R_fig,
             "item_list": item_list,
         },
     )
@@ -125,12 +134,68 @@ class FileViewSets(ModelViewSet):
         return serializer
 
 
-def page_not_found(request, exception):
-    return render(request, "landing/404.html", status=404)
-
-
 def home(request):
     return render(request, "landing/home.html", CONTEXT)
+
+
+def page_not_found(request, exception):
+    return HttpResponseNotFound(
+        render(
+            request,
+            "landing/error.html",
+            CONTEXT
+            | {
+                "ERROR_CODE": "Error 404",
+                "ERROR_DESCR": "Page not found.",
+            },
+        )
+    )
+
+
+def server_error(request):
+    return HttpResponseServerError(
+        render(
+            request,
+            "landing/error.html",
+            CONTEXT
+            | {
+                "ERROR_CODE": "Error 500",
+                "ERROR_DESCR": "Server error.",
+            },
+        )
+    )
+
+
+def bad_request(request, exception):
+    return HttpResponseBadRequest(
+        render(
+            request,
+            "landing/error.html",
+            CONTEXT
+            | {
+                "ERROR_CODE": "Error 400",
+                "ERROR_DESCR": "Bad request.",
+            },
+        )
+    )
+
+
+def permission_denied(request, exception):
+    return HttpResponseForbidden(
+        render(
+            request,
+            "landing/error.html",
+            CONTEXT
+            | {
+                "ERROR_CODE": "Error 403",
+                "ERROR_DESCR": "Permission denied.",
+            },
+        )
+    )
+
+
+def error(request, exception):
+    return render(request, "landing/error.html", CONTEXT)
 
 
 class ContactForm(forms.Form):

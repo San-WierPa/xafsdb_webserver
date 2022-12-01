@@ -21,4 +21,7 @@ urlpatterns = [
     # path("admin/", admin.site.urls),
 ]
 
+handler400 = "xafsdb_web.views.bad_request"
+handler403 = "xafsdb_web.views.permission_denied"
 handler404 = "xafsdb_web.views.page_not_found"
+handler500 = "xafsdb_web.views.server_error"
