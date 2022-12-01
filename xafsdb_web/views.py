@@ -1,11 +1,13 @@
+"""
+@author: Sebastian Paripsa
+"""
+
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import Paginator
 from django.http import (HttpResponse, HttpResponseBadRequest,
-    HttpResponseForbidden,
-    HttpResponseNotFound,
-    HttpResponseServerError,
-)
+                         HttpResponseForbidden, HttpResponseNotFound,
+                         HttpResponseServerError)
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
@@ -81,7 +83,7 @@ def dataset_details(request, dataset_id: str):
             R_fig = attachment_response[2].thumbnail
         except IndexError:
             # return HttpResponse("Oops. Looks like you have note uploaded a picture yet.")
-            return redirect("home")
+            return redirect("error")
 
         item_list = Files.objects.filter(dataset_id=dataset_id)
     return render(

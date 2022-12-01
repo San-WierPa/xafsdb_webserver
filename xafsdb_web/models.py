@@ -1,3 +1,7 @@
+"""
+@author: Sebastian Paripsa
+"""
+
 import uuid
 
 from django.db import models

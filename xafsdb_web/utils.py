@@ -1,3 +1,7 @@
+"""
+@author: Sebastian Paripsa
+"""
+
 import scicat_py
 
 from ._auth_constants import CONFIGURATION, PASSWORD, USERNAME
