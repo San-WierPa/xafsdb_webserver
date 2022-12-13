@@ -48,11 +48,9 @@ ssh -i /home/sepa/.ssh/google_cloud_ssh_key paripsa_uni_wuppertal_de@35.233.84.2
 ```
 + Out: `paripsa_uni_wuppertal_de@wupp-1:~$`
 
-+ cd to correct dir:
++ Execute script:
 ```shell
-cd ..
-cd ..
-cd sebastian/xafsdb/
+sh deploy.sh
 ```
 
 ### Docker
@@ -109,9 +107,9 @@ docker-compose up -d
 ```python
 import scicat_py
 
-USERNAME = "admin"
+USERNAME = env("USERNAME_AUTH")
 # OLD -> PASSWORD = "2jf70TPNZsS"
-PASSWORD = "2jf70TPNZsS_xafs"
+PASSWORD = env("PASSWORD_AUTH")
 
 CONFIGURATION = scicat_py.Configuration(
     host="http://35.233.84.253",
