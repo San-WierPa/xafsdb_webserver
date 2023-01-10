@@ -306,6 +306,16 @@ a {
   Tables
 ==================================================================*/
 
+.longTextHover {
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    overflow: hidden;
+    max-width:1px;
+}
+abbr[title] {
+    text-decoration: none;
+}
+
 caption {
     caption-side: top;
     text-align: left;
