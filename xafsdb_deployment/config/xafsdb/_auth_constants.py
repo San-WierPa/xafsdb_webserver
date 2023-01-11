@@ -5,7 +5,7 @@
 import scicat_py
 
 USERNAME = "admin"
-PASSWORD = "2jf70TPNZsS_xafs"
+PASSWORD = "1234"
 
 CONFIGURATION = scicat_py.Configuration(
     host="http://scicat:3000",
