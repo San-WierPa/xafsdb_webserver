@@ -48,9 +48,9 @@ services:
       - "traefik.http.routers.xafsdb.rule=PathPrefix(`/`)"
       - "traefik.http.routers.xafsdb.entrypoints=web"
     environment:
-      - DB_PASSWORD=J45jflg8iRyIzTIJ226F
+      - DB_PASSWORD=$POSTGRES_PASSWORD
       - DB_HOST=db
-      - DB_NAME=xafsdb_pg
+      - DB_NAME=$POSTGRES_DB
     volumes:
       - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
      
