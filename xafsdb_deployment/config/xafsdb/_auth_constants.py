@@ -3,9 +3,12 @@
 """
 
 import scicat_py
+import environ
+env = environ.Env()
+environ.Env.read_env()
 
-USERNAME = "admin"
-PASSWORD = "2jf70TPNZsS_xafs"
+USERNAME = env("USERNAME")
+PASSWORD = env("PASSWORD")
 
 CONFIGURATION = scicat_py.Configuration(
     host="http://scicat:3000",

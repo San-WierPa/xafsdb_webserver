@@ -51,10 +51,8 @@ services:
       - DB_PASSWORD
       - DB_HOST=db
       - DB_NAME
-      - USERNAME
-      - PASSWORD
-    #volumes:
-    #  - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
+    volumes:
+      - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
      
   mongo-express:
     image: mongo-express
