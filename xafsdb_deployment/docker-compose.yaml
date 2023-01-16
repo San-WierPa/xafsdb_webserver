@@ -10,10 +10,10 @@ services:
       
   mongodb:
     image: bitnami/mongodb:4.2
-    environment:
-      - MONGODB_USERNAME=${MONGODB_USERNAME}
-      - MONGODB_PASSWORD=${MONGODB_PASSWORD}
-      - MONGODB_DATABASE=${MONGODB_DATABASE}
+    #environment:
+    #  - MONGODB_USERNAME=${MONGODB_USERNAME}
+    #  - MONGODB_PASSWORD=${MONGODB_PASSWORD}
+    #  - MONGODB_DATABASE=${MONGODB_DATABASE}
     volumes:
       - "/srv/mongodb:/bitnami/mongodb"     # check that is mount exists on local filesystem
 
@@ -21,9 +21,9 @@ services:
     image: postgres:14.1-alpine
     restart: always
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=J45jflg8iRyIzTIJ226F
+      - POSTGRES_DB=xafsdb_pg
     ports:
       - '5432:5432'
     volumes:
@@ -33,6 +33,9 @@ services:
     image: ghcr.io/scicatproject/backend-next:latest
     depends_on:
       - mongodb
+    volumes:
+      - ./config/backend/config.env:/home/node/app/.env
+      - ./config/backend/functionalAccounts.json:/home/node/app/functionalAccounts.json
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api`, `/auth`, `/explorer`)"
       - "traefik.http.routers.backend.entrypoints=web"
@@ -48,11 +51,11 @@ services:
       - "traefik.http.routers.xafsdb.rule=PathPrefix(`/`)"
       - "traefik.http.routers.xafsdb.entrypoints=web"
     environment:
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
-      - USERNAME=${USERNAME}
-      - PASSWORD=${PASSWORD}
+      - DB_PASSWORD=J45jflg8iRyIzTIJ226F
+      - DB_HOST=db
+      - DB_NAME=xafsdb_pg
+    volumes:
+      - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
      
   mongo-express:
     image: mongo-express
