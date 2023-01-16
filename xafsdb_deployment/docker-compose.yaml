@@ -10,6 +10,10 @@ services:
       
   mongodb:
     image: bitnami/mongodb:4.2
+    environment:
+      - MONGODB_USERNAME=${MONGODB_USERNAME}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
     volumes:
       - "/srv/mongodb:/bitnami/mongodb"     # check that is mount exists on local filesystem
 
@@ -17,9 +21,9 @@ services:
     image: postgres:14.1-alpine
     restart: always
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - '5432:5432'
     volumes:
@@ -29,10 +33,6 @@ services:
     image: ghcr.io/scicatproject/backend-next:latest
     depends_on:
       - mongodb
-    volumes:
-      - ./config/backend/config.env:/home/node/app/.env
-      - ./config/backend/functionalAccounts.json:/home/node/app/functionalAccounts.json
-
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api`, `/auth`, `/explorer`)"
       - "traefik.http.routers.backend.entrypoints=web"
@@ -48,11 +48,9 @@ services:
       - "traefik.http.routers.xafsdb.rule=PathPrefix(`/`)"
       - "traefik.http.routers.xafsdb.entrypoints=web"
     environment:
-      - DB_PASSWORD
-      - DB_HOST=db
-      - DB_NAME
-    volumes:
-      - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
      
   mongo-express:
     image: mongo-express
@@ -61,8 +59,8 @@ services:
         - ME_CONFIG_MONGODB_PORT=${ME_CONFIG_MONGODB_PORT}
         - ME_CONFIG_MONGODB_ENABLE_ADMIN=${ME_CONFIG_MONGODB_ENABLE_ADMIN}
         - ME_CONFIG_SITE_BASEURL=${ME_CONFIG_SITE_BASEURL}
-        - "ME_CONFIG_BASICAUTH_USERNAME="
-        - "ME_CONFIG_BASICAUTH_PASSWORD="
+        - "ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}"
+        - "ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}"
     depends_on:
         - mongodb
     labels:
@@ -71,6 +69,48 @@ services:
        - "traefik.http.routers.mongo-express.middlewares=auth"
        - "traefik.http.middlewares.auth.basicauth.users=admin:$$2a$$12$$vyTh8.zQ85OygVq1q4cX4u50QJXfW1tSJn/dr2zuQFzAW6F31VUtq"
 
+  # https://github.com/tiredofit/docker-db-backup#configuration
+  db-backup-pg:
+    container_name: db-backup-pg
+    image: tiredofit/db-backup
+    volumes:
+      - ./backups-pg:/backup
+    environment:
+      # - DEBUG_MODE=TRUE
+      - DB_TYPE=pgsql
+      - DB_HOST=db
+      - DB_NAME=${POSTGRES_USER}
+      - DB_USER=${POSTGRES_PASSWORD}
+      - DB_PASS=${POSTGRES_DB}
+      - DB_DUMP_FREQ=1            # backup every minute
+      # - DB_DUMP_BEGIN=0000      # backup starts immediately
+      - DB_CLEANUP_TIME=5         # clean backups they are older than 5 minute
+      - CHECKSUM=SHA1
+      - COMPRESSION=GZ
+      - SPLIT_DB=FALSE
+      - CONTAINER_ENABLE_MONITORING=FALSE
+    restart: always
+
+  db-backup-mongo:
+    container_name: db-backup-mongo
+    image: tiredofit/db-backup
+    volumes:
+      - ./backups-mongo:/backup
+    environment:
+      # - DEBUG_MODE=TRUE
+      - DB_TYPE=mongo
+      - DB_HOST=db
+      - DB_NAME=${MONGODB_DATABASE}
+      - DB_USER=${MONGODB_USERNAME}
+      - DB_PASS=${MONGODB_PASSWORD}
+      - DB_DUMP_FREQ=1            # backup every minute | for 1 day you can change DB_DUMP_FREQ=1440
+      # - DB_DUMP_BEGIN=0000      # backup starts immediately
+      - DB_CLEANUP_TIME=5         # clean backups they are older than 5 minute
+      - CHECKSUM=SHA1
+      - COMPRESSION=GZ
+      - SPLIT_DB=FALSE
+      - CONTAINER_ENABLE_MONITORING=FALSE
+    restart: always
+
 volumes:
   PG_DATA:
-
