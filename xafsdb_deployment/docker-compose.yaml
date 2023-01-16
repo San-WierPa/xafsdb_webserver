@@ -84,9 +84,9 @@ services:
       # - DEBUG_MODE=TRUE
       - DB_TYPE=pgsql
       - DB_HOST=db
-      #- DB_NAME=${POSTGRES_USER}
-      #- DB_USER=${POSTGRES_PASSWORD}
-      #- DB_PASS=${POSTGRES_DB}
+      - DB_NAME=${POSTGRES_USER}
+      - DB_USER=${POSTGRES_PASSWORD}
+      - DB_PASS=${POSTGRES_DB}
       - DB_DUMP_FREQ=1            # backup every minute
       # - DB_DUMP_BEGIN=0000      # backup starts immediately
       - DB_CLEANUP_TIME=5         # clean backups they are older than 5 minute
