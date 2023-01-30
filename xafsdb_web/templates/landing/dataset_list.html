@@ -27,6 +27,27 @@
             </tr>
         </thead>
 
+        <tbody>
+            <tr>
+                <td class="limit-id-length"> {{ debug_data.dataset_id }} </td>
+                <td class="table-title limit-title-length">
+                    {{ dataset_meta.datasetName }}
+                    <table>
+                        <tr>
+                            <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
+
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <form action="{% url 'dataset_details' dataset_id=1 %}">
+                        <button class="button-more button4" type="submit" />More</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+
+
         {% for dataset_meta in dataset_meta_list %}
         <tbody>
             <tr>
@@ -53,12 +74,32 @@
     </table>
 
     {% block pagination %}
-        {% if dataset_meta_list.paginator.count > 0 %}
-            {% block datasets_found %}
-                <p class="results-found">Currently <b>{{dataset_meta_list.paginator.count}}</b> datasets stored!</p>
-            {% endblock %}
+
+    {% for page_number in dataset_meta_list.paginator.get_elided_page_range %}
+
+        {% if page_number == dataset_meta_list.paginator.ELLIPSIS %}
+
+            {{page_number}}
+
+        {% else %}
+
+            <a
+
+                href="{% url 'terms-by-page' page_number %}"
+
+                class="{% if page_number == dataset_meta_list.number %}current{% endif %}"
+
+            >
+
+                {{page_number}}
+
+            </a>
+
         {% endif %}
-    {% endblock %}
+
+    {% endfor %}
+
+{% endblock %}
 
 </main>
 
