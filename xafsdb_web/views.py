@@ -2,18 +2,22 @@
 @author: Sebastian Paripsa
 """
 
+import scicat_py
 from django import forms
 from django.core.mail import BadHeaderError, send_mail
-from django.core.paginator import Paginator
-from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseForbidden, HttpResponseNotFound,
-                         HttpResponseServerError)
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponseNotFound,
+    HttpResponseServerError,
+)
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
-import scicat_py
 from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
 
 from ._auth_constants import CONFIGURATION
@@ -32,35 +36,22 @@ async def dataset_list(request):
         dataset_meta_list = api_instance_dataset.datasets_controller_find_all(
             filter=filter
         )
-        # all_ids = [i['id'] for i in dataset_meta_list]
-        ##print(all_ids)
-        # all_attachment_responses = []
-        # for dataset_id in all_ids:
-        #    all_attachment_responses_list = api_instance_dataset.datasets_controller_find_all_attachments(dataset_id)
-        #    all_attachment_responses.append(all_attachment_responses_list)
-        #
-        ##plot_div_list = []
-        # for i in range(len(all_attachment_responses)):
-        #    #print(all_attachment_responses[i][0].id)
-        #    plot_div = (all_attachment_responses[i][0].thumbnail) #display_thumbnail
-        # print(plot_div_list)
-        # plot_div_list.append(plot_div)
-        # print(plot_div)
 
-        # for i in range(len(all_attachment_responses)):
-        #    try:
-        #        #print(all_attachment_responses[i][0].thumbnail)
-        #        plot_div = display_thumbnail(all_attachment_responses[i])
-        #    except IndexError:
-        #        plot_div = 'null'
+        debug_data = {"dataset_id": "1"}
+
+        page = request.GET.get("page", 1)
+        paginator = Paginator(dataset_meta_list, 15)
+        try:
+            dataset_meta_list = paginator.page(page)
+        except PageNotAnInteger:
+            dataset_meta_list = paginator.page(1)
+        except EmptyPage:
+            dataset_meta_list = paginator.page(paginator.num_pages)
 
     return render(
         request,
         "landing/dataset_list.html",
-        {
-            "dataset_meta_list": dataset_meta_list,
-            # "plot_div": plot_div,
-        },
+        {"dataset_meta_list": dataset_meta_list, "debug_data": debug_data},
     )
 
 
@@ -77,8 +68,7 @@ def dataset_details(request, dataset_id: str):
         )
 
         try:
-            data_fig = attachment_response[0].thumbnail  # display_thumbnail
-            # print(attachment_response[0].thumbnail)
+            data_fig = attachment_response[0].thumbnail
             k_fig = attachment_response[1].thumbnail
             R_fig = attachment_response[2].thumbnail
         except IndexError:

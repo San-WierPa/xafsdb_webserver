@@ -73,34 +73,50 @@
 
     </table>
 
-    {% block pagination %}
+    <center><div class="pag">
+        {% if dataset_meta_list.has_other_pages %}
 
-    {% for page_number in dataset_meta_list.paginator.get_elided_page_range %}
-
-        {% if page_number == dataset_meta_list.paginator.ELLIPSIS %}
-
-            {{page_number}}
-
+        {% if dataset_meta_list.has_previous %}
+          <a href="?page={{ dataset_meta_list.previous_page_number }}">&laquo;</a>
         {% else %}
-
-            <a
-
-                href="{% url 'terms-by-page' page_number %}"
-
-                class="{% if page_number == dataset_meta_list.number %}current{% endif %}"
-
-            >
-
-                {{page_number}}
-
-            </a>
-
+          <li><span>&laquo;</span></li>
         {% endif %}
-
-    {% endfor %}
-
-{% endblock %}
+        {% for i in dataset_meta_list.paginator.page_range %}
+          {% if dataset_meta_list.number == i %}
+            <li{{ i }}(current)</li>
+          {% else %}
+            <a href="?page={{ i }}">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if dataset_meta_list.has_next %}
+          <a href="?page={{ dataset_meta_list.next_page_number }}">&raquo;</a>
+        {% else %}
+          <li&raquo;</li>
+        {% endif %}
+        {% endif %}
+    </div></center>
 
 </main>
+
+<style>
+    .pag {
+      display: flex !important;
+    }
+    .pag a {
+      color: black;
+      float: left;
+      padding: 12px 18px;
+      text-decoration: none;
+    }
+    .pag a.active {
+      background-color: #060185;
+      color: white;
+      border-radius: 50%;
+    }
+    .pag a:hover:not(.active) {
+      background-color: #cbcadb;
+      border-radius: 50%;
+    }
+  </style>
 
 {% include "landing/footer.html" %}
