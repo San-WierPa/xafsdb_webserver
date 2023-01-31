@@ -3,7 +3,6 @@
 """
 
 from django.contrib import admin
-
 from xafsdb_web.models import Files
 
 

@@ -3,7 +3,6 @@
 """
 
 from rest_framework import serializers
-
 from xafsdb_web.models import Files
 
 
