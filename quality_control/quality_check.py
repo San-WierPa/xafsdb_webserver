@@ -13,10 +13,11 @@ from glob import glob
 # from time import time
 import matplotlib
 
-matplotlib.use("tkagg")
+matplotlib.use("Agg")
 import json
 
 import matplotlib.pyplot as plt
+
 # import larch
 # from larch.io import read_ascii
 import numpy as np
@@ -30,6 +31,7 @@ plt.rcParams["ytick.direction"] = "in"
 plt.rcParams["ytick.right"] = True
 plt.rcParams["axes.grid.which"] = "both"
 import base64
+
 # print('running on ', platform)
 import io
 import os
