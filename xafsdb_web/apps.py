@@ -1,3 +1,7 @@
+"""
+@author: Sebastian Paripsa
+"""
+
 from django.apps import AppConfig
 
 

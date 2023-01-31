@@ -157,3 +157,6 @@ GitHub.sublime-settings
 webserver/AWS_access.py
 requirements_sunny.txt
 tinyurl.com/
+
+# zips
+*.tar
