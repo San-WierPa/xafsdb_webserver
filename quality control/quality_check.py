@@ -7,18 +7,10 @@ Created on Mon Mar 23 14:33:49 2020
 """
 
 ##############################################################################
-# import h5py
 from glob import glob
-
-# from time import time
-import matplotlib
-
-matplotlib.use("tkagg")
 import json
 
 import matplotlib.pyplot as plt
-# import larch
-# from larch.io import read_ascii
 import numpy as np
 from larch import Group, Interpreter, fitting, xafs
 from PIL import Image
@@ -30,7 +22,6 @@ plt.rcParams["ytick.direction"] = "in"
 plt.rcParams["ytick.right"] = True
 plt.rcParams["axes.grid.which"] = "both"
 import base64
-# print('running on ', platform)
 import io
 import os
 from datetime import datetime
@@ -39,7 +30,50 @@ from sys import platform
 ##############################################################################
 ### define ###
 ##############################################################################
+class read_data(object):
+    """
+    This class helps to read in different data types, .dat, .xdi are currently
+    supported.
+    """
+    def __init__(self, ):
+        pass
+    
+    
+    def load_xdi(self, path):
+        """
+        load a xdi file
 
+        Parameters
+        ----------
+        path : str
+            absolute path to the xdi file.
+        
+        Returns
+        -------
+        array([energy, mu])
+        """
+        
+        data = np.loadtxt(path, skiprows=42)
+        return np.array([data[:,1], 1-data[:,12]]).T
+    
+    
+    def load_dat(self, path):
+        """
+        load a dat file
+
+        Parameters
+        ----------
+        path : str
+            absolute path to the dat file.
+        
+        Returns
+        -------
+        array([energy, mu])
+        """
+        
+        data = np.loadtxt(path, skiprows=1)
+        return np.array([data[:,0], data[:,1]]).T
+        
 
 class check_quality(object):
     """
@@ -394,16 +428,15 @@ class check_quality(object):
 
 
 ## end examples/feffit/doc_feffit1.lar
-test_cq = False
+test_cq = True
 if test_cq:
     ### define data input
     cq_json = os.path.abspath(os.curdir) + "/Criteria.json"
 
-    folder = os.path.abspath(os.curdir) + "/example data/LABORATORY/"
-    files = glob(folder + "*.dat")[0:1]
-    # files = [os.path.abspath(os.curdir)+'/example data/LABORATORY/Ni-K-Ni-foil-2mu.dat']
-    # files = ['/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/example data/LABORATORY/Co 5 mu.dat']
-    # files = ['/home/frank/Doktorarbeit/DAPHNE/Measurement Data/Laboratory/foils/Ni-K-Ni-foil-2mu.dat']
+    folder = os.path.abspath(os.curdir) + "/example data/SYNCHROTRON/"
+    files = sorted(glob(folder + "*.xdi"))#[:1]
+    # folder = os.path.abspath(os.curdir) + "/example data/LABORATORY/"
+    # files = sorted(glob(folder + "*.dat"))[0:1]
 
     ### TODO Spektrum beschneiden  >>> Sache des Users
     ### 10 %
@@ -416,8 +449,14 @@ if test_cq:
         else:
             name = file.split("/")[-1].split(".")[0]
         qc_list = []
-        meas_data = np.loadtxt(file, skiprows=1)
-        cq.load_data(meas_data, source="LABORATORY", name=name)
+        if file.split('.')[-1] == 'dat':
+            meas_data = read_data().load_dat(file)
+        elif file.split('.')[-1] == 'xdi':
+            meas_data = read_data().load_xdi(file)
+        if "LABORATORY" in file:
+            cq.load_data(meas_data, source="LABORATORY", name=name)
+        elif "SYNCHROTRON" in file:
+            cq.load_data(meas_data, source="SYNCHROTRON", name=name)
         data = cq.preprocess_data()
         fig_data = cq.plot_background(show=True, save_path=None)
         fig_data_base64 = cq.encode_base64_figure(fig_data)
