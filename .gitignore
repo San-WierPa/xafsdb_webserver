@@ -81,7 +81,8 @@ wheels/
 *.egg
 *.manifest
 *.spec
-scicat_py/
+scicat_py/*
+!scicat_py/.gitkeep
 
 # Installer logs
 pip-log.txt
@@ -157,3 +158,6 @@ GitHub.sublime-settings
 webserver/AWS_access.py
 requirements_sunny.txt
 tinyurl.com/
+
+# zips
+*.tar

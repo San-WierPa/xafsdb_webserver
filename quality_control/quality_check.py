@@ -8,9 +8,23 @@ Created on Mon Mar 23 14:33:49 2020
 
 ##############################################################################
 from glob import glob
+<<<<<<< HEAD:quality control/quality_check.py
 import json
 
 import matplotlib.pyplot as plt
+=======
+
+# from time import time
+import matplotlib
+
+matplotlib.use("Agg")
+import json
+
+import matplotlib.pyplot as plt
+
+# import larch
+# from larch.io import read_ascii
+>>>>>>> 63c03d8fda09412954fc69ba07575905d2887e6d:quality_control/quality_check.py
 import numpy as np
 from larch import Group, Interpreter, fitting, xafs
 from PIL import Image
@@ -22,6 +36,11 @@ plt.rcParams["ytick.direction"] = "in"
 plt.rcParams["ytick.right"] = True
 plt.rcParams["axes.grid.which"] = "both"
 import base64
+<<<<<<< HEAD:quality control/quality_check.py
+=======
+
+# print('running on ', platform)
+>>>>>>> 63c03d8fda09412954fc69ba07575905d2887e6d:quality_control/quality_check.py
 import io
 import os
 from datetime import datetime

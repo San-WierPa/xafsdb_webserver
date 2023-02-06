@@ -1,5 +1,8 @@
-from django.contrib import admin
+"""
+@author: Sebastian Paripsa
+"""
 
+from django.contrib import admin
 from xafsdb_web.models import Files
 
 

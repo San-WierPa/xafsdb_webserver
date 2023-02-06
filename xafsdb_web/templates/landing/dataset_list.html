@@ -27,6 +27,27 @@
             </tr>
         </thead>
 
+        <tbody>
+            <tr>
+                <td class="limit-id-length"> {{ debug_data.dataset_id }} </td>
+                <td class="table-title limit-title-length">
+                    {{ dataset_meta.datasetName }}
+                    <table>
+                        <tr>
+                            <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
+
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <form action="{% url 'dataset_details' dataset_id=1 %}">
+                        <button class="button-more button4" type="submit" />More</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+
+
         {% for dataset_meta in dataset_meta_list %}
         <tbody>
             <tr>
@@ -52,14 +73,50 @@
 
     </table>
 
-    {% block pagination %}
-        {% if dataset_meta_list.paginator.count > 0 %}
-            {% block datasets_found %}
-                <p class="results-found">Currently <b>{{dataset_meta_list.paginator.count}}</b> datasets stored!</p>
-            {% endblock %}
+    <center><div class="pag">
+        {% if dataset_meta_list.has_other_pages %}
+
+        {% if dataset_meta_list.has_previous %}
+          <a href="?page={{ dataset_meta_list.previous_page_number }}">&laquo;</a>
+        {% else %}
+          <li><span>&laquo;</span></li>
         {% endif %}
-    {% endblock %}
+        {% for i in dataset_meta_list.paginator.page_range %}
+          {% if dataset_meta_list.number == i %}
+            <li{{ i }}(current)</li>
+          {% else %}
+            <a href="?page={{ i }}">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if dataset_meta_list.has_next %}
+          <a href="?page={{ dataset_meta_list.next_page_number }}">&raquo;</a>
+        {% else %}
+          <li&raquo;</li>
+        {% endif %}
+        {% endif %}
+    </div></center>
 
 </main>
+
+<style>
+    .pag {
+      display: flex !important;
+    }
+    .pag a {
+      color: black;
+      float: left;
+      padding: 12px 18px;
+      text-decoration: none;
+    }
+    .pag a.active {
+      background-color: #060185;
+      color: white;
+      border-radius: 50%;
+    }
+    .pag a:hover:not(.active) {
+      background-color: #cbcadb;
+      border-radius: 50%;
+    }
+  </style>
 
 {% include "landing/footer.html" %}

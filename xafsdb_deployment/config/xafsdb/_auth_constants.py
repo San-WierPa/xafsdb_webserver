@@ -1,3 +1,7 @@
+"""
+@author: Sebastian Paripsa
+"""
+
 import scicat_py
 
 USERNAME = "admin"
