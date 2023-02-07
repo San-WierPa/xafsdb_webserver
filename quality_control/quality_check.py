@@ -8,23 +8,9 @@ Created on Mon Mar 23 14:33:49 2020
 
 ##############################################################################
 from glob import glob
-<<<<<<< HEAD:quality control/quality_check.py
 import json
 
 import matplotlib.pyplot as plt
-=======
-
-# from time import time
-import matplotlib
-
-matplotlib.use("Agg")
-import json
-
-import matplotlib.pyplot as plt
-
-# import larch
-# from larch.io import read_ascii
->>>>>>> 63c03d8fda09412954fc69ba07575905d2887e6d:quality_control/quality_check.py
 import numpy as np
 from larch import Group, Interpreter, fitting, xafs
 from PIL import Image
@@ -36,11 +22,6 @@ plt.rcParams["ytick.direction"] = "in"
 plt.rcParams["ytick.right"] = True
 plt.rcParams["axes.grid.which"] = "both"
 import base64
-<<<<<<< HEAD:quality control/quality_check.py
-=======
-
-# print('running on ', platform)
->>>>>>> 63c03d8fda09412954fc69ba07575905d2887e6d:quality_control/quality_check.py
 import io
 import os
 from datetime import datetime
@@ -398,39 +379,11 @@ class check_quality(object):
         ) as tofile:
             json.dump(data, tofile, indent=4, ensure_ascii=False)
 
-    def first_shell_fit(
-        self,
-    ):
-        pars = fitting.param_group(
-            amp=fitting.param(1.0, vary=True),
-            del_e0=fitting.param(0.0, vary=True),
-            sig2=fitting.param(0.0, vary=True),
-            del_r=fitting.guess(0.0, vary=True),
-        )
-        # path1 = xafs.feffpath('fit_path_test.dat',
-        #                       s02    = 'amp',
-        #                       e0     = 'del_e0',
-        #                       sigma2 = 'sig2',
-        #                       deltar = 'del_r')
-
-        # trans = xafs.feffit_transform(kmin=3,
-        #                               kmax=17,
-        #                               kw=2,
-        #                               dk=4,
-        #                               window='kaiser',
-        #                               rmin=1.4,
-        #                               rmax=3.0)
-        # define dataset to include data, pathlist, transform
-        # dset = xafs.feffit_dataset(data=self.data, pathlist=[path1], transform=trans)
-        # perform fit!
-        # out = xafs.feffit(pars, dset)
-        # print(xafs.feffit_report(out))
-        # try:
-        #     fout = open('doc_feffit1.out', 'w')
-        #     fout.write("%s\n" % feffit_report(out))
-        #     fout.close()
-        # except:
-        #     print('could not write doc_feffit1.out')
+    def first_shell_fit(self, ):
+        pars = fitting.param_group(amp=fitting.param(1.0, vary=True),
+                                   del_e0=fitting.param(0.0, vary=True),
+                                   sig2=fitting.param(0.0, vary=True),
+                                   del_r=fitting.guess(0.0, vary=True), )
 
     def encode_base64_figure(self, figure):
         buffer = io.BytesIO()
@@ -446,53 +399,64 @@ class check_quality(object):
         return image
 
 
-## end examples/feffit/doc_feffit1.lar
-test_cq = True
-if test_cq:
-    ### define data input
-    cq_json = os.path.abspath(os.curdir) + "/Criteria.json"
-
-    folder = os.path.abspath(os.curdir) + "/example data/SYNCHROTRON/"
-    files = sorted(glob(folder + "*.xdi"))#[:1]
-    # folder = os.path.abspath(os.curdir) + "/example data/LABORATORY/"
-    # files = sorted(glob(folder + "*.dat"))[0:1]
-
-    ### TODO Spektrum beschneiden  >>> Sache des Users
-    ### 10 %
-    ### EXAFS 600 eV
-    cq = check_quality(quality_criteria_json=cq_json)
-    for file in files:
-        print("file:\t", file)
-        if "win" in platform:
-            name = file.split("\\")[-1].split(".")[0]
-        else:
-            name = file.split("/")[-1].split(".")[0]
-        qc_list = []
-        if file.split('.')[-1] == 'dat':
-            meas_data = read_data().load_dat(file)
-        elif file.split('.')[-1] == 'xdi':
-            meas_data = read_data().load_xdi(file)
-        if "LABORATORY" in file:
-            cq.load_data(meas_data, source="LABORATORY", name=name)
-        elif "SYNCHROTRON" in file:
-            cq.load_data(meas_data, source="SYNCHROTRON", name=name)
-        data = cq.preprocess_data()
-        fig_data = cq.plot_background(show=True, save_path=None)
-        fig_data_base64 = cq.encode_base64_figure(fig_data)
-        fig_k = cq.plot_k(show=True, save_path=None)
-        fig_k_base64 = cq.encode_base64_figure(fig_k)
-        fig_R = cq.plot_R(show=True, save_path=None)
-        fig_R_base64 = cq.encode_base64_figure(fig_R)
-        qc_list.append(cq.check_edge_step())
-        qc_list.append(cq.check_energy_resolution())
-        qc_list.append(cq.check_k())
-        qc_list.append(cq.estimate_noise())
-        if all(np.array(qc_list)[:, 0]):
-            print("quality approved")
-        #     cq.create_data_json()
-        else:
-            print("data not approved")
-        cq.first_shell_fit()
-        image_data = cq.decode_base64_figure(base64_string=fig_data_base64)
-        image_k = cq.decode_base64_figure(base64_string=fig_k_base64)
-        image_R = cq.decode_base64_figure(base64_string=fig_R_base64)
+class check_quality_control(object):
+    """
+    This checks the quality control for a given facility type. It looks for data
+    in the example data folder.
+    Supported facility_type are LABORATORY; SYNCHROTRON and must be a string.
+    The plot_ variables have to be BOOLEAN. They define, if a dataset is plotted
+    or not.
+    """
+    def __init__(self, facility_type, plot_data = False,
+                 plot_k = False, plot_R = False):
+        self.facility_type = facility_type
+        self.plot_data = plot_data
+        self.plot_k = plot_k
+        self.plot_R = plot_R
+        self.results = self.check_data()
+       
+    def check_data(self, ):
+        ### define data input
+        cq_json = os.path.abspath(os.curdir) + "/Criteria.json"
+        folder = os.path.abspath(os.curdir) + "/example data/{}/".format(self.facility_type)
+        if self.facility_type == 'LABORATORY':
+            files = sorted(glob(folder + "*.dat"))
+        elif self.facility_type == 'SYNCHROTRON':
+            files = sorted(glob(folder + "*.xdi"))
+        cq = check_quality(quality_criteria_json=cq_json)
+        for file in files:
+            print("file:\t", file)
+            if "win" in platform:
+                name = file.split("\\")[-1].split(".")[0]
+            else:
+                name = file.split("/")[-1].split(".")[0]
+            self.qc_list = []
+            if file.split('.')[-1] == 'dat':
+                meas_data = read_data().load_dat(file)
+            elif file.split('.')[-1] == 'xdi':
+                meas_data = read_data().load_xdi(file)
+            cq.load_data(meas_data, source = self.facility_type, name = name)
+            self.data = cq.preprocess_data()
+            if self.plot_data:
+                fig_data = cq.plot_background(show=True, save_path=None)
+                fig_data_base64 = cq.encode_base64_figure(fig_data)
+                image_data = cq.decode_base64_figure(base64_string=fig_data_base64)
+            if self.plot_k:
+                fig_k = cq.plot_k(show=True, save_path=None)
+                fig_k_base64 = cq.encode_base64_figure(fig_k)
+                image_k = cq.decode_base64_figure(base64_string=fig_k_base64)
+            if self.plot_R:
+                fig_R = cq.plot_R(show=True, save_path=None)
+                fig_R_base64 = cq.encode_base64_figure(fig_R)
+                image_R = cq.decode_base64_figure(base64_string=fig_R_base64)
+                
+            self.qc_list.append(cq.check_edge_step())
+            self.qc_list.append(cq.check_energy_resolution())
+            self.qc_list.append(cq.check_k())
+            self.qc_list.append(cq.estimate_noise())
+            if all(np.array(self.qc_list)[:, 0]):
+                print("quality approved")
+            else:
+                print("data not approved")
+            cq.first_shell_fit()
+        return self.qc_list
