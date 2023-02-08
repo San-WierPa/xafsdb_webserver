@@ -54,7 +54,7 @@ class read_data(object):
         """
         
         data = np.loadtxt(path, skiprows=42)
-        return np.array([data[:,1], 1-data[:,12]]).T
+        return np.array([data[:,1], np.log(data[:,11]/data[:,12])]).T
     
     
     def load_dat(self, path):
@@ -422,7 +422,7 @@ class check_quality_control(object):
         if self.facility_type == 'LABORATORY':
             files = sorted(glob(folder + "*.dat"))
         elif self.facility_type == 'SYNCHROTRON':
-            files = sorted(glob(folder + "*.xdi"))
+            files = sorted(glob(folder + "*.xdi"))[:1]
         cq = check_quality(quality_criteria_json=cq_json)
         for file in files:
             print("file:\t", file)
