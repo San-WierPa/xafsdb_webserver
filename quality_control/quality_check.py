@@ -3,7 +3,8 @@
 """
 Created on Mon Mar 23 14:33:49 2020
 
-@author: frank
+@author: Frank Foerste
+ffoerste@physik.tu-berlin.de
 """
 
 ##############################################################################
@@ -26,55 +27,13 @@ import io
 import os
 from datetime import datetime
 from sys import platform
+from sys import path
+path.append('/'.join(os.path.abspath(os.curdir).split('/')[:-1])+'/plugins')
+from read_data import read_data
 
 ##############################################################################
 ### define ###
 ##############################################################################
-class read_data(object):
-    """
-    This class helps to read in different data types, .dat, .xdi are currently
-    supported.
-    """
-    def __init__(self, ):
-        pass
-    
-    
-    def load_xdi(self, path):
-        """
-        load a xdi file
-
-        Parameters
-        ----------
-        path : str
-            absolute path to the xdi file.
-        
-        Returns
-        -------
-        array([energy, mu])
-        """
-        
-        data = np.loadtxt(path, skiprows=42)
-        return np.array([data[:,1], np.log(data[:,11]/data[:,12])]).T
-    
-    
-    def load_dat(self, path):
-        """
-        load a dat file
-
-        Parameters
-        ----------
-        path : str
-            absolute path to the dat file.
-        
-        Returns
-        -------
-        array([energy, mu])
-        """
-        
-        data = np.loadtxt(path, skiprows=1)
-        return np.array([data[:,0], data[:,1]]).T
-        
-
 class check_quality(object):
     """
     This class implements the automated checkers for the quality criteria
@@ -422,7 +381,7 @@ class check_quality_control(object):
         if self.facility_type == 'LABORATORY':
             files = sorted(glob(folder + "*.dat"))
         elif self.facility_type == 'SYNCHROTRON':
-            files = sorted(glob(folder + "*.xdi"))[:1]
+            files = sorted(glob(folder + "*.xdi"))
         cq = check_quality(quality_criteria_json=cq_json)
         for file in files:
             print("file:\t", file)
@@ -459,4 +418,5 @@ class check_quality_control(object):
             else:
                 print("data not approved")
             cq.first_shell_fit()
-        return self.qc_list
+        # return self.qc_list
+# 
