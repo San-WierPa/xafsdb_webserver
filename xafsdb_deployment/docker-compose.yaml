@@ -30,7 +30,8 @@ services:
       - PG_DATA:/var/lib/postgresql/data
 
   scicat:
-    image: ghcr.io/scicatproject/backend-next:latest
+    image: ghcr.io/scicatproject/backend-next:v4.0.0-beta.2
+    #image: ghcr.io/scicatproject/backend-next:latest
     depends_on:
       - mongodb
     volumes:
