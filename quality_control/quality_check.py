@@ -7,9 +7,10 @@ Created on Mon Mar 23 14:33:49 2020
 ffoerste@physik.tu-berlin.de
 """
 
+import json
+
 ##############################################################################
 from glob import glob
-import json
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,10 +27,11 @@ import base64
 import io
 import os
 from datetime import datetime
-from sys import platform
-from sys import path
-path.append('/'.join(os.path.abspath(os.curdir).split('/')[:-1])+'/plugins')
-from read_data import read_data
+from sys import path, platform
+
+path.append("/".join(os.path.abspath(os.curdir).split("/")[:-1]) + "/plugins")
+from plugins.read_data import read_data
+
 
 ##############################################################################
 ### define ###
@@ -338,11 +340,15 @@ class check_quality(object):
         ) as tofile:
             json.dump(data, tofile, indent=4, ensure_ascii=False)
 
-    def first_shell_fit(self, ):
-        pars = fitting.param_group(amp=fitting.param(1.0, vary=True),
-                                   del_e0=fitting.param(0.0, vary=True),
-                                   sig2=fitting.param(0.0, vary=True),
-                                   del_r=fitting.guess(0.0, vary=True), )
+    def first_shell_fit(
+        self,
+    ):
+        pars = fitting.param_group(
+            amp=fitting.param(1.0, vary=True),
+            del_e0=fitting.param(0.0, vary=True),
+            sig2=fitting.param(0.0, vary=True),
+            del_r=fitting.guess(0.0, vary=True),
+        )
 
     def encode_base64_figure(self, figure):
         buffer = io.BytesIO()
@@ -366,21 +372,25 @@ class check_quality_control(object):
     The plot_ variables have to be BOOLEAN. They define, if a dataset is plotted
     or not.
     """
-    def __init__(self, facility_type, plot_data = False,
-                 plot_k = False, plot_R = False):
+
+    def __init__(self, facility_type, plot_data=False, plot_k=False, plot_R=False):
         self.facility_type = facility_type
         self.plot_data = plot_data
         self.plot_k = plot_k
         self.plot_R = plot_R
         self.results = self.check_data()
-       
-    def check_data(self, ):
+
+    def check_data(
+        self,
+    ):
         ### define data input
         cq_json = os.path.abspath(os.curdir) + "/Criteria.json"
-        folder = os.path.abspath(os.curdir) + "/example data/{}/".format(self.facility_type)
-        if self.facility_type == 'LABORATORY':
+        folder = os.path.abspath(os.curdir) + "/example data/{}/".format(
+            self.facility_type
+        )
+        if self.facility_type == "LABORATORY":
             files = sorted(glob(folder + "*.dat"))
-        elif self.facility_type == 'SYNCHROTRON':
+        elif self.facility_type == "SYNCHROTRON":
             files = sorted(glob(folder + "*.xdi"))
         cq = check_quality(quality_criteria_json=cq_json)
         for file in files:
@@ -390,11 +400,11 @@ class check_quality_control(object):
             else:
                 name = file.split("/")[-1].split(".")[0]
             self.qc_list = []
-            if file.split('.')[-1] == 'dat':
+            if file.split(".")[-1] == "dat":
                 meas_data = read_data().load_dat(file)
-            elif file.split('.')[-1] == 'xdi':
+            elif file.split(".")[-1] == "xdi":
                 meas_data = read_data().load_xdi(file)
-            cq.load_data(meas_data, source = self.facility_type, name = name)
+            cq.load_data(meas_data, source=self.facility_type, name=name)
             self.data = cq.preprocess_data()
             if self.plot_data:
                 fig_data = cq.plot_background(show=True, save_path=None)
@@ -408,7 +418,7 @@ class check_quality_control(object):
                 fig_R = cq.plot_R(show=True, save_path=None)
                 fig_R_base64 = cq.encode_base64_figure(fig_R)
                 image_R = cq.decode_base64_figure(base64_string=fig_R_base64)
-                
+
             self.qc_list.append(cq.check_edge_step())
             self.qc_list.append(cq.check_energy_resolution())
             self.qc_list.append(cq.check_k())
@@ -419,4 +429,6 @@ class check_quality_control(object):
                 print("data not approved")
             cq.first_shell_fit()
         # return self.qc_list
-# 
+
+
+#

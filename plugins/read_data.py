@@ -9,6 +9,8 @@ ffoerste@physik.tu-berlin.de
 
 ##############################################################################
 import numpy as np
+
+
 ##############################################################################
 ### define ###
 ##############################################################################
@@ -17,10 +19,12 @@ class read_data(object):
     This class helps to read in different data types, .dat, .xdi are currently
     supported.
     """
-    def __init__(self, ):
+
+    def __init__(
+        self,
+    ):
         pass
-    
-    
+
     def load_xdi(self, path):
         """
         load a xdi file
@@ -29,16 +33,15 @@ class read_data(object):
         ----------
         path : str
             absolute path to the xdi file.
-        
+
         Returns
         -------
         array([energy, mu])
         """
-        
+
         data = np.loadtxt(path, skiprows=42)
-        return np.array([data[:,1], np.log(data[:,11]/data[:,12])]).T
-    
-    
+        return np.array([data[:, 1], np.log(data[:, 11] / data[:, 12])]).T
+
     def load_dat(self, path):
         """
         load a dat file
@@ -47,12 +50,11 @@ class read_data(object):
         ----------
         path : str
             absolute path to the dat file.
-        
+
         Returns
         -------
         array([energy, mu])
         """
-        
+
         data = np.loadtxt(path, skiprows=1)
-        return np.array([data[:,0], data[:,1]]).T
-        
+        return np.array([data[:, 0], data[:, 1]]).T
