@@ -31,6 +31,47 @@ docker run registry.hzdr.de/daphne4nfdi/xafsdb
 docker run -p 8000:8000 <image-id>
 ```
 
+## Testing via feature- and dev-branch
+
+  - Before starting any new work, make sure you are on the development branch by running git checkout dev in your terminal.
+  - Create a new feature branch for your work by running git checkout -b my-feature where "my-feature" is a descriptive name for your branch.
+  - Make changes to the code, commit frequently, and push your feature branch to the remote repository with git push -u origin my-feature.
+  - Once your work is complete and tested, it's time to merge it back into the development branch. First, switch to the dev branch with git checkout dev.
+  - Merge your feature branch into the development branch with git merge my-feature.
+  - Resolve any merge conflicts that arise. These can often be resolved automatically by Git, but sometimes manual intervention is required.
+  - Once the conflicts are resolved, run your tests on the dev branch to make sure everything is still working as expected.
+  - If all tests pass, push the changes to the remote dev branch with git push.
+  - After pushing the changes to the development branch, it's time to deploy to production. Depending on your deployment process, this might involve creating a new build, running tests in a production-like environment, and deploying the new build to your production servers.
+  - Once the new build is deployed, monitor your production environment closely for any issues that may arise. If you do discover issues, you may need to roll back the changes to the previous version of your code.
+  - Repeat this process as necessary, always working on feature branches and merging them into the development branch before deploying to production.
+
++ Respectively with respect to versioning:
+
+  - Start by creating a new feature branch for each new feature or change you want to make.
+  - Commit your changes to your feature branch as you work on them.
+  - Once you're happy with your changes, merge your feature branch into the development branch.
+  - Test your changes in the development branch and make any necessary bug fixes.
+  - When you're ready to release a new version of your software, create a new release branch based on the development branch.
+  - Update the version number in your code to reflect the changes you've made since the last release.
+  - Build and test your code in the release branch to ensure everything is working as expected.
+  - When you're ready to deploy your code to production, merge the release branch into the production branch.
+
+## Python tests
+
++ In Django, the python manage.py test command is used to run all of the tests for the project. This command uses the built-in unittest module to discover and run the test cases in the project.
+
+Using python manage.py test has a few advantages over using unittest directly:
+
+    - It automatically sets up the Django environment for the     tests, which includes configuring the database and loading the project's settings.
+
+    - It provides a consistent interface for running tests across different Django projects.
+
+    - It allows for more fine-grained control over the tests, such as running only specific tests or excluding tests with certain tags.
+
+    - It integrates with other Django features, such as test fixtures, which can make it easier to set up test data.
+
+That being said, it is still possible to use unittest directly to run tests in a Django project. However, in most cases, using python manage.py test is the recommended approach.
+
 ### Pre-deploy to gitlab -> atm hzdr
 
 + Push the image:
@@ -195,6 +236,12 @@ http://35.233.84.253/mongodb/db/scicat/
 + For deleting (flush) datasets, do not forget to delete ALL relational entries in the database (e.g. attachment with the same datasetId)
 **NOTE** Deleting atm only manually, since the db is persistent and the vm does not have a mongosh!
 
+**TODO**
+```shell
+mongo-express_1    | Mongo Express server listening at http://0.0.0.0:8081
+mongo-express_1    | Server is open to allow connections from anyone (0.0.0.0)
+mongo-express_1    | basicAuth credentials are "admin:pass", it is recommended you change this in your config.js!
+```
 
 
 ## PIPELINE
