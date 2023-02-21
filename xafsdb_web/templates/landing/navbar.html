@@ -3,17 +3,16 @@
 <div class="navbar">
     <div class="navbar-container">
         <div class="logo-container">
-            <a href="http://35.233.84.253">
+            <a href="{% url 'home' %}">
                 <h1 class="logo">xafsdb</h1>
             </a>
         </div>
 
         <div class="menu-container">
             <ul class="menu-list">
-                <li class="menu-list-item active_nav"><a href="{% url 'home' %}">Home</a></li>
-                <a href="{% url 'dataset_list' %}" class="menu-list-item active_nav"> DataSets </a>
-                <a href="{% url 'contact' %}"  class="menu-list-item active_nav"> Contact </a>
-
+              <li class="menu-list-item active_nav"><a href="{% url 'home' %}">Home</a></li>
+              <li class="menu-list-item active_nav"><a href="{% url 'dataset_list' %}">DataSets</a></li>
+              <li class="menu-list-item active_nav"><a href="{% url 'contact' %}">Contact</a></li>
             </ul>
         </div>
 
@@ -27,7 +26,8 @@
 
         <!-- searchbar -->
         <div class="search-container">
-            <form action="{% url 'pg_search' %}">
+            <form action="{% url 'pg_search' %}" method="GET">
+                {% csrf_token %}
                 <input
                 type="search"
                 class="searchTerm"
@@ -39,7 +39,7 @@
                 <button type="submit"><i class="fa fa-search"></i></button>
             </form>
         </div>
-        <!-- end of searchbar {% csrf_token %}-->
+        <!-- end of searchbar -->
 
     </div>
 </div>

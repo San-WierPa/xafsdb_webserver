@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-    <title>xafsDB - Error</title>
-    <!-- favicon -->
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
+
+    {% block title %}
+    <title>xafsDB - Error</title>
+    {% endblock %}
+
 </header>
 
 {% include "landing/navbar.html" %}
@@ -73,7 +74,7 @@
             <h2>
                 {{ ERROR_DESCR }}
             </h2>
-            Back to <a href="http://35.233.84.253"> "Home" </a>?
+            Back to <a href="{% url 'home' %}"> "Home" </a>?
         </div>
 
     </section>
