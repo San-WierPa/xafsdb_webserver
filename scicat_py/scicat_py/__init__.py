@@ -28,11 +28,18 @@ from scicat_py.api.published_data_api import PublishedDataApi
 from scicat_py.api.samples_api import SamplesApi
 from scicat_py.api.user_identities_api import UserIdentitiesApi
 from scicat_py.api.users_api import UsersApi
+
 # import ApiClient
 from scicat_py.api_client import ApiClient
 from scicat_py.configuration import Configuration
-from scicat_py.exceptions import (ApiException, ApiKeyError, ApiTypeError,
-                                  ApiValueError, OpenApiException)
+from scicat_py.exceptions import (
+    ApiException,
+    ApiKeyError,
+    ApiTypeError,
+    ApiValueError,
+    OpenApiException,
+)
+
 # import models into sdk package
 from scicat_py.models.attachment import Attachment
 from scicat_py.models.create_attachment_dto import CreateAttachmentDto

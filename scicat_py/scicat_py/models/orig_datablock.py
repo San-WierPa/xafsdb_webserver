@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,30 +33,42 @@ class OrigDatablock(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'instrument_group': 'str',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'id': 'str',
-        'dataset_id': 'str',
-        'size': 'float',
-        'data_file_list': 'list[str]'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "instrument_group": "str",
+        "created_by": "str",
+        "updated_by": "str",
+        "id": "str",
+        "dataset_id": "str",
+        "size": "float",
+        "data_file_list": "list[str]",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'instrument_group': 'instrumentGroup',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'id': '_id',
-        'dataset_id': 'datasetId',
-        'size': 'size',
-        'data_file_list': 'dataFileList'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "instrument_group": "instrumentGroup",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "id": "_id",
+        "dataset_id": "datasetId",
+        "size": "size",
+        "data_file_list": "dataFileList",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, instrument_group=None, created_by=None, updated_by=None, id=None, dataset_id=None, size=None, data_file_list=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        instrument_group=None,
+        created_by=None,
+        updated_by=None,
+        id=None,
+        dataset_id=None,
+        size=None,
+        data_file_list=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """OrigDatablock - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -103,8 +116,12 @@ class OrigDatablock(object):
         :param owner_group: The owner_group of this OrigDatablock.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_group is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_group`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_group is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_group`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_group = owner_group
 
@@ -128,8 +145,13 @@ class OrigDatablock(object):
         :param access_groups: The access_groups of this OrigDatablock.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and access_groups is None:  # noqa: E501
-            raise ValueError("Invalid value for `access_groups`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and access_groups is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `access_groups`, must not be `None`"
+            )  # noqa: E501
 
         self._access_groups = access_groups
 
@@ -174,8 +196,12 @@ class OrigDatablock(object):
         :param created_by: The created_by of this OrigDatablock.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and created_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_by`, must not be `None`"
+            )  # noqa: E501
 
         self._created_by = created_by
 
@@ -197,8 +223,12 @@ class OrigDatablock(object):
         :param updated_by: The updated_by of this OrigDatablock.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and updated_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_by`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_by = updated_by
 
@@ -220,7 +250,9 @@ class OrigDatablock(object):
         :param id: The id of this OrigDatablock.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and id is None:  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and id is None
+        ):  # noqa: E501
             raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id
@@ -245,8 +277,12 @@ class OrigDatablock(object):
         :param dataset_id: The dataset_id of this OrigDatablock.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and dataset_id is None:  # noqa: E501
-            raise ValueError("Invalid value for `dataset_id`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and dataset_id is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `dataset_id`, must not be `None`"
+            )  # noqa: E501
 
         self._dataset_id = dataset_id
 
@@ -270,8 +306,12 @@ class OrigDatablock(object):
         :param size: The size of this OrigDatablock.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and size is None:  # noqa: E501
-            raise ValueError("Invalid value for `size`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and size is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `size`, must not be `None`"
+            )  # noqa: E501
 
         self._size = size
 
@@ -295,8 +335,13 @@ class OrigDatablock(object):
         :param data_file_list: The data_file_list of this OrigDatablock.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and data_file_list is None:  # noqa: E501
-            raise ValueError("Invalid value for `data_file_list`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and data_file_list is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `data_file_list`, must not be `None`"
+            )  # noqa: E501
 
         self._data_file_list = data_file_list
 
@@ -307,18 +352,20 @@ class OrigDatablock(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

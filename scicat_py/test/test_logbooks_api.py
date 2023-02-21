@@ -29,17 +29,13 @@ class TestLogbooksApi(unittest.TestCase):
         pass
 
     def test_logbooks_controller_find_all(self):
-        """Test case for logbooks_controller_find_all
-
-        """
+        """Test case for logbooks_controller_find_all"""
         pass
 
     def test_logbooks_controller_find_by_name(self):
-        """Test case for logbooks_controller_find_by_name
-
-        """
+        """Test case for logbooks_controller_find_by_name"""
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

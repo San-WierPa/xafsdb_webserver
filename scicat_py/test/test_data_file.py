@@ -31,30 +31,34 @@ class TestDataFile(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test DataFile
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.data_file.DataFile()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return DataFile(
-                path = '0', 
-                size = 1.337, 
-                time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                chk = '0', 
-                uid = '0', 
-                gid = '0', 
-                perm = '0'
+                path="0",
+                size=1.337,
+                time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                chk="0",
+                uid="0",
+                gid="0",
+                perm="0",
             )
-        else :
+        else:
             return DataFile(
-                path = '0',
-                size = 1.337,
-                time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                chk = '0',
-                uid = '0',
-                gid = '0',
-                perm = '0',
-        )
+                path="0",
+                size=1.337,
+                time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                chk="0",
+                uid="0",
+                gid="0",
+                perm="0",
+            )
 
     def testDataFile(self):
         """Test DataFile"""
@@ -62,5 +66,5 @@ class TestDataFile(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

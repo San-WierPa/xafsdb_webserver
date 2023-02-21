@@ -31,24 +31,32 @@ class TestMeasurementPeriod(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test MeasurementPeriod
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.measurement_period.MeasurementPeriod()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return MeasurementPeriod(
-                instrument = '0', 
-                start = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                end = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                comment = '0'
+                instrument="0",
+                start=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                end=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                comment="0",
             )
-        else :
+        else:
             return MeasurementPeriod(
-                instrument = '0',
-                start = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                end = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                comment = '0',
-        )
+                instrument="0",
+                start=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                end=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                comment="0",
+            )
 
     def testMeasurementPeriod(self):
         """Test MeasurementPeriod"""
@@ -56,5 +64,5 @@ class TestMeasurementPeriod(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

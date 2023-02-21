@@ -16,8 +16,9 @@ import datetime
 import unittest
 
 import scicat_py
-from scicat_py.models.create_published_data_dto import \
-    CreatePublishedDataDto  # noqa: E501
+from scicat_py.models.create_published_data_dto import (
+    CreatePublishedDataDto,
+)  # noqa: E501
 from scicat_py.rest import ApiException
 
 
@@ -32,58 +33,50 @@ class TestCreatePublishedDataDto(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test CreatePublishedDataDto
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.create_published_data_dto.CreatePublishedDataDto()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return CreatePublishedDataDto(
-                id = '0', 
-                doi = '0', 
-                affiliation = '0', 
-                creator = [
-                    '0'
-                    ], 
-                publisher = '0', 
-                publication_year = 1.337, 
-                title = '0', 
-                url = '0', 
-                abstract = '0', 
-                data_description = '0', 
-                resource_type = '0', 
-                number_of_files = 1.337, 
-                size_of_archive = 1.337, 
-                pid_array = [
-                    '0'
-                    ], 
-                authors = [
-                    '0'
-                    ], 
-                registered_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                status = '0', 
-                scicat_user = '0', 
-                thumbnail = '0', 
-                related_publications = [
-                    '0'
-                    ], 
-                download_link = '0'
+                id="0",
+                doi="0",
+                affiliation="0",
+                creator=["0"],
+                publisher="0",
+                publication_year=1.337,
+                title="0",
+                url="0",
+                abstract="0",
+                data_description="0",
+                resource_type="0",
+                number_of_files=1.337,
+                size_of_archive=1.337,
+                pid_array=["0"],
+                authors=["0"],
+                registered_time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                status="0",
+                scicat_user="0",
+                thumbnail="0",
+                related_publications=["0"],
+                download_link="0",
             )
-        else :
+        else:
             return CreatePublishedDataDto(
-                creator = [
-                    '0'
-                    ],
-                publisher = '0',
-                publication_year = 1.337,
-                title = '0',
-                abstract = '0',
-                data_description = '0',
-                resource_type = '0',
-                pid_array = [
-                    '0'
-                    ],
-                registered_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-        )
+                creator=["0"],
+                publisher="0",
+                publication_year=1.337,
+                title="0",
+                abstract="0",
+                data_description="0",
+                resource_type="0",
+                pid_array=["0"],
+                registered_time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+            )
 
     def testCreatePublishedDataDto(self):
         """Test CreatePublishedDataDto"""
@@ -91,5 +84,5 @@ class TestCreatePublishedDataDto(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

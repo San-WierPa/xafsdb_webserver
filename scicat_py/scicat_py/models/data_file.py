@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,26 +33,36 @@ class DataFile(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'path': 'str',
-        'size': 'float',
-        'time': 'datetime',
-        'chk': 'str',
-        'uid': 'str',
-        'gid': 'str',
-        'perm': 'str'
+        "path": "str",
+        "size": "float",
+        "time": "datetime",
+        "chk": "str",
+        "uid": "str",
+        "gid": "str",
+        "perm": "str",
     }
 
     attribute_map = {
-        'path': 'path',
-        'size': 'size',
-        'time': 'time',
-        'chk': 'chk',
-        'uid': 'uid',
-        'gid': 'gid',
-        'perm': 'perm'
+        "path": "path",
+        "size": "size",
+        "time": "time",
+        "chk": "chk",
+        "uid": "uid",
+        "gid": "gid",
+        "perm": "perm",
     }
 
-    def __init__(self, path=None, size=None, time=None, chk=None, uid=None, gid=None, perm=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        path=None,
+        size=None,
+        time=None,
+        chk=None,
+        uid=None,
+        gid=None,
+        perm=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """DataFile - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -94,8 +105,12 @@ class DataFile(object):
         :param path: The path of this DataFile.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and path is None:  # noqa: E501
-            raise ValueError("Invalid value for `path`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and path is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `path`, must not be `None`"
+            )  # noqa: E501
 
         self._path = path
 
@@ -119,8 +134,12 @@ class DataFile(object):
         :param size: The size of this DataFile.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and size is None:  # noqa: E501
-            raise ValueError("Invalid value for `size`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and size is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `size`, must not be `None`"
+            )  # noqa: E501
 
         self._size = size
 
@@ -144,8 +163,12 @@ class DataFile(object):
         :param time: The time of this DataFile.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and time is None:  # noqa: E501
-            raise ValueError("Invalid value for `time`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and time is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `time`, must not be `None`"
+            )  # noqa: E501
 
         self._time = time
 
@@ -169,8 +192,12 @@ class DataFile(object):
         :param chk: The chk of this DataFile.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and chk is None:  # noqa: E501
-            raise ValueError("Invalid value for `chk`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and chk is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `chk`, must not be `None`"
+            )  # noqa: E501
 
         self._chk = chk
 
@@ -194,8 +221,12 @@ class DataFile(object):
         :param uid: The uid of this DataFile.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and uid is None:  # noqa: E501
-            raise ValueError("Invalid value for `uid`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and uid is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `uid`, must not be `None`"
+            )  # noqa: E501
 
         self._uid = uid
 
@@ -219,8 +250,12 @@ class DataFile(object):
         :param gid: The gid of this DataFile.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and gid is None:  # noqa: E501
-            raise ValueError("Invalid value for `gid`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and gid is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `gid`, must not be `None`"
+            )  # noqa: E501
 
         self._gid = gid
 
@@ -244,8 +279,12 @@ class DataFile(object):
         :param perm: The perm of this DataFile.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and perm is None:  # noqa: E501
-            raise ValueError("Invalid value for `perm`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and perm is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `perm`, must not be `None`"
+            )  # noqa: E501
 
         self._perm = perm
 
@@ -256,18 +295,20 @@ class DataFile(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

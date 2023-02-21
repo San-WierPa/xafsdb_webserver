@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,28 +33,39 @@ class UpdateJobDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'email_job_initiator': 'str',
-        'type': 'str',
-        'creation_time': 'datetime',
-        'execution_time': 'datetime',
-        'job_params': 'object',
-        'job_status_message': 'str',
-        'dataset_list': 'object',
-        'job_result_object': 'object'
+        "email_job_initiator": "str",
+        "type": "str",
+        "creation_time": "datetime",
+        "execution_time": "datetime",
+        "job_params": "object",
+        "job_status_message": "str",
+        "dataset_list": "object",
+        "job_result_object": "object",
     }
 
     attribute_map = {
-        'email_job_initiator': 'emailJobInitiator',
-        'type': 'type',
-        'creation_time': 'creationTime',
-        'execution_time': 'executionTime',
-        'job_params': 'jobParams',
-        'job_status_message': 'jobStatusMessage',
-        'dataset_list': 'datasetList',
-        'job_result_object': 'jobResultObject'
+        "email_job_initiator": "emailJobInitiator",
+        "type": "type",
+        "creation_time": "creationTime",
+        "execution_time": "executionTime",
+        "job_params": "jobParams",
+        "job_status_message": "jobStatusMessage",
+        "dataset_list": "datasetList",
+        "job_result_object": "jobResultObject",
     }
 
-    def __init__(self, email_job_initiator=None, type=None, creation_time=None, execution_time=None, job_params=None, job_status_message=None, dataset_list=None, job_result_object=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        email_job_initiator=None,
+        type=None,
+        creation_time=None,
+        execution_time=None,
+        job_params=None,
+        job_status_message=None,
+        dataset_list=None,
+        job_result_object=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """UpdateJobDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -261,18 +273,20 @@ class UpdateJobDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

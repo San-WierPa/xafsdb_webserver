@@ -31,27 +31,26 @@ class TestUpdateSampleDto(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test UpdateSampleDto
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.update_sample_dto.UpdateSampleDto()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return UpdateSampleDto(
-                owner_group = '0', 
-                access_groups = [
-                    '0'
-                    ], 
-                created_by = '0', 
-                updated_by = '0', 
-                owner = '0', 
-                description = '0', 
-                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                sample_characteristics = None, 
-                is_published = True
+                owner_group="0",
+                access_groups=["0"],
+                created_by="0",
+                updated_by="0",
+                owner="0",
+                description="0",
+                created_at=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                sample_characteristics=None,
+                is_published=True,
             )
-        else :
-            return UpdateSampleDto(
-        )
+        else:
+            return UpdateSampleDto()
 
     def testUpdateSampleDto(self):
         """Test UpdateSampleDto"""
@@ -59,5 +58,5 @@ class TestUpdateSampleDto(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

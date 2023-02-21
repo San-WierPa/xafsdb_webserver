@@ -31,24 +31,27 @@ class TestUpdateJobDto(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test UpdateJobDto
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.update_job_dto.UpdateJobDto()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return UpdateJobDto(
-                email_job_initiator = '0', 
-                type = '0', 
-                creation_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                execution_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                job_params = None, 
-                job_status_message = '0', 
-                dataset_list = None, 
-                job_result_object = None
+                email_job_initiator="0",
+                type="0",
+                creation_time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                execution_time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                job_params=None,
+                job_status_message="0",
+                dataset_list=None,
+                job_result_object=None,
             )
-        else :
-            return UpdateJobDto(
-        )
+        else:
+            return UpdateJobDto()
 
     def testUpdateJobDto(self):
         """Test UpdateJobDto"""
@@ -56,5 +59,5 @@ class TestUpdateJobDto(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

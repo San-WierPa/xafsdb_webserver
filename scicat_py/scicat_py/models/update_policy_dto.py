@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,38 +33,54 @@ class UpdatePolicyDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'manager': 'list[str]',
-        'tape_redundancy': 'str',
-        'auto_archive': 'bool',
-        'auto_archive_delay': 'float',
-        'archive_email_notification': 'bool',
-        'archive_emails_to_be_notified': 'list[str]',
-        'retrieve_email_notification': 'bool',
-        'retrieve_emails_to_be_notified': 'list[str]',
-        'embargo_period': 'float'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "manager": "list[str]",
+        "tape_redundancy": "str",
+        "auto_archive": "bool",
+        "auto_archive_delay": "float",
+        "archive_email_notification": "bool",
+        "archive_emails_to_be_notified": "list[str]",
+        "retrieve_email_notification": "bool",
+        "retrieve_emails_to_be_notified": "list[str]",
+        "embargo_period": "float",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'manager': 'manager',
-        'tape_redundancy': 'tapeRedundancy',
-        'auto_archive': 'autoArchive',
-        'auto_archive_delay': 'autoArchiveDelay',
-        'archive_email_notification': 'archiveEmailNotification',
-        'archive_emails_to_be_notified': 'archiveEmailsToBeNotified',
-        'retrieve_email_notification': 'retrieveEmailNotification',
-        'retrieve_emails_to_be_notified': 'retrieveEmailsToBeNotified',
-        'embargo_period': 'embargoPeriod'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "manager": "manager",
+        "tape_redundancy": "tapeRedundancy",
+        "auto_archive": "autoArchive",
+        "auto_archive_delay": "autoArchiveDelay",
+        "archive_email_notification": "archiveEmailNotification",
+        "archive_emails_to_be_notified": "archiveEmailsToBeNotified",
+        "retrieve_email_notification": "retrieveEmailNotification",
+        "retrieve_emails_to_be_notified": "retrieveEmailsToBeNotified",
+        "embargo_period": "embargoPeriod",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, manager=None, tape_redundancy=None, auto_archive=None, auto_archive_delay=None, archive_email_notification=None, archive_emails_to_be_notified=None, retrieve_email_notification=None, retrieve_emails_to_be_notified=None, embargo_period=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        manager=None,
+        tape_redundancy=None,
+        auto_archive=None,
+        auto_archive_delay=None,
+        archive_email_notification=None,
+        archive_emails_to_be_notified=None,
+        retrieve_email_notification=None,
+        retrieve_emails_to_be_notified=None,
+        embargo_period=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """UpdatePolicyDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -399,18 +416,20 @@ class UpdatePolicyDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

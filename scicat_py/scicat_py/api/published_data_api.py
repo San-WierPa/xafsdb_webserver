@@ -16,6 +16,7 @@ import re  # noqa: F401
 
 # python 2 and python 3 compatibility library
 import six
+
 from scicat_py.api_client import ApiClient
 from scicat_py.exceptions import ApiTypeError, ApiValueError  # noqa: F401
 
@@ -53,8 +54,10 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_count_with_http_info(**kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_count_with_http_info(
+            **kwargs
+        )  # noqa: E501
 
     def published_data_controller_count_with_http_info(self, **kwargs):  # noqa: E501
         """published_data_controller_count  # noqa: E501
@@ -82,34 +85,34 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filter'
-        ]
+        all_params = ["filter"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_count" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filter' in local_var_params and local_var_params['filter'] is not None:  # noqa: E501
-            query_params.append(('filter', local_var_params['filter']))  # noqa: E501
+        if (
+            "filter" in local_var_params and local_var_params["filter"] is not None
+        ):  # noqa: E501
+            query_params.append(("filter", local_var_params["filter"]))  # noqa: E501
 
         header_params = {}
 
@@ -118,29 +121,36 @@ class PublishedDataApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata/count', 'GET',
+            "/api/v3/publisheddata/count",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def published_data_controller_create(self, create_published_data_dto, **kwargs):  # noqa: E501
+    def published_data_controller_create(
+        self, create_published_data_dto, **kwargs
+    ):  # noqa: E501
         """published_data_controller_create  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -161,10 +171,14 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_create_with_http_info(create_published_data_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_create_with_http_info(
+            create_published_data_dto, **kwargs
+        )  # noqa: E501
 
-    def published_data_controller_create_with_http_info(self, create_published_data_dto, **kwargs):  # noqa: E501
+    def published_data_controller_create_with_http_info(
+        self, create_published_data_dto, **kwargs
+    ):  # noqa: E501
         """published_data_controller_create  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -190,30 +204,32 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'create_published_data_dto'
-        ]
+        all_params = ["create_published_data_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_create" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'create_published_data_dto' is set
-        if self.api_client.client_side_validation and ('create_published_data_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['create_published_data_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `create_published_data_dto` when calling `published_data_controller_create`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "create_published_data_dto" not in local_var_params
+            or local_var_params["create_published_data_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `create_published_data_dto` when calling `published_data_controller_create`"
+            )  # noqa: E501
 
         collection_formats = {}
 
@@ -227,34 +243,42 @@ class PublishedDataApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'create_published_data_dto' in local_var_params:
-            body_params = local_var_params['create_published_data_dto']
+        if "create_published_data_dto" in local_var_params:
+            body_params = local_var_params["create_published_data_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata', 'POST',
+            "/api/v3/publisheddata",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PublishedData',  # noqa: E501
+            response_type="PublishedData",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def published_data_controller_find_all(self, **kwargs):  # noqa: E501
         """published_data_controller_find_all  # noqa: E501
@@ -277,8 +301,10 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_find_all_with_http_info(**kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_find_all_with_http_info(
+            **kwargs
+        )  # noqa: E501
 
     def published_data_controller_find_all_with_http_info(self, **kwargs):  # noqa: E501
         """published_data_controller_find_all  # noqa: E501
@@ -306,34 +332,34 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filter'
-        ]
+        all_params = ["filter"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_find_all" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filter' in local_var_params and local_var_params['filter'] is not None:  # noqa: E501
-            query_params.append(('filter', local_var_params['filter']))  # noqa: E501
+        if (
+            "filter" in local_var_params and local_var_params["filter"] is not None
+        ):  # noqa: E501
+            query_params.append(("filter", local_var_params["filter"]))  # noqa: E501
 
         header_params = {}
 
@@ -342,27 +368,32 @@ class PublishedDataApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata', 'GET',
+            "/api/v3/publisheddata",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[PublishedData]',  # noqa: E501
+            response_type="list[PublishedData]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def published_data_controller_find_one(self, id, **kwargs):  # noqa: E501
         """published_data_controller_find_one  # noqa: E501
@@ -385,10 +416,14 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_find_one_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_find_one_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def published_data_controller_find_one_with_http_info(self, id, **kwargs):  # noqa: E501
+    def published_data_controller_find_one_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """published_data_controller_find_one  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -414,36 +449,37 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_find_one" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `published_data_controller_find_one`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `published_data_controller_find_one`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -454,27 +490,32 @@ class PublishedDataApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata/{id}', 'GET',
+            "/api/v3/publisheddata/{id}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def published_data_controller_form_populate(self, pid, **kwargs):  # noqa: E501
         """published_data_controller_form_populate  # noqa: E501
@@ -497,10 +538,14 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_form_populate_with_http_info(pid, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_form_populate_with_http_info(
+            pid, **kwargs
+        )  # noqa: E501
 
-    def published_data_controller_form_populate_with_http_info(self, pid, **kwargs):  # noqa: E501
+    def published_data_controller_form_populate_with_http_info(
+        self, pid, **kwargs
+    ):  # noqa: E501
         """published_data_controller_form_populate  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -526,38 +571,42 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'pid'
-        ]
+        all_params = ["pid"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_form_populate" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'pid' is set
-        if self.api_client.client_side_validation and ('pid' not in local_var_params or  # noqa: E501
-                                                        local_var_params['pid'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `pid` when calling `published_data_controller_form_populate`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "pid" not in local_var_params
+            or local_var_params["pid"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `pid` when calling `published_data_controller_form_populate`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'pid' in local_var_params and local_var_params['pid'] is not None:  # noqa: E501
-            query_params.append(('pid', local_var_params['pid']))  # noqa: E501
+        if (
+            "pid" in local_var_params and local_var_params["pid"] is not None
+        ):  # noqa: E501
+            query_params.append(("pid", local_var_params["pid"]))  # noqa: E501
 
         header_params = {}
 
@@ -566,27 +615,32 @@ class PublishedDataApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata/formpopulate', 'GET',
+            "/api/v3/publisheddata/formpopulate",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def published_data_controller_register(self, id, **kwargs):  # noqa: E501
         """published_data_controller_register  # noqa: E501
@@ -609,10 +663,14 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_register_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_register_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def published_data_controller_register_with_http_info(self, id, **kwargs):  # noqa: E501
+    def published_data_controller_register_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """published_data_controller_register  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -638,36 +696,37 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_register" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `published_data_controller_register`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `published_data_controller_register`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -678,27 +737,32 @@ class PublishedDataApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata/{id}/register', 'POST',
+            "/api/v3/publisheddata/{id}/register",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def published_data_controller_remove(self, id, **kwargs):  # noqa: E501
         """published_data_controller_remove  # noqa: E501
@@ -721,10 +785,14 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_remove_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_remove_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def published_data_controller_remove_with_http_info(self, id, **kwargs):  # noqa: E501
+    def published_data_controller_remove_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """published_data_controller_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -750,36 +818,37 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_remove" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `published_data_controller_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `published_data_controller_remove`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -790,29 +859,36 @@ class PublishedDataApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata/{id}', 'DELETE',
+            "/api/v3/publisheddata/{id}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def published_data_controller_resync(self, id, update_published_data_dto, **kwargs):  # noqa: E501
+    def published_data_controller_resync(
+        self, id, update_published_data_dto, **kwargs
+    ):  # noqa: E501
         """published_data_controller_resync  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -834,10 +910,14 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_resync_with_http_info(id, update_published_data_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_resync_with_http_info(
+            id, update_published_data_dto, **kwargs
+        )  # noqa: E501
 
-    def published_data_controller_resync_with_http_info(self, id, update_published_data_dto, **kwargs):  # noqa: E501
+    def published_data_controller_resync_with_http_info(
+        self, id, update_published_data_dto, **kwargs
+    ):  # noqa: E501
         """published_data_controller_resync  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -864,41 +944,45 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'update_published_data_dto'
-        ]
+        all_params = ["id", "update_published_data_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_resync" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `published_data_controller_resync`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `published_data_controller_resync`"
+            )  # noqa: E501
         # verify the required parameter 'update_published_data_dto' is set
-        if self.api_client.client_side_validation and ('update_published_data_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_published_data_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_published_data_dto` when calling `published_data_controller_resync`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_published_data_dto" not in local_var_params
+            or local_var_params["update_published_data_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_published_data_dto` when calling `published_data_controller_resync`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -908,36 +992,46 @@ class PublishedDataApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_published_data_dto' in local_var_params:
-            body_params = local_var_params['update_published_data_dto']
+        if "update_published_data_dto" in local_var_params:
+            body_params = local_var_params["update_published_data_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata/{id}/resync', 'POST',
+            "/api/v3/publisheddata/{id}/resync",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def published_data_controller_update(self, id, update_published_data_dto, **kwargs):  # noqa: E501
+    def published_data_controller_update(
+        self, id, update_published_data_dto, **kwargs
+    ):  # noqa: E501
         """published_data_controller_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -959,10 +1053,14 @@ class PublishedDataApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.published_data_controller_update_with_http_info(id, update_published_data_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.published_data_controller_update_with_http_info(
+            id, update_published_data_dto, **kwargs
+        )  # noqa: E501
 
-    def published_data_controller_update_with_http_info(self, id, update_published_data_dto, **kwargs):  # noqa: E501
+    def published_data_controller_update_with_http_info(
+        self, id, update_published_data_dto, **kwargs
+    ):  # noqa: E501
         """published_data_controller_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -989,41 +1087,45 @@ class PublishedDataApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'update_published_data_dto'
-        ]
+        all_params = ["id", "update_published_data_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method published_data_controller_update" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `published_data_controller_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `published_data_controller_update`"
+            )  # noqa: E501
         # verify the required parameter 'update_published_data_dto' is set
-        if self.api_client.client_side_validation and ('update_published_data_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_published_data_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_published_data_dto` when calling `published_data_controller_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_published_data_dto" not in local_var_params
+            or local_var_params["update_published_data_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_published_data_dto` when calling `published_data_controller_update`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1033,31 +1135,39 @@ class PublishedDataApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_published_data_dto' in local_var_params:
-            body_params = local_var_params['update_published_data_dto']
+        if "update_published_data_dto" in local_var_params:
+            body_params = local_var_params["update_published_data_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/publisheddata/{id}', 'PATCH',
+            "/api/v3/publisheddata/{id}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

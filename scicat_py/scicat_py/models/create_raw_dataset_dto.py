@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,88 +33,129 @@ class CreateRawDatasetDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'owner': 'str',
-        'owner_email': 'str',
-        'orcid_of_owner': 'str',
-        'contact_email': 'str',
-        'source_folder': 'str',
-        'source_folder_host': 'str',
-        'size': 'float',
-        'packed_size': 'float',
-        'number_of_files': 'float',
-        'number_of_files_archived': 'float',
-        'creation_time': 'datetime',
-        'type': 'str',
-        'validation_status': 'str',
-        'keywords': 'list[str]',
-        'description': 'str',
-        'dataset_name': 'str',
-        'classification': 'str',
-        'license': 'str',
-        'version': 'str',
-        'is_published': 'bool',
-        'history': 'list[object]',
-        'datasetlifecycle': 'Lifecycle',
-        'created_at': 'datetime',
-        'updated_at': 'datetime',
-        'instrument_id': 'str',
-        'techniques': 'list[Technique]',
-        'shared_with': 'list[str]',
-        'principal_investigator': 'str',
-        'end_time': 'datetime',
-        'creation_location': 'str',
-        'data_format': 'str',
-        'scientific_metadata': 'object',
-        'proposal_id': 'str',
-        'sample_id': 'str'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "owner": "str",
+        "owner_email": "str",
+        "orcid_of_owner": "str",
+        "contact_email": "str",
+        "source_folder": "str",
+        "source_folder_host": "str",
+        "size": "float",
+        "packed_size": "float",
+        "number_of_files": "float",
+        "number_of_files_archived": "float",
+        "creation_time": "datetime",
+        "type": "str",
+        "validation_status": "str",
+        "keywords": "list[str]",
+        "description": "str",
+        "dataset_name": "str",
+        "classification": "str",
+        "license": "str",
+        "version": "str",
+        "is_published": "bool",
+        "history": "list[object]",
+        "datasetlifecycle": "Lifecycle",
+        "created_at": "datetime",
+        "updated_at": "datetime",
+        "instrument_id": "str",
+        "techniques": "list[Technique]",
+        "shared_with": "list[str]",
+        "principal_investigator": "str",
+        "end_time": "datetime",
+        "creation_location": "str",
+        "data_format": "str",
+        "scientific_metadata": "object",
+        "proposal_id": "str",
+        "sample_id": "str",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'owner': 'owner',
-        'owner_email': 'ownerEmail',
-        'orcid_of_owner': 'orcidOfOwner',
-        'contact_email': 'contactEmail',
-        'source_folder': 'sourceFolder',
-        'source_folder_host': 'sourceFolderHost',
-        'size': 'size',
-        'packed_size': 'packedSize',
-        'number_of_files': 'numberOfFiles',
-        'number_of_files_archived': 'numberOfFilesArchived',
-        'creation_time': 'creationTime',
-        'type': 'type',
-        'validation_status': 'validationStatus',
-        'keywords': 'keywords',
-        'description': 'description',
-        'dataset_name': 'datasetName',
-        'classification': 'classification',
-        'license': 'license',
-        'version': 'version',
-        'is_published': 'isPublished',
-        'history': 'history',
-        'datasetlifecycle': 'datasetlifecycle',
-        'created_at': 'createdAt',
-        'updated_at': 'updatedAt',
-        'instrument_id': 'instrumentId',
-        'techniques': 'techniques',
-        'shared_with': 'sharedWith',
-        'principal_investigator': 'principalInvestigator',
-        'end_time': 'endTime',
-        'creation_location': 'creationLocation',
-        'data_format': 'dataFormat',
-        'scientific_metadata': 'scientificMetadata',
-        'proposal_id': 'proposalId',
-        'sample_id': 'sampleId'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "owner": "owner",
+        "owner_email": "ownerEmail",
+        "orcid_of_owner": "orcidOfOwner",
+        "contact_email": "contactEmail",
+        "source_folder": "sourceFolder",
+        "source_folder_host": "sourceFolderHost",
+        "size": "size",
+        "packed_size": "packedSize",
+        "number_of_files": "numberOfFiles",
+        "number_of_files_archived": "numberOfFilesArchived",
+        "creation_time": "creationTime",
+        "type": "type",
+        "validation_status": "validationStatus",
+        "keywords": "keywords",
+        "description": "description",
+        "dataset_name": "datasetName",
+        "classification": "classification",
+        "license": "license",
+        "version": "version",
+        "is_published": "isPublished",
+        "history": "history",
+        "datasetlifecycle": "datasetlifecycle",
+        "created_at": "createdAt",
+        "updated_at": "updatedAt",
+        "instrument_id": "instrumentId",
+        "techniques": "techniques",
+        "shared_with": "sharedWith",
+        "principal_investigator": "principalInvestigator",
+        "end_time": "endTime",
+        "creation_location": "creationLocation",
+        "data_format": "dataFormat",
+        "scientific_metadata": "scientificMetadata",
+        "proposal_id": "proposalId",
+        "sample_id": "sampleId",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, owner=None, owner_email=None, orcid_of_owner=None, contact_email=None, source_folder=None, source_folder_host=None, size=None, packed_size=None, number_of_files=None, number_of_files_archived=None, creation_time=None, type=None, validation_status=None, keywords=None, description=None, dataset_name=None, classification=None, license=None, version=None, is_published=None, history=None, datasetlifecycle=None, created_at=None, updated_at=None, instrument_id=None, techniques=None, shared_with=None, principal_investigator=None, end_time=None, creation_location=None, data_format=None, scientific_metadata=None, proposal_id=None, sample_id=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        owner=None,
+        owner_email=None,
+        orcid_of_owner=None,
+        contact_email=None,
+        source_folder=None,
+        source_folder_host=None,
+        size=None,
+        packed_size=None,
+        number_of_files=None,
+        number_of_files_archived=None,
+        creation_time=None,
+        type=None,
+        validation_status=None,
+        keywords=None,
+        description=None,
+        dataset_name=None,
+        classification=None,
+        license=None,
+        version=None,
+        is_published=None,
+        history=None,
+        datasetlifecycle=None,
+        created_at=None,
+        updated_at=None,
+        instrument_id=None,
+        techniques=None,
+        shared_with=None,
+        principal_investigator=None,
+        end_time=None,
+        creation_location=None,
+        data_format=None,
+        scientific_metadata=None,
+        proposal_id=None,
+        sample_id=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """CreateRawDatasetDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -219,8 +261,12 @@ class CreateRawDatasetDto(object):
         :param owner_group: The owner_group of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_group is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_group`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_group is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_group`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_group = owner_group
 
@@ -244,8 +290,13 @@ class CreateRawDatasetDto(object):
         :param access_groups: The access_groups of this CreateRawDatasetDto.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and access_groups is None:  # noqa: E501
-            raise ValueError("Invalid value for `access_groups`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and access_groups is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `access_groups`, must not be `None`"
+            )  # noqa: E501
 
         self._access_groups = access_groups
 
@@ -269,8 +320,12 @@ class CreateRawDatasetDto(object):
         :param created_by: The created_by of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and created_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_by`, must not be `None`"
+            )  # noqa: E501
 
         self._created_by = created_by
 
@@ -294,8 +349,12 @@ class CreateRawDatasetDto(object):
         :param updated_by: The updated_by of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and updated_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_by`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_by = updated_by
 
@@ -317,8 +376,12 @@ class CreateRawDatasetDto(object):
         :param owner: The owner of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner`, must not be `None`"
+            )  # noqa: E501
 
         self._owner = owner
 
@@ -340,8 +403,12 @@ class CreateRawDatasetDto(object):
         :param owner_email: The owner_email of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_email is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_email`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_email is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_email`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_email = owner_email
 
@@ -363,8 +430,13 @@ class CreateRawDatasetDto(object):
         :param orcid_of_owner: The orcid_of_owner of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and orcid_of_owner is None:  # noqa: E501
-            raise ValueError("Invalid value for `orcid_of_owner`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and orcid_of_owner is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `orcid_of_owner`, must not be `None`"
+            )  # noqa: E501
 
         self._orcid_of_owner = orcid_of_owner
 
@@ -386,8 +458,13 @@ class CreateRawDatasetDto(object):
         :param contact_email: The contact_email of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and contact_email is None:  # noqa: E501
-            raise ValueError("Invalid value for `contact_email`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and contact_email is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `contact_email`, must not be `None`"
+            )  # noqa: E501
 
         self._contact_email = contact_email
 
@@ -409,8 +486,13 @@ class CreateRawDatasetDto(object):
         :param source_folder: The source_folder of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and source_folder is None:  # noqa: E501
-            raise ValueError("Invalid value for `source_folder`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and source_folder is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `source_folder`, must not be `None`"
+            )  # noqa: E501
 
         self._source_folder = source_folder
 
@@ -432,8 +514,13 @@ class CreateRawDatasetDto(object):
         :param source_folder_host: The source_folder_host of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and source_folder_host is None:  # noqa: E501
-            raise ValueError("Invalid value for `source_folder_host`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and source_folder_host is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `source_folder_host`, must not be `None`"
+            )  # noqa: E501
 
         self._source_folder_host = source_folder_host
 
@@ -455,8 +542,12 @@ class CreateRawDatasetDto(object):
         :param size: The size of this CreateRawDatasetDto.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and size is None:  # noqa: E501
-            raise ValueError("Invalid value for `size`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and size is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `size`, must not be `None`"
+            )  # noqa: E501
 
         self._size = size
 
@@ -478,8 +569,12 @@ class CreateRawDatasetDto(object):
         :param packed_size: The packed_size of this CreateRawDatasetDto.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and packed_size is None:  # noqa: E501
-            raise ValueError("Invalid value for `packed_size`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and packed_size is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `packed_size`, must not be `None`"
+            )  # noqa: E501
 
         self._packed_size = packed_size
 
@@ -501,8 +596,13 @@ class CreateRawDatasetDto(object):
         :param number_of_files: The number_of_files of this CreateRawDatasetDto.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and number_of_files is None:  # noqa: E501
-            raise ValueError("Invalid value for `number_of_files`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and number_of_files is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `number_of_files`, must not be `None`"
+            )  # noqa: E501
 
         self._number_of_files = number_of_files
 
@@ -524,8 +624,13 @@ class CreateRawDatasetDto(object):
         :param number_of_files_archived: The number_of_files_archived of this CreateRawDatasetDto.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and number_of_files_archived is None:  # noqa: E501
-            raise ValueError("Invalid value for `number_of_files_archived`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and number_of_files_archived is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `number_of_files_archived`, must not be `None`"
+            )  # noqa: E501
 
         self._number_of_files_archived = number_of_files_archived
 
@@ -547,8 +652,13 @@ class CreateRawDatasetDto(object):
         :param creation_time: The creation_time of this CreateRawDatasetDto.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and creation_time is None:  # noqa: E501
-            raise ValueError("Invalid value for `creation_time`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and creation_time is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `creation_time`, must not be `None`"
+            )  # noqa: E501
 
         self._creation_time = creation_time
 
@@ -570,8 +680,12 @@ class CreateRawDatasetDto(object):
         :param type: The type of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and type is None:  # noqa: E501
-            raise ValueError("Invalid value for `type`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and type is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `type`, must not be `None`"
+            )  # noqa: E501
 
         self._type = type
 
@@ -593,8 +707,13 @@ class CreateRawDatasetDto(object):
         :param validation_status: The validation_status of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and validation_status is None:  # noqa: E501
-            raise ValueError("Invalid value for `validation_status`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and validation_status is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `validation_status`, must not be `None`"
+            )  # noqa: E501
 
         self._validation_status = validation_status
 
@@ -616,8 +735,12 @@ class CreateRawDatasetDto(object):
         :param keywords: The keywords of this CreateRawDatasetDto.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and keywords is None:  # noqa: E501
-            raise ValueError("Invalid value for `keywords`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and keywords is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `keywords`, must not be `None`"
+            )  # noqa: E501
 
         self._keywords = keywords
 
@@ -641,8 +764,12 @@ class CreateRawDatasetDto(object):
         :param description: The description of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and description is None:  # noqa: E501
-            raise ValueError("Invalid value for `description`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and description is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `description`, must not be `None`"
+            )  # noqa: E501
 
         self._description = description
 
@@ -664,8 +791,13 @@ class CreateRawDatasetDto(object):
         :param dataset_name: The dataset_name of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and dataset_name is None:  # noqa: E501
-            raise ValueError("Invalid value for `dataset_name`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and dataset_name is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `dataset_name`, must not be `None`"
+            )  # noqa: E501
 
         self._dataset_name = dataset_name
 
@@ -687,8 +819,13 @@ class CreateRawDatasetDto(object):
         :param classification: The classification of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and classification is None:  # noqa: E501
-            raise ValueError("Invalid value for `classification`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and classification is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `classification`, must not be `None`"
+            )  # noqa: E501
 
         self._classification = classification
 
@@ -710,8 +847,12 @@ class CreateRawDatasetDto(object):
         :param license: The license of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and license is None:  # noqa: E501
-            raise ValueError("Invalid value for `license`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and license is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `license`, must not be `None`"
+            )  # noqa: E501
 
         self._license = license
 
@@ -733,8 +874,12 @@ class CreateRawDatasetDto(object):
         :param version: The version of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and version is None:  # noqa: E501
-            raise ValueError("Invalid value for `version`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and version is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `version`, must not be `None`"
+            )  # noqa: E501
 
         self._version = version
 
@@ -756,8 +901,13 @@ class CreateRawDatasetDto(object):
         :param is_published: The is_published of this CreateRawDatasetDto.  # noqa: E501
         :type: bool
         """
-        if self.local_vars_configuration.client_side_validation and is_published is None:  # noqa: E501
-            raise ValueError("Invalid value for `is_published`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and is_published is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `is_published`, must not be `None`"
+            )  # noqa: E501
 
         self._is_published = is_published
 
@@ -779,8 +929,12 @@ class CreateRawDatasetDto(object):
         :param history: The history of this CreateRawDatasetDto.  # noqa: E501
         :type: list[object]
         """
-        if self.local_vars_configuration.client_side_validation and history is None:  # noqa: E501
-            raise ValueError("Invalid value for `history`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and history is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `history`, must not be `None`"
+            )  # noqa: E501
 
         self._history = history
 
@@ -802,8 +956,13 @@ class CreateRawDatasetDto(object):
         :param datasetlifecycle: The datasetlifecycle of this CreateRawDatasetDto.  # noqa: E501
         :type: Lifecycle
         """
-        if self.local_vars_configuration.client_side_validation and datasetlifecycle is None:  # noqa: E501
-            raise ValueError("Invalid value for `datasetlifecycle`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and datasetlifecycle is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `datasetlifecycle`, must not be `None`"
+            )  # noqa: E501
 
         self._datasetlifecycle = datasetlifecycle
 
@@ -825,8 +984,12 @@ class CreateRawDatasetDto(object):
         :param created_at: The created_at of this CreateRawDatasetDto.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and created_at is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_at`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_at is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_at`, must not be `None`"
+            )  # noqa: E501
 
         self._created_at = created_at
 
@@ -848,8 +1011,12 @@ class CreateRawDatasetDto(object):
         :param updated_at: The updated_at of this CreateRawDatasetDto.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and updated_at is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_at`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_at is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_at`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_at = updated_at
 
@@ -871,8 +1038,13 @@ class CreateRawDatasetDto(object):
         :param instrument_id: The instrument_id of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and instrument_id is None:  # noqa: E501
-            raise ValueError("Invalid value for `instrument_id`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and instrument_id is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `instrument_id`, must not be `None`"
+            )  # noqa: E501
 
         self._instrument_id = instrument_id
 
@@ -894,8 +1066,12 @@ class CreateRawDatasetDto(object):
         :param techniques: The techniques of this CreateRawDatasetDto.  # noqa: E501
         :type: list[Technique]
         """
-        if self.local_vars_configuration.client_side_validation and techniques is None:  # noqa: E501
-            raise ValueError("Invalid value for `techniques`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and techniques is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `techniques`, must not be `None`"
+            )  # noqa: E501
 
         self._techniques = techniques
 
@@ -917,8 +1093,12 @@ class CreateRawDatasetDto(object):
         :param shared_with: The shared_with of this CreateRawDatasetDto.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and shared_with is None:  # noqa: E501
-            raise ValueError("Invalid value for `shared_with`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and shared_with is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `shared_with`, must not be `None`"
+            )  # noqa: E501
 
         self._shared_with = shared_with
 
@@ -940,8 +1120,13 @@ class CreateRawDatasetDto(object):
         :param principal_investigator: The principal_investigator of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and principal_investigator is None:  # noqa: E501
-            raise ValueError("Invalid value for `principal_investigator`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and principal_investigator is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `principal_investigator`, must not be `None`"
+            )  # noqa: E501
 
         self._principal_investigator = principal_investigator
 
@@ -963,8 +1148,12 @@ class CreateRawDatasetDto(object):
         :param end_time: The end_time of this CreateRawDatasetDto.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and end_time is None:  # noqa: E501
-            raise ValueError("Invalid value for `end_time`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and end_time is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `end_time`, must not be `None`"
+            )  # noqa: E501
 
         self._end_time = end_time
 
@@ -986,8 +1175,13 @@ class CreateRawDatasetDto(object):
         :param creation_location: The creation_location of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and creation_location is None:  # noqa: E501
-            raise ValueError("Invalid value for `creation_location`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and creation_location is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `creation_location`, must not be `None`"
+            )  # noqa: E501
 
         self._creation_location = creation_location
 
@@ -1009,8 +1203,12 @@ class CreateRawDatasetDto(object):
         :param data_format: The data_format of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and data_format is None:  # noqa: E501
-            raise ValueError("Invalid value for `data_format`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and data_format is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `data_format`, must not be `None`"
+            )  # noqa: E501
 
         self._data_format = data_format
 
@@ -1032,8 +1230,13 @@ class CreateRawDatasetDto(object):
         :param scientific_metadata: The scientific_metadata of this CreateRawDatasetDto.  # noqa: E501
         :type: object
         """
-        if self.local_vars_configuration.client_side_validation and scientific_metadata is None:  # noqa: E501
-            raise ValueError("Invalid value for `scientific_metadata`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and scientific_metadata is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `scientific_metadata`, must not be `None`"
+            )  # noqa: E501
 
         self._scientific_metadata = scientific_metadata
 
@@ -1055,8 +1258,12 @@ class CreateRawDatasetDto(object):
         :param proposal_id: The proposal_id of this CreateRawDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and proposal_id is None:  # noqa: E501
-            raise ValueError("Invalid value for `proposal_id`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and proposal_id is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `proposal_id`, must not be `None`"
+            )  # noqa: E501
 
         self._proposal_id = proposal_id
 
@@ -1088,18 +1295,20 @@ class CreateRawDatasetDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

@@ -16,6 +16,7 @@ import re  # noqa: F401
 
 # python 2 and python 3 compatibility library
 import six
+
 from scicat_py.api_client import ApiClient
 from scicat_py.exceptions import ApiTypeError, ApiValueError  # noqa: F401
 
@@ -52,7 +53,7 @@ class LogbooksApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.logbooks_controller_find_all_with_http_info(**kwargs)  # noqa: E501
 
     def logbooks_controller_find_all_with_http_info(self, **kwargs):  # noqa: E501
@@ -80,25 +81,24 @@ class LogbooksApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
+        all_params = []
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method logbooks_controller_find_all" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
@@ -113,27 +113,32 @@ class LogbooksApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/logbooks', 'GET',
+            "/api/v3/logbooks",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def logbooks_controller_find_by_name(self, name, filters, **kwargs):  # noqa: E501
         """logbooks_controller_find_by_name  # noqa: E501
@@ -157,10 +162,14 @@ class LogbooksApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.logbooks_controller_find_by_name_with_http_info(name, filters, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.logbooks_controller_find_by_name_with_http_info(
+            name, filters, **kwargs
+        )  # noqa: E501
 
-    def logbooks_controller_find_by_name_with_http_info(self, name, filters, **kwargs):  # noqa: E501
+    def logbooks_controller_find_by_name_with_http_info(
+        self, name, filters, **kwargs
+    ):  # noqa: E501
         """logbooks_controller_find_by_name  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -187,45 +196,52 @@ class LogbooksApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'name',
-            'filters'
-        ]
+        all_params = ["name", "filters"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method logbooks_controller_find_by_name" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'name' is set
-        if self.api_client.client_side_validation and ('name' not in local_var_params or  # noqa: E501
-                                                        local_var_params['name'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `name` when calling `logbooks_controller_find_by_name`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "name" not in local_var_params
+            or local_var_params["name"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `name` when calling `logbooks_controller_find_by_name`"
+            )  # noqa: E501
         # verify the required parameter 'filters' is set
-        if self.api_client.client_side_validation and ('filters' not in local_var_params or  # noqa: E501
-                                                        local_var_params['filters'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `filters` when calling `logbooks_controller_find_by_name`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "filters" not in local_var_params
+            or local_var_params["filters"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `filters` when calling `logbooks_controller_find_by_name`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'name' in local_var_params:
-            path_params['name'] = local_var_params['name']  # noqa: E501
+        if "name" in local_var_params:
+            path_params["name"] = local_var_params["name"]  # noqa: E501
 
         query_params = []
-        if 'filters' in local_var_params and local_var_params['filters'] is not None:  # noqa: E501
-            query_params.append(('filters', local_var_params['filters']))  # noqa: E501
+        if (
+            "filters" in local_var_params and local_var_params["filters"] is not None
+        ):  # noqa: E501
+            query_params.append(("filters", local_var_params["filters"]))  # noqa: E501
 
         header_params = {}
 
@@ -234,24 +250,29 @@ class LogbooksApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/logbooks/{name}', 'GET',
+            "/api/v3/logbooks/{name}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

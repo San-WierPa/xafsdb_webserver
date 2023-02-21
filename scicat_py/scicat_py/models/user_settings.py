@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,20 +33,27 @@ class UserSettings(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'columns': 'list[object]',
-        'dataset_count': 'float',
-        'job_count': 'float',
-        'user_id': 'str'
+        "columns": "list[object]",
+        "dataset_count": "float",
+        "job_count": "float",
+        "user_id": "str",
     }
 
     attribute_map = {
-        'columns': 'columns',
-        'dataset_count': 'datasetCount',
-        'job_count': 'jobCount',
-        'user_id': 'userId'
+        "columns": "columns",
+        "dataset_count": "datasetCount",
+        "job_count": "jobCount",
+        "user_id": "userId",
     }
 
-    def __init__(self, columns=[], dataset_count=25, job_count=25, user_id=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        columns=[],
+        dataset_count=25,
+        job_count=25,
+        user_id=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """UserSettings - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -82,8 +90,12 @@ class UserSettings(object):
         :param columns: The columns of this UserSettings.  # noqa: E501
         :type: list[object]
         """
-        if self.local_vars_configuration.client_side_validation and columns is None:  # noqa: E501
-            raise ValueError("Invalid value for `columns`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and columns is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `columns`, must not be `None`"
+            )  # noqa: E501
 
         self._columns = columns
 
@@ -107,8 +119,13 @@ class UserSettings(object):
         :param dataset_count: The dataset_count of this UserSettings.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and dataset_count is None:  # noqa: E501
-            raise ValueError("Invalid value for `dataset_count`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and dataset_count is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `dataset_count`, must not be `None`"
+            )  # noqa: E501
 
         self._dataset_count = dataset_count
 
@@ -132,8 +149,12 @@ class UserSettings(object):
         :param job_count: The job_count of this UserSettings.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and job_count is None:  # noqa: E501
-            raise ValueError("Invalid value for `job_count`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and job_count is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `job_count`, must not be `None`"
+            )  # noqa: E501
 
         self._job_count = job_count
 
@@ -155,8 +176,12 @@ class UserSettings(object):
         :param user_id: The user_id of this UserSettings.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and user_id is None:  # noqa: E501
-            raise ValueError("Invalid value for `user_id`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and user_id is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `user_id`, must not be `None`"
+            )  # noqa: E501
 
         self._user_id = user_id
 
@@ -167,18 +192,20 @@ class UserSettings(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

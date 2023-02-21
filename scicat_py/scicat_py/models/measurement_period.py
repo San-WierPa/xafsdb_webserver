@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,20 +33,27 @@ class MeasurementPeriod(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'instrument': 'str',
-        'start': 'datetime',
-        'end': 'datetime',
-        'comment': 'str'
+        "instrument": "str",
+        "start": "datetime",
+        "end": "datetime",
+        "comment": "str",
     }
 
     attribute_map = {
-        'instrument': 'instrument',
-        'start': 'start',
-        'end': 'end',
-        'comment': 'comment'
+        "instrument": "instrument",
+        "start": "start",
+        "end": "end",
+        "comment": "comment",
     }
 
-    def __init__(self, instrument=None, start=None, end=None, comment=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        instrument=None,
+        start=None,
+        end=None,
+        comment=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """MeasurementPeriod - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -82,8 +90,12 @@ class MeasurementPeriod(object):
         :param instrument: The instrument of this MeasurementPeriod.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and instrument is None:  # noqa: E501
-            raise ValueError("Invalid value for `instrument`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and instrument is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `instrument`, must not be `None`"
+            )  # noqa: E501
 
         self._instrument = instrument
 
@@ -107,8 +119,12 @@ class MeasurementPeriod(object):
         :param start: The start of this MeasurementPeriod.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and start is None:  # noqa: E501
-            raise ValueError("Invalid value for `start`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and start is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `start`, must not be `None`"
+            )  # noqa: E501
 
         self._start = start
 
@@ -132,8 +148,12 @@ class MeasurementPeriod(object):
         :param end: The end of this MeasurementPeriod.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and end is None:  # noqa: E501
-            raise ValueError("Invalid value for `end`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and end is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `end`, must not be `None`"
+            )  # noqa: E501
 
         self._end = end
 
@@ -157,8 +177,12 @@ class MeasurementPeriod(object):
         :param comment: The comment of this MeasurementPeriod.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and comment is None:  # noqa: E501
-            raise ValueError("Invalid value for `comment`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and comment is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `comment`, must not be `None`"
+            )  # noqa: E501
 
         self._comment = comment
 
@@ -169,18 +193,20 @@ class MeasurementPeriod(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

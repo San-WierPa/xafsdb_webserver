@@ -31,58 +31,42 @@ class TestCreatePolicyDto(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test CreatePolicyDto
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.create_policy_dto.CreatePolicyDto()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return CreatePolicyDto(
-                owner_group = '0', 
-                access_groups = [
-                    '0'
-                    ], 
-                created_by = '0', 
-                updated_by = '0', 
-                manager = [
-                    '0'
-                    ], 
-                tape_redundancy = '0', 
-                auto_archive = True, 
-                auto_archive_delay = 1.337, 
-                archive_email_notification = True, 
-                archive_emails_to_be_notified = [
-                    '0'
-                    ], 
-                retrieve_email_notification = True, 
-                retrieve_emails_to_be_notified = [
-                    '0'
-                    ], 
-                embargo_period = 1.337
+                owner_group="0",
+                access_groups=["0"],
+                created_by="0",
+                updated_by="0",
+                manager=["0"],
+                tape_redundancy="0",
+                auto_archive=True,
+                auto_archive_delay=1.337,
+                archive_email_notification=True,
+                archive_emails_to_be_notified=["0"],
+                retrieve_email_notification=True,
+                retrieve_emails_to_be_notified=["0"],
+                embargo_period=1.337,
             )
-        else :
+        else:
             return CreatePolicyDto(
-                owner_group = '0',
-                access_groups = [
-                    '0'
-                    ],
-                created_by = '0',
-                updated_by = '0',
-                manager = [
-                    '0'
-                    ],
-                tape_redundancy = '0',
-                auto_archive = True,
-                auto_archive_delay = 1.337,
-                archive_email_notification = True,
-                archive_emails_to_be_notified = [
-                    '0'
-                    ],
-                retrieve_email_notification = True,
-                retrieve_emails_to_be_notified = [
-                    '0'
-                    ],
-                embargo_period = 1.337,
-        )
+                owner_group="0",
+                access_groups=["0"],
+                created_by="0",
+                updated_by="0",
+                manager=["0"],
+                tape_redundancy="0",
+                auto_archive=True,
+                auto_archive_delay=1.337,
+                archive_email_notification=True,
+                archive_emails_to_be_notified=["0"],
+                retrieve_email_notification=True,
+                retrieve_emails_to_be_notified=["0"],
+                embargo_period=1.337,
+            )
 
     def testCreatePolicyDto(self):
         """Test CreatePolicyDto"""
@@ -90,5 +74,5 @@ class TestCreatePolicyDto(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

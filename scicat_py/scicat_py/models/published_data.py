@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,56 +33,81 @@ class PublishedData(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'doi': 'str',
-        'affiliation': 'str',
-        'creator': 'list[str]',
-        'publisher': 'str',
-        'publication_year': 'float',
-        'title': 'str',
-        'url': 'str',
-        'abstract': 'str',
-        'data_description': 'str',
-        'resource_type': 'str',
-        'number_of_files': 'float',
-        'size_of_archive': 'float',
-        'pid_array': 'list[str]',
-        'authors': 'list[str]',
-        'registered_time': 'datetime',
-        'status': 'str',
-        'scicat_user': 'str',
-        'thumbnail': 'str',
-        'related_publications': 'list[str]',
-        'download_link': 'str',
-        'created_at': 'datetime',
-        'updated_at': 'datetime'
+        "doi": "str",
+        "affiliation": "str",
+        "creator": "list[str]",
+        "publisher": "str",
+        "publication_year": "float",
+        "title": "str",
+        "url": "str",
+        "abstract": "str",
+        "data_description": "str",
+        "resource_type": "str",
+        "number_of_files": "float",
+        "size_of_archive": "float",
+        "pid_array": "list[str]",
+        "authors": "list[str]",
+        "registered_time": "datetime",
+        "status": "str",
+        "scicat_user": "str",
+        "thumbnail": "str",
+        "related_publications": "list[str]",
+        "download_link": "str",
+        "created_at": "datetime",
+        "updated_at": "datetime",
     }
 
     attribute_map = {
-        'doi': 'doi',
-        'affiliation': 'affiliation',
-        'creator': 'creator',
-        'publisher': 'publisher',
-        'publication_year': 'publicationYear',
-        'title': 'title',
-        'url': 'url',
-        'abstract': 'abstract',
-        'data_description': 'dataDescription',
-        'resource_type': 'resourceType',
-        'number_of_files': 'numberOfFiles',
-        'size_of_archive': 'sizeOfArchive',
-        'pid_array': 'pidArray',
-        'authors': 'authors',
-        'registered_time': 'registeredTime',
-        'status': 'status',
-        'scicat_user': 'scicatUser',
-        'thumbnail': 'thumbnail',
-        'related_publications': 'relatedPublications',
-        'download_link': 'downloadLink',
-        'created_at': 'createdAt',
-        'updated_at': 'updatedAt'
+        "doi": "doi",
+        "affiliation": "affiliation",
+        "creator": "creator",
+        "publisher": "publisher",
+        "publication_year": "publicationYear",
+        "title": "title",
+        "url": "url",
+        "abstract": "abstract",
+        "data_description": "dataDescription",
+        "resource_type": "resourceType",
+        "number_of_files": "numberOfFiles",
+        "size_of_archive": "sizeOfArchive",
+        "pid_array": "pidArray",
+        "authors": "authors",
+        "registered_time": "registeredTime",
+        "status": "status",
+        "scicat_user": "scicatUser",
+        "thumbnail": "thumbnail",
+        "related_publications": "relatedPublications",
+        "download_link": "downloadLink",
+        "created_at": "createdAt",
+        "updated_at": "updatedAt",
     }
 
-    def __init__(self, doi=None, affiliation=None, creator=None, publisher=None, publication_year=None, title=None, url=None, abstract=None, data_description=None, resource_type=None, number_of_files=None, size_of_archive=None, pid_array=None, authors=None, registered_time=None, status=None, scicat_user=None, thumbnail=None, related_publications=None, download_link=None, created_at=None, updated_at=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        doi=None,
+        affiliation=None,
+        creator=None,
+        publisher=None,
+        publication_year=None,
+        title=None,
+        url=None,
+        abstract=None,
+        data_description=None,
+        resource_type=None,
+        number_of_files=None,
+        size_of_archive=None,
+        pid_array=None,
+        authors=None,
+        registered_time=None,
+        status=None,
+        scicat_user=None,
+        thumbnail=None,
+        related_publications=None,
+        download_link=None,
+        created_at=None,
+        updated_at=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """PublishedData - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -163,8 +189,12 @@ class PublishedData(object):
         :param doi: The doi of this PublishedData.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and doi is None:  # noqa: E501
-            raise ValueError("Invalid value for `doi`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and doi is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `doi`, must not be `None`"
+            )  # noqa: E501
 
         self._doi = doi
 
@@ -211,8 +241,12 @@ class PublishedData(object):
         :param creator: The creator of this PublishedData.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and creator is None:  # noqa: E501
-            raise ValueError("Invalid value for `creator`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and creator is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `creator`, must not be `None`"
+            )  # noqa: E501
 
         self._creator = creator
 
@@ -236,8 +270,12 @@ class PublishedData(object):
         :param publisher: The publisher of this PublishedData.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and publisher is None:  # noqa: E501
-            raise ValueError("Invalid value for `publisher`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and publisher is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `publisher`, must not be `None`"
+            )  # noqa: E501
 
         self._publisher = publisher
 
@@ -261,8 +299,13 @@ class PublishedData(object):
         :param publication_year: The publication_year of this PublishedData.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and publication_year is None:  # noqa: E501
-            raise ValueError("Invalid value for `publication_year`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and publication_year is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `publication_year`, must not be `None`"
+            )  # noqa: E501
 
         self._publication_year = publication_year
 
@@ -286,8 +329,12 @@ class PublishedData(object):
         :param title: The title of this PublishedData.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and title is None:  # noqa: E501
-            raise ValueError("Invalid value for `title`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and title is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `title`, must not be `None`"
+            )  # noqa: E501
 
         self._title = title
 
@@ -334,8 +381,12 @@ class PublishedData(object):
         :param abstract: The abstract of this PublishedData.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and abstract is None:  # noqa: E501
-            raise ValueError("Invalid value for `abstract`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and abstract is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `abstract`, must not be `None`"
+            )  # noqa: E501
 
         self._abstract = abstract
 
@@ -359,8 +410,13 @@ class PublishedData(object):
         :param data_description: The data_description of this PublishedData.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and data_description is None:  # noqa: E501
-            raise ValueError("Invalid value for `data_description`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and data_description is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `data_description`, must not be `None`"
+            )  # noqa: E501
 
         self._data_description = data_description
 
@@ -384,8 +440,13 @@ class PublishedData(object):
         :param resource_type: The resource_type of this PublishedData.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and resource_type is None:  # noqa: E501
-            raise ValueError("Invalid value for `resource_type`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and resource_type is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `resource_type`, must not be `None`"
+            )  # noqa: E501
 
         self._resource_type = resource_type
 
@@ -455,8 +516,12 @@ class PublishedData(object):
         :param pid_array: The pid_array of this PublishedData.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and pid_array is None:  # noqa: E501
-            raise ValueError("Invalid value for `pid_array`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and pid_array is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `pid_array`, must not be `None`"
+            )  # noqa: E501
 
         self._pid_array = pid_array
 
@@ -503,8 +568,13 @@ class PublishedData(object):
         :param registered_time: The registered_time of this PublishedData.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and registered_time is None:  # noqa: E501
-            raise ValueError("Invalid value for `registered_time`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and registered_time is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `registered_time`, must not be `None`"
+            )  # noqa: E501
 
         self._registered_time = registered_time
 
@@ -528,8 +598,12 @@ class PublishedData(object):
         :param status: The status of this PublishedData.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and status is None:  # noqa: E501
-            raise ValueError("Invalid value for `status`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and status is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `status`, must not be `None`"
+            )  # noqa: E501
 
         self._status = status
 
@@ -645,8 +719,12 @@ class PublishedData(object):
         :param created_at: The created_at of this PublishedData.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and created_at is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_at`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_at is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_at`, must not be `None`"
+            )  # noqa: E501
 
         self._created_at = created_at
 
@@ -670,8 +748,12 @@ class PublishedData(object):
         :param updated_at: The updated_at of this PublishedData.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and updated_at is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_at`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_at is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_at`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_at = updated_at
 
@@ -682,18 +764,20 @@ class PublishedData(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

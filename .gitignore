@@ -76,8 +76,6 @@ wheels/
 *.egg
 *.manifest
 *.spec
-scicat_py/*
-!scicat_py/.gitkeep
 
 # Installer logs
 pip-log.txt

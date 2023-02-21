@@ -29,59 +29,41 @@ class TestUsersApi(unittest.TestCase):
         pass
 
     def test_users_controller_create_settings(self):
-        """Test case for users_controller_create_settings
-
-        """
+        """Test case for users_controller_create_settings"""
         pass
 
     def test_users_controller_find_by_id(self):
-        """Test case for users_controller_find_by_id
-
-        """
+        """Test case for users_controller_find_by_id"""
         pass
 
     def test_users_controller_get_settings(self):
-        """Test case for users_controller_get_settings
-
-        """
+        """Test case for users_controller_get_settings"""
         pass
 
     def test_users_controller_get_user_identity(self):
-        """Test case for users_controller_get_user_identity
-
-        """
+        """Test case for users_controller_get_user_identity"""
         pass
 
     def test_users_controller_get_user_jwt(self):
-        """Test case for users_controller_get_user_jwt
-
-        """
+        """Test case for users_controller_get_user_jwt"""
         pass
 
     def test_users_controller_login(self):
-        """Test case for users_controller_login
-
-        """
+        """Test case for users_controller_login"""
         pass
 
     def test_users_controller_patch_settings(self):
-        """Test case for users_controller_patch_settings
-
-        """
+        """Test case for users_controller_patch_settings"""
         pass
 
     def test_users_controller_remove_settings(self):
-        """Test case for users_controller_remove_settings
-
-        """
+        """Test case for users_controller_remove_settings"""
         pass
 
     def test_users_controller_update_settings(self):
-        """Test case for users_controller_update_settings
-
-        """
+        """Test case for users_controller_update_settings"""
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

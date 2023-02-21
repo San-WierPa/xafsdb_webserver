@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,30 +33,42 @@ class CreateSampleDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'owner': 'str',
-        'description': 'str',
-        'created_at': 'datetime',
-        'sample_characteristics': 'object',
-        'is_published': 'bool'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "owner": "str",
+        "description": "str",
+        "created_at": "datetime",
+        "sample_characteristics": "object",
+        "is_published": "bool",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'owner': 'owner',
-        'description': 'description',
-        'created_at': 'createdAt',
-        'sample_characteristics': 'sampleCharacteristics',
-        'is_published': 'isPublished'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "owner": "owner",
+        "description": "description",
+        "created_at": "createdAt",
+        "sample_characteristics": "sampleCharacteristics",
+        "is_published": "isPublished",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, owner=None, description=None, created_at=None, sample_characteristics=None, is_published=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        owner=None,
+        description=None,
+        created_at=None,
+        sample_characteristics=None,
+        is_published=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """CreateSampleDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -102,8 +115,12 @@ class CreateSampleDto(object):
         :param owner_group: The owner_group of this CreateSampleDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_group is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_group`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_group is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_group`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_group = owner_group
 
@@ -127,8 +144,13 @@ class CreateSampleDto(object):
         :param access_groups: The access_groups of this CreateSampleDto.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and access_groups is None:  # noqa: E501
-            raise ValueError("Invalid value for `access_groups`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and access_groups is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `access_groups`, must not be `None`"
+            )  # noqa: E501
 
         self._access_groups = access_groups
 
@@ -152,8 +174,12 @@ class CreateSampleDto(object):
         :param created_by: The created_by of this CreateSampleDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and created_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_by`, must not be `None`"
+            )  # noqa: E501
 
         self._created_by = created_by
 
@@ -177,8 +203,12 @@ class CreateSampleDto(object):
         :param updated_by: The updated_by of this CreateSampleDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and updated_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_by`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_by = updated_by
 
@@ -200,8 +230,12 @@ class CreateSampleDto(object):
         :param owner: The owner of this CreateSampleDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner`, must not be `None`"
+            )  # noqa: E501
 
         self._owner = owner
 
@@ -223,8 +257,12 @@ class CreateSampleDto(object):
         :param description: The description of this CreateSampleDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and description is None:  # noqa: E501
-            raise ValueError("Invalid value for `description`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and description is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `description`, must not be `None`"
+            )  # noqa: E501
 
         self._description = description
 
@@ -246,8 +284,12 @@ class CreateSampleDto(object):
         :param created_at: The created_at of this CreateSampleDto.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and created_at is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_at`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_at is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_at`, must not be `None`"
+            )  # noqa: E501
 
         self._created_at = created_at
 
@@ -269,8 +311,13 @@ class CreateSampleDto(object):
         :param sample_characteristics: The sample_characteristics of this CreateSampleDto.  # noqa: E501
         :type: object
         """
-        if self.local_vars_configuration.client_side_validation and sample_characteristics is None:  # noqa: E501
-            raise ValueError("Invalid value for `sample_characteristics`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and sample_characteristics is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `sample_characteristics`, must not be `None`"
+            )  # noqa: E501
 
         self._sample_characteristics = sample_characteristics
 
@@ -292,8 +339,13 @@ class CreateSampleDto(object):
         :param is_published: The is_published of this CreateSampleDto.  # noqa: E501
         :type: bool
         """
-        if self.local_vars_configuration.client_side_validation and is_published is None:  # noqa: E501
-            raise ValueError("Invalid value for `is_published`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and is_published is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `is_published`, must not be `None`"
+            )  # noqa: E501
 
         self._is_published = is_published
 
@@ -304,18 +356,20 @@ class CreateSampleDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

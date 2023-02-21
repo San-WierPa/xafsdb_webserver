@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,74 +33,108 @@ class UpdateDatasetDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'owner': 'str',
-        'owner_email': 'str',
-        'orcid_of_owner': 'str',
-        'contact_email': 'str',
-        'source_folder': 'str',
-        'source_folder_host': 'str',
-        'size': 'float',
-        'packed_size': 'float',
-        'number_of_files': 'float',
-        'number_of_files_archived': 'float',
-        'creation_time': 'datetime',
-        'type': 'str',
-        'validation_status': 'str',
-        'keywords': 'list[str]',
-        'description': 'str',
-        'dataset_name': 'str',
-        'classification': 'str',
-        'license': 'str',
-        'version': 'str',
-        'is_published': 'bool',
-        'history': 'list[object]',
-        'datasetlifecycle': 'Lifecycle',
-        'created_at': 'datetime',
-        'updated_at': 'datetime',
-        'instrument_id': 'str',
-        'techniques': 'list[Technique]',
-        'shared_with': 'list[str]'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "owner": "str",
+        "owner_email": "str",
+        "orcid_of_owner": "str",
+        "contact_email": "str",
+        "source_folder": "str",
+        "source_folder_host": "str",
+        "size": "float",
+        "packed_size": "float",
+        "number_of_files": "float",
+        "number_of_files_archived": "float",
+        "creation_time": "datetime",
+        "type": "str",
+        "validation_status": "str",
+        "keywords": "list[str]",
+        "description": "str",
+        "dataset_name": "str",
+        "classification": "str",
+        "license": "str",
+        "version": "str",
+        "is_published": "bool",
+        "history": "list[object]",
+        "datasetlifecycle": "Lifecycle",
+        "created_at": "datetime",
+        "updated_at": "datetime",
+        "instrument_id": "str",
+        "techniques": "list[Technique]",
+        "shared_with": "list[str]",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'owner': 'owner',
-        'owner_email': 'ownerEmail',
-        'orcid_of_owner': 'orcidOfOwner',
-        'contact_email': 'contactEmail',
-        'source_folder': 'sourceFolder',
-        'source_folder_host': 'sourceFolderHost',
-        'size': 'size',
-        'packed_size': 'packedSize',
-        'number_of_files': 'numberOfFiles',
-        'number_of_files_archived': 'numberOfFilesArchived',
-        'creation_time': 'creationTime',
-        'type': 'type',
-        'validation_status': 'validationStatus',
-        'keywords': 'keywords',
-        'description': 'description',
-        'dataset_name': 'datasetName',
-        'classification': 'classification',
-        'license': 'license',
-        'version': 'version',
-        'is_published': 'isPublished',
-        'history': 'history',
-        'datasetlifecycle': 'datasetlifecycle',
-        'created_at': 'createdAt',
-        'updated_at': 'updatedAt',
-        'instrument_id': 'instrumentId',
-        'techniques': 'techniques',
-        'shared_with': 'sharedWith'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "owner": "owner",
+        "owner_email": "ownerEmail",
+        "orcid_of_owner": "orcidOfOwner",
+        "contact_email": "contactEmail",
+        "source_folder": "sourceFolder",
+        "source_folder_host": "sourceFolderHost",
+        "size": "size",
+        "packed_size": "packedSize",
+        "number_of_files": "numberOfFiles",
+        "number_of_files_archived": "numberOfFilesArchived",
+        "creation_time": "creationTime",
+        "type": "type",
+        "validation_status": "validationStatus",
+        "keywords": "keywords",
+        "description": "description",
+        "dataset_name": "datasetName",
+        "classification": "classification",
+        "license": "license",
+        "version": "version",
+        "is_published": "isPublished",
+        "history": "history",
+        "datasetlifecycle": "datasetlifecycle",
+        "created_at": "createdAt",
+        "updated_at": "updatedAt",
+        "instrument_id": "instrumentId",
+        "techniques": "techniques",
+        "shared_with": "sharedWith",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, owner=None, owner_email=None, orcid_of_owner=None, contact_email=None, source_folder=None, source_folder_host=None, size=None, packed_size=None, number_of_files=None, number_of_files_archived=None, creation_time=None, type=None, validation_status=None, keywords=None, description=None, dataset_name=None, classification=None, license=None, version=None, is_published=None, history=None, datasetlifecycle=None, created_at=None, updated_at=None, instrument_id=None, techniques=None, shared_with=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        owner=None,
+        owner_email=None,
+        orcid_of_owner=None,
+        contact_email=None,
+        source_folder=None,
+        source_folder_host=None,
+        size=None,
+        packed_size=None,
+        number_of_files=None,
+        number_of_files_archived=None,
+        creation_time=None,
+        type=None,
+        validation_status=None,
+        keywords=None,
+        description=None,
+        dataset_name=None,
+        classification=None,
+        license=None,
+        version=None,
+        is_published=None,
+        history=None,
+        datasetlifecycle=None,
+        created_at=None,
+        updated_at=None,
+        instrument_id=None,
+        techniques=None,
+        shared_with=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """UpdateDatasetDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -869,18 +904,20 @@ class UpdateDatasetDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

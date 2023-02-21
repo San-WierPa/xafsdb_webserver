@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,80 +33,117 @@ class CreateDatasetDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'owner': 'str',
-        'owner_email': 'str',
-        'orcid_of_owner': 'str',
-        'contact_email': 'str',
-        'source_folder': 'str',
-        'source_folder_host': 'str',
-        'size': 'float',
-        'packed_size': 'float',
-        'number_of_files': 'float',
-        'number_of_files_archived': 'float',
-        'creation_time': 'datetime',
-        'type': 'str',
-        'validation_status': 'str',
-        'keywords': 'list[str]',
-        'description': 'str',
-        'dataset_name': 'str',
-        'classification': 'str',
-        'license': 'str',
-        'version': 'str',
-        'is_published': 'bool',
-        'history': 'list[object]',
-        'datasetlifecycle': 'Lifecycle',
-        'created_at': 'datetime',
-        'updated_at': 'datetime',
-        'instrument_id': 'str',
-        'techniques': 'list[Technique]',
-        'shared_with': 'list[str]',
-        'creation_location': 'str',
-        'principal_investigator': 'str',
-        'scientific_metadata': 'object'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "owner": "str",
+        "owner_email": "str",
+        "orcid_of_owner": "str",
+        "contact_email": "str",
+        "source_folder": "str",
+        "source_folder_host": "str",
+        "size": "float",
+        "packed_size": "float",
+        "number_of_files": "float",
+        "number_of_files_archived": "float",
+        "creation_time": "datetime",
+        "type": "str",
+        "validation_status": "str",
+        "keywords": "list[str]",
+        "description": "str",
+        "dataset_name": "str",
+        "classification": "str",
+        "license": "str",
+        "version": "str",
+        "is_published": "bool",
+        "history": "list[object]",
+        "datasetlifecycle": "Lifecycle",
+        "created_at": "datetime",
+        "updated_at": "datetime",
+        "instrument_id": "str",
+        "techniques": "list[Technique]",
+        "shared_with": "list[str]",
+        "creation_location": "str",
+        "principal_investigator": "str",
+        "scientific_metadata": "object",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'owner': 'owner',
-        'owner_email': 'ownerEmail',
-        'orcid_of_owner': 'orcidOfOwner',
-        'contact_email': 'contactEmail',
-        'source_folder': 'sourceFolder',
-        'source_folder_host': 'sourceFolderHost',
-        'size': 'size',
-        'packed_size': 'packedSize',
-        'number_of_files': 'numberOfFiles',
-        'number_of_files_archived': 'numberOfFilesArchived',
-        'creation_time': 'creationTime',
-        'type': 'type',
-        'validation_status': 'validationStatus',
-        'keywords': 'keywords',
-        'description': 'description',
-        'dataset_name': 'datasetName',
-        'classification': 'classification',
-        'license': 'license',
-        'version': 'version',
-        'is_published': 'isPublished',
-        'history': 'history',
-        'datasetlifecycle': 'datasetlifecycle',
-        'created_at': 'createdAt',
-        'updated_at': 'updatedAt',
-        'instrument_id': 'instrumentId',
-        'techniques': 'techniques',
-        'shared_with': 'sharedWith',
-        'creation_location': 'creationLocation',
-        'principal_investigator': 'principalInvestigator',
-        'scientific_metadata': 'scientificMetadata'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "owner": "owner",
+        "owner_email": "ownerEmail",
+        "orcid_of_owner": "orcidOfOwner",
+        "contact_email": "contactEmail",
+        "source_folder": "sourceFolder",
+        "source_folder_host": "sourceFolderHost",
+        "size": "size",
+        "packed_size": "packedSize",
+        "number_of_files": "numberOfFiles",
+        "number_of_files_archived": "numberOfFilesArchived",
+        "creation_time": "creationTime",
+        "type": "type",
+        "validation_status": "validationStatus",
+        "keywords": "keywords",
+        "description": "description",
+        "dataset_name": "datasetName",
+        "classification": "classification",
+        "license": "license",
+        "version": "version",
+        "is_published": "isPublished",
+        "history": "history",
+        "datasetlifecycle": "datasetlifecycle",
+        "created_at": "createdAt",
+        "updated_at": "updatedAt",
+        "instrument_id": "instrumentId",
+        "techniques": "techniques",
+        "shared_with": "sharedWith",
+        "creation_location": "creationLocation",
+        "principal_investigator": "principalInvestigator",
+        "scientific_metadata": "scientificMetadata",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, owner=None, owner_email=None, orcid_of_owner=None, contact_email=None, source_folder=None, source_folder_host=None, size=None, packed_size=None, number_of_files=None, number_of_files_archived=None, creation_time=None, type=None, validation_status=None, keywords=None, description=None, dataset_name=None, classification=None, license=None, version=None, is_published=None, history=None, datasetlifecycle=None, created_at=None, updated_at=None, instrument_id=None, techniques=None, shared_with=None, creation_location=None, principal_investigator=None, scientific_metadata=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        owner=None,
+        owner_email=None,
+        orcid_of_owner=None,
+        contact_email=None,
+        source_folder=None,
+        source_folder_host=None,
+        size=None,
+        packed_size=None,
+        number_of_files=None,
+        number_of_files_archived=None,
+        creation_time=None,
+        type=None,
+        validation_status=None,
+        keywords=None,
+        description=None,
+        dataset_name=None,
+        classification=None,
+        license=None,
+        version=None,
+        is_published=None,
+        history=None,
+        datasetlifecycle=None,
+        created_at=None,
+        updated_at=None,
+        instrument_id=None,
+        techniques=None,
+        shared_with=None,
+        creation_location=None,
+        principal_investigator=None,
+        scientific_metadata=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """CreateDatasetDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -224,8 +262,12 @@ class CreateDatasetDto(object):
         :param owner_group: The owner_group of this CreateDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_group is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_group`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_group is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_group`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_group = owner_group
 
@@ -249,8 +291,13 @@ class CreateDatasetDto(object):
         :param access_groups: The access_groups of this CreateDatasetDto.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and access_groups is None:  # noqa: E501
-            raise ValueError("Invalid value for `access_groups`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and access_groups is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `access_groups`, must not be `None`"
+            )  # noqa: E501
 
         self._access_groups = access_groups
 
@@ -318,8 +365,12 @@ class CreateDatasetDto(object):
         :param owner: The owner of this CreateDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner`, must not be `None`"
+            )  # noqa: E501
 
         self._owner = owner
 
@@ -383,8 +434,13 @@ class CreateDatasetDto(object):
         :param contact_email: The contact_email of this CreateDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and contact_email is None:  # noqa: E501
-            raise ValueError("Invalid value for `contact_email`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and contact_email is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `contact_email`, must not be `None`"
+            )  # noqa: E501
 
         self._contact_email = contact_email
 
@@ -406,8 +462,13 @@ class CreateDatasetDto(object):
         :param source_folder: The source_folder of this CreateDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and source_folder is None:  # noqa: E501
-            raise ValueError("Invalid value for `source_folder`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and source_folder is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `source_folder`, must not be `None`"
+            )  # noqa: E501
 
         self._source_folder = source_folder
 
@@ -534,8 +595,13 @@ class CreateDatasetDto(object):
         :param creation_time: The creation_time of this CreateDatasetDto.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and creation_time is None:  # noqa: E501
-            raise ValueError("Invalid value for `creation_time`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and creation_time is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `creation_time`, must not be `None`"
+            )  # noqa: E501
 
         self._creation_time = creation_time
 
@@ -557,8 +623,12 @@ class CreateDatasetDto(object):
         :param type: The type of this CreateDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and type is None:  # noqa: E501
-            raise ValueError("Invalid value for `type`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and type is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `type`, must not be `None`"
+            )  # noqa: E501
 
         self._type = type
 
@@ -645,8 +715,13 @@ class CreateDatasetDto(object):
         :param dataset_name: The dataset_name of this CreateDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and dataset_name is None:  # noqa: E501
-            raise ValueError("Invalid value for `dataset_name`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and dataset_name is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `dataset_name`, must not be `None`"
+            )  # noqa: E501
 
         self._dataset_name = dataset_name
 
@@ -731,8 +806,13 @@ class CreateDatasetDto(object):
         :param is_published: The is_published of this CreateDatasetDto.  # noqa: E501
         :type: bool
         """
-        if self.local_vars_configuration.client_side_validation and is_published is None:  # noqa: E501
-            raise ValueError("Invalid value for `is_published`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and is_published is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `is_published`, must not be `None`"
+            )  # noqa: E501
 
         self._is_published = is_published
 
@@ -901,8 +981,13 @@ class CreateDatasetDto(object):
         :param creation_location: The creation_location of this CreateDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and creation_location is None:  # noqa: E501
-            raise ValueError("Invalid value for `creation_location`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and creation_location is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `creation_location`, must not be `None`"
+            )  # noqa: E501
 
         self._creation_location = creation_location
 
@@ -924,8 +1009,13 @@ class CreateDatasetDto(object):
         :param principal_investigator: The principal_investigator of this CreateDatasetDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and principal_investigator is None:  # noqa: E501
-            raise ValueError("Invalid value for `principal_investigator`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and principal_investigator is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `principal_investigator`, must not be `None`"
+            )  # noqa: E501
 
         self._principal_investigator = principal_investigator
 
@@ -947,8 +1037,13 @@ class CreateDatasetDto(object):
         :param scientific_metadata: The scientific_metadata of this CreateDatasetDto.  # noqa: E501
         :type: object
         """
-        if self.local_vars_configuration.client_side_validation and scientific_metadata is None:  # noqa: E501
-            raise ValueError("Invalid value for `scientific_metadata`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and scientific_metadata is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `scientific_metadata`, must not be `None`"
+            )  # noqa: E501
 
         self._scientific_metadata = scientific_metadata
 
@@ -959,18 +1054,20 @@ class CreateDatasetDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

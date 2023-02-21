@@ -29,23 +29,17 @@ class TestAuthApi(unittest.TestCase):
         pass
 
     def test_auth_controller_ad_login(self):
-        """Test case for auth_controller_ad_login
-
-        """
+        """Test case for auth_controller_ad_login"""
         pass
 
     def test_auth_controller_login(self):
-        """Test case for auth_controller_login
-
-        """
+        """Test case for auth_controller_login"""
         pass
 
     def test_auth_controller_whoami(self):
-        """Test case for auth_controller_whoami
-
-        """
+        """Test case for auth_controller_whoami"""
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

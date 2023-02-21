@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,28 +33,39 @@ class Job(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'email_job_initiator': 'str',
-        'type': 'str',
-        'creation_time': 'datetime',
-        'execution_time': 'datetime',
-        'job_params': 'object',
-        'job_status_message': 'str',
-        'dataset_list': 'list[str]',
-        'job_result_object': 'object'
+        "email_job_initiator": "str",
+        "type": "str",
+        "creation_time": "datetime",
+        "execution_time": "datetime",
+        "job_params": "object",
+        "job_status_message": "str",
+        "dataset_list": "list[str]",
+        "job_result_object": "object",
     }
 
     attribute_map = {
-        'email_job_initiator': 'emailJobInitiator',
-        'type': 'type',
-        'creation_time': 'creationTime',
-        'execution_time': 'executionTime',
-        'job_params': 'jobParams',
-        'job_status_message': 'jobStatusMessage',
-        'dataset_list': 'datasetList',
-        'job_result_object': 'jobResultObject'
+        "email_job_initiator": "emailJobInitiator",
+        "type": "type",
+        "creation_time": "creationTime",
+        "execution_time": "executionTime",
+        "job_params": "jobParams",
+        "job_status_message": "jobStatusMessage",
+        "dataset_list": "datasetList",
+        "job_result_object": "jobResultObject",
     }
 
-    def __init__(self, email_job_initiator=None, type=None, creation_time=None, execution_time=None, job_params=None, job_status_message=None, dataset_list=None, job_result_object=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        email_job_initiator=None,
+        type=None,
+        creation_time=None,
+        execution_time=None,
+        job_params=None,
+        job_status_message=None,
+        dataset_list=None,
+        job_result_object=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """Job - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -98,8 +110,13 @@ class Job(object):
         :param email_job_initiator: The email_job_initiator of this Job.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and email_job_initiator is None:  # noqa: E501
-            raise ValueError("Invalid value for `email_job_initiator`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and email_job_initiator is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `email_job_initiator`, must not be `None`"
+            )  # noqa: E501
 
         self._email_job_initiator = email_job_initiator
 
@@ -123,8 +140,12 @@ class Job(object):
         :param type: The type of this Job.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and type is None:  # noqa: E501
-            raise ValueError("Invalid value for `type`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and type is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `type`, must not be `None`"
+            )  # noqa: E501
 
         self._type = type
 
@@ -148,8 +169,13 @@ class Job(object):
         :param creation_time: The creation_time of this Job.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and creation_time is None:  # noqa: E501
-            raise ValueError("Invalid value for `creation_time`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and creation_time is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `creation_time`, must not be `None`"
+            )  # noqa: E501
 
         self._creation_time = creation_time
 
@@ -173,8 +199,13 @@ class Job(object):
         :param execution_time: The execution_time of this Job.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and execution_time is None:  # noqa: E501
-            raise ValueError("Invalid value for `execution_time`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and execution_time is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `execution_time`, must not be `None`"
+            )  # noqa: E501
 
         self._execution_time = execution_time
 
@@ -198,8 +229,12 @@ class Job(object):
         :param job_params: The job_params of this Job.  # noqa: E501
         :type: object
         """
-        if self.local_vars_configuration.client_side_validation and job_params is None:  # noqa: E501
-            raise ValueError("Invalid value for `job_params`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and job_params is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `job_params`, must not be `None`"
+            )  # noqa: E501
 
         self._job_params = job_params
 
@@ -223,8 +258,13 @@ class Job(object):
         :param job_status_message: The job_status_message of this Job.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and job_status_message is None:  # noqa: E501
-            raise ValueError("Invalid value for `job_status_message`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and job_status_message is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `job_status_message`, must not be `None`"
+            )  # noqa: E501
 
         self._job_status_message = job_status_message
 
@@ -248,8 +288,13 @@ class Job(object):
         :param dataset_list: The dataset_list of this Job.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and dataset_list is None:  # noqa: E501
-            raise ValueError("Invalid value for `dataset_list`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and dataset_list is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `dataset_list`, must not be `None`"
+            )  # noqa: E501
 
         self._dataset_list = dataset_list
 
@@ -273,8 +318,13 @@ class Job(object):
         :param job_result_object: The job_result_object of this Job.  # noqa: E501
         :type: object
         """
-        if self.local_vars_configuration.client_side_validation and job_result_object is None:  # noqa: E501
-            raise ValueError("Invalid value for `job_result_object`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and job_result_object is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `job_result_object`, must not be `None`"
+            )  # noqa: E501
 
         self._job_result_object = job_result_object
 
@@ -285,18 +335,20 @@ class Job(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

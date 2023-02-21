@@ -36,5 +36,5 @@ setup(
     include_package_data=True,
     long_description="""\
     SciCat backend API  # noqa: E501
-    """
+    """,
 )

@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,42 +33,60 @@ class CreateProposalDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'proposal_id': 'str',
-        'pi_email': 'str',
-        'pi_firstname': 'str',
-        'pi_lastname': 'str',
-        'email': 'str',
-        'firstname': 'str',
-        'lastname': 'str',
-        'title': 'str',
-        'abstract': 'str',
-        'start_time': 'datetime',
-        'end_time': 'datetime'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "proposal_id": "str",
+        "pi_email": "str",
+        "pi_firstname": "str",
+        "pi_lastname": "str",
+        "email": "str",
+        "firstname": "str",
+        "lastname": "str",
+        "title": "str",
+        "abstract": "str",
+        "start_time": "datetime",
+        "end_time": "datetime",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'proposal_id': 'proposalId',
-        'pi_email': 'pi_email',
-        'pi_firstname': 'pi_firstname',
-        'pi_lastname': 'pi_lastname',
-        'email': 'email',
-        'firstname': 'firstname',
-        'lastname': 'lastname',
-        'title': 'title',
-        'abstract': 'abstract',
-        'start_time': 'startTime',
-        'end_time': 'endTime'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "proposal_id": "proposalId",
+        "pi_email": "pi_email",
+        "pi_firstname": "pi_firstname",
+        "pi_lastname": "pi_lastname",
+        "email": "email",
+        "firstname": "firstname",
+        "lastname": "lastname",
+        "title": "title",
+        "abstract": "abstract",
+        "start_time": "startTime",
+        "end_time": "endTime",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, proposal_id=None, pi_email=None, pi_firstname=None, pi_lastname=None, email=None, firstname=None, lastname=None, title=None, abstract=None, start_time=None, end_time=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        proposal_id=None,
+        pi_email=None,
+        pi_firstname=None,
+        pi_lastname=None,
+        email=None,
+        firstname=None,
+        lastname=None,
+        title=None,
+        abstract=None,
+        start_time=None,
+        end_time=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """CreateProposalDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -128,8 +147,12 @@ class CreateProposalDto(object):
         :param owner_group: The owner_group of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_group is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_group`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_group is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_group`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_group = owner_group
 
@@ -153,8 +176,13 @@ class CreateProposalDto(object):
         :param access_groups: The access_groups of this CreateProposalDto.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and access_groups is None:  # noqa: E501
-            raise ValueError("Invalid value for `access_groups`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and access_groups is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `access_groups`, must not be `None`"
+            )  # noqa: E501
 
         self._access_groups = access_groups
 
@@ -178,8 +206,12 @@ class CreateProposalDto(object):
         :param created_by: The created_by of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and created_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_by`, must not be `None`"
+            )  # noqa: E501
 
         self._created_by = created_by
 
@@ -203,8 +235,12 @@ class CreateProposalDto(object):
         :param updated_by: The updated_by of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and updated_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_by`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_by = updated_by
 
@@ -226,8 +262,12 @@ class CreateProposalDto(object):
         :param proposal_id: The proposal_id of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and proposal_id is None:  # noqa: E501
-            raise ValueError("Invalid value for `proposal_id`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and proposal_id is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `proposal_id`, must not be `None`"
+            )  # noqa: E501
 
         self._proposal_id = proposal_id
 
@@ -249,8 +289,12 @@ class CreateProposalDto(object):
         :param pi_email: The pi_email of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and pi_email is None:  # noqa: E501
-            raise ValueError("Invalid value for `pi_email`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and pi_email is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `pi_email`, must not be `None`"
+            )  # noqa: E501
 
         self._pi_email = pi_email
 
@@ -272,8 +316,13 @@ class CreateProposalDto(object):
         :param pi_firstname: The pi_firstname of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and pi_firstname is None:  # noqa: E501
-            raise ValueError("Invalid value for `pi_firstname`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and pi_firstname is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `pi_firstname`, must not be `None`"
+            )  # noqa: E501
 
         self._pi_firstname = pi_firstname
 
@@ -295,8 +344,12 @@ class CreateProposalDto(object):
         :param pi_lastname: The pi_lastname of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and pi_lastname is None:  # noqa: E501
-            raise ValueError("Invalid value for `pi_lastname`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and pi_lastname is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `pi_lastname`, must not be `None`"
+            )  # noqa: E501
 
         self._pi_lastname = pi_lastname
 
@@ -318,8 +371,12 @@ class CreateProposalDto(object):
         :param email: The email of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and email is None:  # noqa: E501
-            raise ValueError("Invalid value for `email`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and email is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `email`, must not be `None`"
+            )  # noqa: E501
 
         self._email = email
 
@@ -341,8 +398,12 @@ class CreateProposalDto(object):
         :param firstname: The firstname of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and firstname is None:  # noqa: E501
-            raise ValueError("Invalid value for `firstname`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and firstname is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `firstname`, must not be `None`"
+            )  # noqa: E501
 
         self._firstname = firstname
 
@@ -364,8 +425,12 @@ class CreateProposalDto(object):
         :param lastname: The lastname of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and lastname is None:  # noqa: E501
-            raise ValueError("Invalid value for `lastname`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and lastname is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `lastname`, must not be `None`"
+            )  # noqa: E501
 
         self._lastname = lastname
 
@@ -387,8 +452,12 @@ class CreateProposalDto(object):
         :param title: The title of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and title is None:  # noqa: E501
-            raise ValueError("Invalid value for `title`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and title is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `title`, must not be `None`"
+            )  # noqa: E501
 
         self._title = title
 
@@ -410,8 +479,12 @@ class CreateProposalDto(object):
         :param abstract: The abstract of this CreateProposalDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and abstract is None:  # noqa: E501
-            raise ValueError("Invalid value for `abstract`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and abstract is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `abstract`, must not be `None`"
+            )  # noqa: E501
 
         self._abstract = abstract
 
@@ -464,18 +537,20 @@ class CreateProposalDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

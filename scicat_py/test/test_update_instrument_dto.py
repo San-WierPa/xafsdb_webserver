@@ -16,8 +16,7 @@ import datetime
 import unittest
 
 import scicat_py
-from scicat_py.models.update_instrument_dto import \
-    UpdateInstrumentDto  # noqa: E501
+from scicat_py.models.update_instrument_dto import UpdateInstrumentDto  # noqa: E501
 from scicat_py.rest import ApiException
 
 
@@ -32,18 +31,14 @@ class TestUpdateInstrumentDto(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test UpdateInstrumentDto
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.update_instrument_dto.UpdateInstrumentDto()  # noqa: E501
-        if include_optional :
-            return UpdateInstrumentDto(
-                name = '0', 
-                custom_metadata = None
-            )
-        else :
-            return UpdateInstrumentDto(
-        )
+        if include_optional:
+            return UpdateInstrumentDto(name="0", custom_metadata=None)
+        else:
+            return UpdateInstrumentDto()
 
     def testUpdateInstrumentDto(self):
         """Test UpdateInstrumentDto"""
@@ -51,5 +46,5 @@ class TestUpdateInstrumentDto(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

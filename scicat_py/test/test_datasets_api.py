@@ -29,155 +29,105 @@ class TestDatasetsApi(unittest.TestCase):
         pass
 
     def test_datasets_controller_append_to_array_field(self):
-        """Test case for datasets_controller_append_to_array_field
-
-        """
+        """Test case for datasets_controller_append_to_array_field"""
         pass
 
     def test_datasets_controller_count(self):
-        """Test case for datasets_controller_count
-
-        """
+        """Test case for datasets_controller_count"""
         pass
 
     def test_datasets_controller_create(self):
-        """Test case for datasets_controller_create
-
-        """
+        """Test case for datasets_controller_create"""
         pass
 
     def test_datasets_controller_create_attachment(self):
-        """Test case for datasets_controller_create_attachment
-
-        """
+        """Test case for datasets_controller_create_attachment"""
         pass
 
     def test_datasets_controller_create_datablock(self):
-        """Test case for datasets_controller_create_datablock
-
-        """
+        """Test case for datasets_controller_create_datablock"""
         pass
 
     def test_datasets_controller_create_orig_datablock(self):
-        """Test case for datasets_controller_create_orig_datablock
-
-        """
+        """Test case for datasets_controller_create_orig_datablock"""
         pass
 
     def test_datasets_controller_find_all(self):
-        """Test case for datasets_controller_find_all
-
-        """
+        """Test case for datasets_controller_find_all"""
         pass
 
     def test_datasets_controller_find_all_attachments(self):
-        """Test case for datasets_controller_find_all_attachments
-
-        """
+        """Test case for datasets_controller_find_all_attachments"""
         pass
 
     def test_datasets_controller_find_all_datablocks(self):
-        """Test case for datasets_controller_find_all_datablocks
-
-        """
+        """Test case for datasets_controller_find_all_datablocks"""
         pass
 
     def test_datasets_controller_find_all_orig_datablocks(self):
-        """Test case for datasets_controller_find_all_orig_datablocks
-
-        """
+        """Test case for datasets_controller_find_all_orig_datablocks"""
         pass
 
     def test_datasets_controller_find_by_id(self):
-        """Test case for datasets_controller_find_by_id
-
-        """
+        """Test case for datasets_controller_find_by_id"""
         pass
 
     def test_datasets_controller_find_by_id_and_delete(self):
-        """Test case for datasets_controller_find_by_id_and_delete
-
-        """
+        """Test case for datasets_controller_find_by_id_and_delete"""
         pass
 
     def test_datasets_controller_find_by_id_and_update(self):
-        """Test case for datasets_controller_find_by_id_and_update
-
-        """
+        """Test case for datasets_controller_find_by_id_and_update"""
         pass
 
     def test_datasets_controller_find_by_id_replace_or_create(self):
-        """Test case for datasets_controller_find_by_id_replace_or_create
-
-        """
+        """Test case for datasets_controller_find_by_id_replace_or_create"""
         pass
 
     def test_datasets_controller_find_one(self):
-        """Test case for datasets_controller_find_one
-
-        """
+        """Test case for datasets_controller_find_one"""
         pass
 
     def test_datasets_controller_find_one_attachment_and_remove(self):
-        """Test case for datasets_controller_find_one_attachment_and_remove
-
-        """
+        """Test case for datasets_controller_find_one_attachment_and_remove"""
         pass
 
     def test_datasets_controller_find_one_attachment_and_update(self):
-        """Test case for datasets_controller_find_one_attachment_and_update
-
-        """
+        """Test case for datasets_controller_find_one_attachment_and_update"""
         pass
 
     def test_datasets_controller_find_one_datablock_and_remove(self):
-        """Test case for datasets_controller_find_one_datablock_and_remove
-
-        """
+        """Test case for datasets_controller_find_one_datablock_and_remove"""
         pass
 
     def test_datasets_controller_find_one_datablock_and_update(self):
-        """Test case for datasets_controller_find_one_datablock_and_update
-
-        """
+        """Test case for datasets_controller_find_one_datablock_and_update"""
         pass
 
     def test_datasets_controller_find_one_orig_datablock_and_remove(self):
-        """Test case for datasets_controller_find_one_orig_datablock_and_remove
-
-        """
+        """Test case for datasets_controller_find_one_orig_datablock_and_remove"""
         pass
 
     def test_datasets_controller_find_one_orig_datablock_and_update(self):
-        """Test case for datasets_controller_find_one_orig_datablock_and_update
-
-        """
+        """Test case for datasets_controller_find_one_orig_datablock_and_update"""
         pass
 
     def test_datasets_controller_fullfacet(self):
-        """Test case for datasets_controller_fullfacet
-
-        """
+        """Test case for datasets_controller_fullfacet"""
         pass
 
     def test_datasets_controller_fullquery(self):
-        """Test case for datasets_controller_fullquery
-
-        """
+        """Test case for datasets_controller_fullquery"""
         pass
 
     def test_datasets_controller_metadata_keys(self):
-        """Test case for datasets_controller_metadata_keys
-
-        """
+        """Test case for datasets_controller_metadata_keys"""
         pass
 
     def test_datasets_controller_thumbnail(self):
-        """Test case for datasets_controller_thumbnail
-
-        """
+        """Test case for datasets_controller_thumbnail"""
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

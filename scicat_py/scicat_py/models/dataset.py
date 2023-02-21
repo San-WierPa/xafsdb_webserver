@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,84 +33,123 @@ class Dataset(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'instrument_group': 'str',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'pid': 'str',
-        'owner': 'str',
-        'owner_email': 'str',
-        'orcid_of_owner': 'str',
-        'contact_email': 'str',
-        'source_folder': 'str',
-        'source_folder_host': 'str',
-        'size': 'float',
-        'packed_size': 'float',
-        'number_of_files': 'float',
-        'number_of_files_archived': 'float',
-        'creation_time': 'datetime',
-        'type': 'str',
-        'validation_status': 'str',
-        'keywords': 'list[str]',
-        'description': 'str',
-        'dataset_name': 'str',
-        'classification': 'str',
-        'license': 'str',
-        'version': 'str',
-        'is_published': 'bool',
-        'history': 'list[object]',
-        'datasetlifecycle': 'Lifecycle',
-        'created_at': 'datetime',
-        'updated_at': 'datetime',
-        'instrument_id': 'str',
-        'techniques': 'list[Technique]',
-        'shared_with': 'list[str]',
-        'attachments': 'list[Attachment]',
-        'origdatablocks': 'list[OrigDatablock]',
-        'datablocks': 'list[Datablock]'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "instrument_group": "str",
+        "created_by": "str",
+        "updated_by": "str",
+        "pid": "str",
+        "owner": "str",
+        "owner_email": "str",
+        "orcid_of_owner": "str",
+        "contact_email": "str",
+        "source_folder": "str",
+        "source_folder_host": "str",
+        "size": "float",
+        "packed_size": "float",
+        "number_of_files": "float",
+        "number_of_files_archived": "float",
+        "creation_time": "datetime",
+        "type": "str",
+        "validation_status": "str",
+        "keywords": "list[str]",
+        "description": "str",
+        "dataset_name": "str",
+        "classification": "str",
+        "license": "str",
+        "version": "str",
+        "is_published": "bool",
+        "history": "list[object]",
+        "datasetlifecycle": "Lifecycle",
+        "created_at": "datetime",
+        "updated_at": "datetime",
+        "instrument_id": "str",
+        "techniques": "list[Technique]",
+        "shared_with": "list[str]",
+        "attachments": "list[Attachment]",
+        "origdatablocks": "list[OrigDatablock]",
+        "datablocks": "list[Datablock]",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'instrument_group': 'instrumentGroup',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'pid': 'pid',
-        'owner': 'owner',
-        'owner_email': 'ownerEmail',
-        'orcid_of_owner': 'orcidOfOwner',
-        'contact_email': 'contactEmail',
-        'source_folder': 'sourceFolder',
-        'source_folder_host': 'sourceFolderHost',
-        'size': 'size',
-        'packed_size': 'packedSize',
-        'number_of_files': 'numberOfFiles',
-        'number_of_files_archived': 'numberOfFilesArchived',
-        'creation_time': 'creationTime',
-        'type': 'type',
-        'validation_status': 'validationStatus',
-        'keywords': 'keywords',
-        'description': 'description',
-        'dataset_name': 'datasetName',
-        'classification': 'classification',
-        'license': 'license',
-        'version': 'version',
-        'is_published': 'isPublished',
-        'history': 'history',
-        'datasetlifecycle': 'datasetlifecycle',
-        'created_at': 'createdAt',
-        'updated_at': 'updatedAt',
-        'instrument_id': 'instrumentId',
-        'techniques': 'techniques',
-        'shared_with': 'sharedWith',
-        'attachments': 'attachments',
-        'origdatablocks': 'origdatablocks',
-        'datablocks': 'datablocks'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "instrument_group": "instrumentGroup",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "pid": "pid",
+        "owner": "owner",
+        "owner_email": "ownerEmail",
+        "orcid_of_owner": "orcidOfOwner",
+        "contact_email": "contactEmail",
+        "source_folder": "sourceFolder",
+        "source_folder_host": "sourceFolderHost",
+        "size": "size",
+        "packed_size": "packedSize",
+        "number_of_files": "numberOfFiles",
+        "number_of_files_archived": "numberOfFilesArchived",
+        "creation_time": "creationTime",
+        "type": "type",
+        "validation_status": "validationStatus",
+        "keywords": "keywords",
+        "description": "description",
+        "dataset_name": "datasetName",
+        "classification": "classification",
+        "license": "license",
+        "version": "version",
+        "is_published": "isPublished",
+        "history": "history",
+        "datasetlifecycle": "datasetlifecycle",
+        "created_at": "createdAt",
+        "updated_at": "updatedAt",
+        "instrument_id": "instrumentId",
+        "techniques": "techniques",
+        "shared_with": "sharedWith",
+        "attachments": "attachments",
+        "origdatablocks": "origdatablocks",
+        "datablocks": "datablocks",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, instrument_group=None, created_by=None, updated_by=None, pid=None, owner=None, owner_email=None, orcid_of_owner=None, contact_email=None, source_folder=None, source_folder_host=None, size=None, packed_size=None, number_of_files=None, number_of_files_archived=None, creation_time=None, type=None, validation_status=None, keywords=None, description=None, dataset_name=None, classification=None, license=None, version=None, is_published=None, history=None, datasetlifecycle=None, created_at=None, updated_at=None, instrument_id=None, techniques=None, shared_with=None, attachments=None, origdatablocks=None, datablocks=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        instrument_group=None,
+        created_by=None,
+        updated_by=None,
+        pid=None,
+        owner=None,
+        owner_email=None,
+        orcid_of_owner=None,
+        contact_email=None,
+        source_folder=None,
+        source_folder_host=None,
+        size=None,
+        packed_size=None,
+        number_of_files=None,
+        number_of_files_archived=None,
+        creation_time=None,
+        type=None,
+        validation_status=None,
+        keywords=None,
+        description=None,
+        dataset_name=None,
+        classification=None,
+        license=None,
+        version=None,
+        is_published=None,
+        history=None,
+        datasetlifecycle=None,
+        created_at=None,
+        updated_at=None,
+        instrument_id=None,
+        techniques=None,
+        shared_with=None,
+        attachments=None,
+        origdatablocks=None,
+        datablocks=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """Dataset - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -212,8 +252,12 @@ class Dataset(object):
         :param owner_group: The owner_group of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_group is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_group`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_group is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_group`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_group = owner_group
 
@@ -237,8 +281,13 @@ class Dataset(object):
         :param access_groups: The access_groups of this Dataset.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and access_groups is None:  # noqa: E501
-            raise ValueError("Invalid value for `access_groups`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and access_groups is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `access_groups`, must not be `None`"
+            )  # noqa: E501
 
         self._access_groups = access_groups
 
@@ -283,8 +332,12 @@ class Dataset(object):
         :param created_by: The created_by of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and created_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_by`, must not be `None`"
+            )  # noqa: E501
 
         self._created_by = created_by
 
@@ -306,8 +359,12 @@ class Dataset(object):
         :param updated_by: The updated_by of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and updated_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_by`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_by = updated_by
 
@@ -331,8 +388,12 @@ class Dataset(object):
         :param pid: The pid of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and pid is None:  # noqa: E501
-            raise ValueError("Invalid value for `pid`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and pid is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `pid`, must not be `None`"
+            )  # noqa: E501
 
         self._pid = pid
 
@@ -356,8 +417,12 @@ class Dataset(object):
         :param owner: The owner of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner`, must not be `None`"
+            )  # noqa: E501
 
         self._owner = owner
 
@@ -381,8 +446,12 @@ class Dataset(object):
         :param owner_email: The owner_email of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_email is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_email`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_email is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_email`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_email = owner_email
 
@@ -406,8 +475,13 @@ class Dataset(object):
         :param orcid_of_owner: The orcid_of_owner of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and orcid_of_owner is None:  # noqa: E501
-            raise ValueError("Invalid value for `orcid_of_owner`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and orcid_of_owner is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `orcid_of_owner`, must not be `None`"
+            )  # noqa: E501
 
         self._orcid_of_owner = orcid_of_owner
 
@@ -431,8 +505,13 @@ class Dataset(object):
         :param contact_email: The contact_email of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and contact_email is None:  # noqa: E501
-            raise ValueError("Invalid value for `contact_email`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and contact_email is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `contact_email`, must not be `None`"
+            )  # noqa: E501
 
         self._contact_email = contact_email
 
@@ -456,8 +535,13 @@ class Dataset(object):
         :param source_folder: The source_folder of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and source_folder is None:  # noqa: E501
-            raise ValueError("Invalid value for `source_folder`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and source_folder is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `source_folder`, must not be `None`"
+            )  # noqa: E501
 
         self._source_folder = source_folder
 
@@ -481,8 +565,13 @@ class Dataset(object):
         :param source_folder_host: The source_folder_host of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and source_folder_host is None:  # noqa: E501
-            raise ValueError("Invalid value for `source_folder_host`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and source_folder_host is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `source_folder_host`, must not be `None`"
+            )  # noqa: E501
 
         self._source_folder_host = source_folder_host
 
@@ -506,8 +595,12 @@ class Dataset(object):
         :param size: The size of this Dataset.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and size is None:  # noqa: E501
-            raise ValueError("Invalid value for `size`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and size is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `size`, must not be `None`"
+            )  # noqa: E501
 
         self._size = size
 
@@ -531,8 +624,12 @@ class Dataset(object):
         :param packed_size: The packed_size of this Dataset.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and packed_size is None:  # noqa: E501
-            raise ValueError("Invalid value for `packed_size`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and packed_size is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `packed_size`, must not be `None`"
+            )  # noqa: E501
 
         self._packed_size = packed_size
 
@@ -556,8 +653,13 @@ class Dataset(object):
         :param number_of_files: The number_of_files of this Dataset.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and number_of_files is None:  # noqa: E501
-            raise ValueError("Invalid value for `number_of_files`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and number_of_files is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `number_of_files`, must not be `None`"
+            )  # noqa: E501
 
         self._number_of_files = number_of_files
 
@@ -581,8 +683,13 @@ class Dataset(object):
         :param number_of_files_archived: The number_of_files_archived of this Dataset.  # noqa: E501
         :type: float
         """
-        if self.local_vars_configuration.client_side_validation and number_of_files_archived is None:  # noqa: E501
-            raise ValueError("Invalid value for `number_of_files_archived`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and number_of_files_archived is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `number_of_files_archived`, must not be `None`"
+            )  # noqa: E501
 
         self._number_of_files_archived = number_of_files_archived
 
@@ -606,8 +713,13 @@ class Dataset(object):
         :param creation_time: The creation_time of this Dataset.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and creation_time is None:  # noqa: E501
-            raise ValueError("Invalid value for `creation_time`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and creation_time is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `creation_time`, must not be `None`"
+            )  # noqa: E501
 
         self._creation_time = creation_time
 
@@ -631,8 +743,12 @@ class Dataset(object):
         :param type: The type of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and type is None:  # noqa: E501
-            raise ValueError("Invalid value for `type`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and type is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `type`, must not be `None`"
+            )  # noqa: E501
 
         self._type = type
 
@@ -656,8 +772,13 @@ class Dataset(object):
         :param validation_status: The validation_status of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and validation_status is None:  # noqa: E501
-            raise ValueError("Invalid value for `validation_status`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and validation_status is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `validation_status`, must not be `None`"
+            )  # noqa: E501
 
         self._validation_status = validation_status
 
@@ -681,8 +802,12 @@ class Dataset(object):
         :param keywords: The keywords of this Dataset.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and keywords is None:  # noqa: E501
-            raise ValueError("Invalid value for `keywords`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and keywords is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `keywords`, must not be `None`"
+            )  # noqa: E501
 
         self._keywords = keywords
 
@@ -706,8 +831,12 @@ class Dataset(object):
         :param description: The description of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and description is None:  # noqa: E501
-            raise ValueError("Invalid value for `description`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and description is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `description`, must not be `None`"
+            )  # noqa: E501
 
         self._description = description
 
@@ -731,8 +860,13 @@ class Dataset(object):
         :param dataset_name: The dataset_name of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and dataset_name is None:  # noqa: E501
-            raise ValueError("Invalid value for `dataset_name`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and dataset_name is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `dataset_name`, must not be `None`"
+            )  # noqa: E501
 
         self._dataset_name = dataset_name
 
@@ -756,8 +890,13 @@ class Dataset(object):
         :param classification: The classification of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and classification is None:  # noqa: E501
-            raise ValueError("Invalid value for `classification`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and classification is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `classification`, must not be `None`"
+            )  # noqa: E501
 
         self._classification = classification
 
@@ -781,8 +920,12 @@ class Dataset(object):
         :param license: The license of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and license is None:  # noqa: E501
-            raise ValueError("Invalid value for `license`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and license is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `license`, must not be `None`"
+            )  # noqa: E501
 
         self._license = license
 
@@ -806,8 +949,12 @@ class Dataset(object):
         :param version: The version of this Dataset.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and version is None:  # noqa: E501
-            raise ValueError("Invalid value for `version`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and version is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `version`, must not be `None`"
+            )  # noqa: E501
 
         self._version = version
 
@@ -831,8 +978,13 @@ class Dataset(object):
         :param is_published: The is_published of this Dataset.  # noqa: E501
         :type: bool
         """
-        if self.local_vars_configuration.client_side_validation and is_published is None:  # noqa: E501
-            raise ValueError("Invalid value for `is_published`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and is_published is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `is_published`, must not be `None`"
+            )  # noqa: E501
 
         self._is_published = is_published
 
@@ -856,8 +1008,12 @@ class Dataset(object):
         :param history: The history of this Dataset.  # noqa: E501
         :type: list[object]
         """
-        if self.local_vars_configuration.client_side_validation and history is None:  # noqa: E501
-            raise ValueError("Invalid value for `history`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and history is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `history`, must not be `None`"
+            )  # noqa: E501
 
         self._history = history
 
@@ -881,8 +1037,13 @@ class Dataset(object):
         :param datasetlifecycle: The datasetlifecycle of this Dataset.  # noqa: E501
         :type: Lifecycle
         """
-        if self.local_vars_configuration.client_side_validation and datasetlifecycle is None:  # noqa: E501
-            raise ValueError("Invalid value for `datasetlifecycle`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and datasetlifecycle is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `datasetlifecycle`, must not be `None`"
+            )  # noqa: E501
 
         self._datasetlifecycle = datasetlifecycle
 
@@ -906,8 +1067,12 @@ class Dataset(object):
         :param created_at: The created_at of this Dataset.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and created_at is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_at`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_at is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_at`, must not be `None`"
+            )  # noqa: E501
 
         self._created_at = created_at
 
@@ -931,8 +1096,12 @@ class Dataset(object):
         :param updated_at: The updated_at of this Dataset.  # noqa: E501
         :type: datetime
         """
-        if self.local_vars_configuration.client_side_validation and updated_at is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_at`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_at is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_at`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_at = updated_at
 
@@ -979,8 +1148,12 @@ class Dataset(object):
         :param techniques: The techniques of this Dataset.  # noqa: E501
         :type: list[Technique]
         """
-        if self.local_vars_configuration.client_side_validation and techniques is None:  # noqa: E501
-            raise ValueError("Invalid value for `techniques`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and techniques is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `techniques`, must not be `None`"
+            )  # noqa: E501
 
         self._techniques = techniques
 
@@ -1004,8 +1177,12 @@ class Dataset(object):
         :param shared_with: The shared_with of this Dataset.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and shared_with is None:  # noqa: E501
-            raise ValueError("Invalid value for `shared_with`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and shared_with is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `shared_with`, must not be `None`"
+            )  # noqa: E501
 
         self._shared_with = shared_with
 
@@ -1029,8 +1206,12 @@ class Dataset(object):
         :param attachments: The attachments of this Dataset.  # noqa: E501
         :type: list[Attachment]
         """
-        if self.local_vars_configuration.client_side_validation and attachments is None:  # noqa: E501
-            raise ValueError("Invalid value for `attachments`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and attachments is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `attachments`, must not be `None`"
+            )  # noqa: E501
 
         self._attachments = attachments
 
@@ -1054,8 +1235,13 @@ class Dataset(object):
         :param origdatablocks: The origdatablocks of this Dataset.  # noqa: E501
         :type: list[OrigDatablock]
         """
-        if self.local_vars_configuration.client_side_validation and origdatablocks is None:  # noqa: E501
-            raise ValueError("Invalid value for `origdatablocks`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and origdatablocks is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `origdatablocks`, must not be `None`"
+            )  # noqa: E501
 
         self._origdatablocks = origdatablocks
 
@@ -1079,8 +1265,12 @@ class Dataset(object):
         :param datablocks: The datablocks of this Dataset.  # noqa: E501
         :type: list[Datablock]
         """
-        if self.local_vars_configuration.client_side_validation and datablocks is None:  # noqa: E501
-            raise ValueError("Invalid value for `datablocks`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and datablocks is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `datablocks`, must not be `None`"
+            )  # noqa: E501
 
         self._datablocks = datablocks
 
@@ -1091,18 +1281,20 @@ class Dataset(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

@@ -16,6 +16,7 @@ import re  # noqa: F401
 
 # python 2 and python 3 compatibility library
 import six
+
 from scicat_py.api_client import ApiClient
 from scicat_py.exceptions import ApiTypeError, ApiValueError  # noqa: F401
 
@@ -32,7 +33,9 @@ class DatasetsApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
-    def datasets_controller_append_to_array_field(self, id, field_name, **kwargs):  # noqa: E501
+    def datasets_controller_append_to_array_field(
+        self, id, field_name, **kwargs
+    ):  # noqa: E501
         """datasets_controller_append_to_array_field  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -54,10 +57,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_append_to_array_field_with_http_info(id, field_name, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_append_to_array_field_with_http_info(
+            id, field_name, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_append_to_array_field_with_http_info(self, id, field_name, **kwargs):  # noqa: E501
+    def datasets_controller_append_to_array_field_with_http_info(
+        self, id, field_name, **kwargs
+    ):  # noqa: E501
         """datasets_controller_append_to_array_field  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -84,45 +91,54 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'field_name'
-        ]
+        all_params = ["id", "field_name"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_append_to_array_field" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_append_to_array_field`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_append_to_array_field`"
+            )  # noqa: E501
         # verify the required parameter 'field_name' is set
-        if self.api_client.client_side_validation and ('field_name' not in local_var_params or  # noqa: E501
-                                                        local_var_params['field_name'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `field_name` when calling `datasets_controller_append_to_array_field`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "field_name" not in local_var_params
+            or local_var_params["field_name"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `field_name` when calling `datasets_controller_append_to_array_field`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
-        if 'field_name' in local_var_params and local_var_params['field_name'] is not None:  # noqa: E501
-            query_params.append(('fieldName', local_var_params['field_name']))  # noqa: E501
+        if (
+            "field_name" in local_var_params
+            and local_var_params["field_name"] is not None
+        ):  # noqa: E501
+            query_params.append(
+                ("fieldName", local_var_params["field_name"])
+            )  # noqa: E501
 
         header_params = {}
 
@@ -131,27 +147,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/appendToArrayField', 'POST',
+            "/api/v3/datasets/{id}/appendToArrayField",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_count(self, **kwargs):  # noqa: E501
         """datasets_controller_count  # noqa: E501
@@ -173,7 +194,7 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.datasets_controller_count_with_http_info(**kwargs)  # noqa: E501
 
     def datasets_controller_count_with_http_info(self, **kwargs):  # noqa: E501
@@ -201,25 +222,24 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
+        all_params = []
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_count" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
@@ -234,10 +254,11 @@ class DatasetsApi(object):
 
         body_params = None
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/count', 'GET',
+            "/api/v3/datasets/count",
+            "GET",
             path_params,
             query_params,
             header_params,
@@ -246,11 +267,14 @@ class DatasetsApi(object):
             files=local_var_files,
             response_type=None,  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_create(self, create_dataset_dto, **kwargs):  # noqa: E501
         """datasets_controller_create  # noqa: E501
@@ -273,10 +297,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_create_with_http_info(create_dataset_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_create_with_http_info(
+            create_dataset_dto, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_create_with_http_info(self, create_dataset_dto, **kwargs):  # noqa: E501
+    def datasets_controller_create_with_http_info(
+        self, create_dataset_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_create  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -302,30 +330,32 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'create_dataset_dto'
-        ]
+        all_params = ["create_dataset_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_create" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'create_dataset_dto' is set
-        if self.api_client.client_side_validation and ('create_dataset_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['create_dataset_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `create_dataset_dto` when calling `datasets_controller_create`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "create_dataset_dto" not in local_var_params
+            or local_var_params["create_dataset_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `create_dataset_dto` when calling `datasets_controller_create`"
+            )  # noqa: E501
 
         collection_formats = {}
 
@@ -339,36 +369,46 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'create_dataset_dto' in local_var_params:
-            body_params = local_var_params['create_dataset_dto']
+        if "create_dataset_dto" in local_var_params:
+            body_params = local_var_params["create_dataset_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets', 'POST',
+            "/api/v3/datasets",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='Dataset',  # noqa: E501
+            response_type="Dataset",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_create_attachment(self, id, create_attachment_dto, **kwargs):  # noqa: E501
+    def datasets_controller_create_attachment(
+        self, id, create_attachment_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_create_attachment  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -390,10 +430,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_create_attachment_with_http_info(id, create_attachment_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_create_attachment_with_http_info(
+            id, create_attachment_dto, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_create_attachment_with_http_info(self, id, create_attachment_dto, **kwargs):  # noqa: E501
+    def datasets_controller_create_attachment_with_http_info(
+        self, id, create_attachment_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_create_attachment  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -420,41 +464,45 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'create_attachment_dto'
-        ]
+        all_params = ["id", "create_attachment_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_create_attachment" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_create_attachment`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_create_attachment`"
+            )  # noqa: E501
         # verify the required parameter 'create_attachment_dto' is set
-        if self.api_client.client_side_validation and ('create_attachment_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['create_attachment_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `create_attachment_dto` when calling `datasets_controller_create_attachment`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "create_attachment_dto" not in local_var_params
+            or local_var_params["create_attachment_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `create_attachment_dto` when calling `datasets_controller_create_attachment`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -464,36 +512,46 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'create_attachment_dto' in local_var_params:
-            body_params = local_var_params['create_attachment_dto']
+        if "create_attachment_dto" in local_var_params:
+            body_params = local_var_params["create_attachment_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/attachments', 'POST',
+            "/api/v3/datasets/{id}/attachments",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_create_datablock(self, id, create_datablock_dto, **kwargs):  # noqa: E501
+    def datasets_controller_create_datablock(
+        self, id, create_datablock_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_create_datablock  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -515,10 +573,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_create_datablock_with_http_info(id, create_datablock_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_create_datablock_with_http_info(
+            id, create_datablock_dto, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_create_datablock_with_http_info(self, id, create_datablock_dto, **kwargs):  # noqa: E501
+    def datasets_controller_create_datablock_with_http_info(
+        self, id, create_datablock_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_create_datablock  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -545,41 +607,45 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'create_datablock_dto'
-        ]
+        all_params = ["id", "create_datablock_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_create_datablock" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_create_datablock`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_create_datablock`"
+            )  # noqa: E501
         # verify the required parameter 'create_datablock_dto' is set
-        if self.api_client.client_side_validation and ('create_datablock_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['create_datablock_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `create_datablock_dto` when calling `datasets_controller_create_datablock`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "create_datablock_dto" not in local_var_params
+            or local_var_params["create_datablock_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `create_datablock_dto` when calling `datasets_controller_create_datablock`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -589,36 +655,46 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'create_datablock_dto' in local_var_params:
-            body_params = local_var_params['create_datablock_dto']
+        if "create_datablock_dto" in local_var_params:
+            body_params = local_var_params["create_datablock_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/datablocks', 'POST',
+            "/api/v3/datasets/{id}/datablocks",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_create_orig_datablock(self, id, create_origdatablock_dto, **kwargs):  # noqa: E501
+    def datasets_controller_create_orig_datablock(
+        self, id, create_origdatablock_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_create_orig_datablock  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -640,10 +716,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_create_orig_datablock_with_http_info(id, create_origdatablock_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_create_orig_datablock_with_http_info(
+            id, create_origdatablock_dto, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_create_orig_datablock_with_http_info(self, id, create_origdatablock_dto, **kwargs):  # noqa: E501
+    def datasets_controller_create_orig_datablock_with_http_info(
+        self, id, create_origdatablock_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_create_orig_datablock  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -670,41 +750,45 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'create_origdatablock_dto'
-        ]
+        all_params = ["id", "create_origdatablock_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_create_orig_datablock" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_create_orig_datablock`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_create_orig_datablock`"
+            )  # noqa: E501
         # verify the required parameter 'create_origdatablock_dto' is set
-        if self.api_client.client_side_validation and ('create_origdatablock_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['create_origdatablock_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `create_origdatablock_dto` when calling `datasets_controller_create_orig_datablock`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "create_origdatablock_dto" not in local_var_params
+            or local_var_params["create_origdatablock_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `create_origdatablock_dto` when calling `datasets_controller_create_orig_datablock`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -714,34 +798,42 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'create_origdatablock_dto' in local_var_params:
-            body_params = local_var_params['create_origdatablock_dto']
+        if "create_origdatablock_dto" in local_var_params:
+            body_params = local_var_params["create_origdatablock_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/origdatablocks', 'POST',
+            "/api/v3/datasets/{id}/origdatablocks",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_find_all(self, **kwargs):  # noqa: E501
         """datasets_controller_find_all  # noqa: E501
@@ -764,7 +856,7 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.datasets_controller_find_all_with_http_info(**kwargs)  # noqa: E501
 
     def datasets_controller_find_all_with_http_info(self, **kwargs):  # noqa: E501
@@ -793,34 +885,34 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filter'
-        ]
+        all_params = ["filter"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_all" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filter' in local_var_params and local_var_params['filter'] is not None:  # noqa: E501
-            query_params.append(('filter', local_var_params['filter']))  # noqa: E501
+        if (
+            "filter" in local_var_params and local_var_params["filter"] is not None
+        ):  # noqa: E501
+            query_params.append(("filter", local_var_params["filter"]))  # noqa: E501
 
         header_params = {}
 
@@ -829,27 +921,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets', 'GET',
+            "/api/v3/datasets",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_find_all_attachments(self, id, **kwargs):  # noqa: E501
         """datasets_controller_find_all_attachments  # noqa: E501
@@ -872,10 +969,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_all_attachments_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_all_attachments_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_all_attachments_with_http_info(self, id, **kwargs):  # noqa: E501
+    def datasets_controller_find_all_attachments_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_all_attachments  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -901,36 +1002,37 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_all_attachments" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_all_attachments`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_all_attachments`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -941,27 +1043,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/attachments', 'GET',
+            "/api/v3/datasets/{id}/attachments",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[Attachment]',  # noqa: E501
+            response_type="list[Attachment]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_find_all_datablocks(self, id, **kwargs):  # noqa: E501
         """datasets_controller_find_all_datablocks  # noqa: E501
@@ -984,10 +1091,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_all_datablocks_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_all_datablocks_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_all_datablocks_with_http_info(self, id, **kwargs):  # noqa: E501
+    def datasets_controller_find_all_datablocks_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_all_datablocks  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1013,36 +1124,37 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_all_datablocks" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_all_datablocks`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_all_datablocks`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1053,27 +1165,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/datablocks', 'GET',
+            "/api/v3/datasets/{id}/datablocks",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[Datablock]',  # noqa: E501
+            response_type="list[Datablock]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_find_all_orig_datablocks(self, id, **kwargs):  # noqa: E501
         """datasets_controller_find_all_orig_datablocks  # noqa: E501
@@ -1096,10 +1213,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_all_orig_datablocks_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_all_orig_datablocks_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_all_orig_datablocks_with_http_info(self, id, **kwargs):  # noqa: E501
+    def datasets_controller_find_all_orig_datablocks_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_all_orig_datablocks  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1125,36 +1246,37 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_all_orig_datablocks" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_all_orig_datablocks`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_all_orig_datablocks`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1165,27 +1287,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/origdatablocks', 'GET',
+            "/api/v3/datasets/{id}/origdatablocks",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[OrigDatablock]',  # noqa: E501
+            response_type="list[OrigDatablock]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_find_by_id(self, id, **kwargs):  # noqa: E501
         """datasets_controller_find_by_id  # noqa: E501
@@ -1208,8 +1335,10 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_by_id_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_by_id_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
     def datasets_controller_find_by_id_with_http_info(self, id, **kwargs):  # noqa: E501
         """datasets_controller_find_by_id  # noqa: E501
@@ -1237,36 +1366,37 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_by_id" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_by_id`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_by_id`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1277,27 +1407,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}', 'GET',
+            "/api/v3/datasets/{id}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_find_by_id_and_delete(self, id, **kwargs):  # noqa: E501
         """datasets_controller_find_by_id_and_delete  # noqa: E501
@@ -1320,10 +1455,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_by_id_and_delete_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_by_id_and_delete_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_by_id_and_delete_with_http_info(self, id, **kwargs):  # noqa: E501
+    def datasets_controller_find_by_id_and_delete_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_by_id_and_delete  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1349,36 +1488,37 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_by_id_and_delete" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_by_id_and_delete`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_by_id_and_delete`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1389,29 +1529,36 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}', 'DELETE',
+            "/api/v3/datasets/{id}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_find_by_id_and_update(self, id, update_dataset_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_by_id_and_update(
+        self, id, update_dataset_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_by_id_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1433,10 +1580,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_by_id_and_update_with_http_info(id, update_dataset_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_by_id_and_update_with_http_info(
+            id, update_dataset_dto, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_by_id_and_update_with_http_info(self, id, update_dataset_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_by_id_and_update_with_http_info(
+        self, id, update_dataset_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_by_id_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1463,41 +1614,45 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'update_dataset_dto'
-        ]
+        all_params = ["id", "update_dataset_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_by_id_and_update" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_by_id_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_by_id_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'update_dataset_dto' is set
-        if self.api_client.client_side_validation and ('update_dataset_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_dataset_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_dataset_dto` when calling `datasets_controller_find_by_id_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_dataset_dto" not in local_var_params
+            or local_var_params["update_dataset_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_dataset_dto` when calling `datasets_controller_find_by_id_and_update`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1507,36 +1662,46 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_dataset_dto' in local_var_params:
-            body_params = local_var_params['update_dataset_dto']
+        if "update_dataset_dto" in local_var_params:
+            body_params = local_var_params["update_dataset_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}', 'PATCH',
+            "/api/v3/datasets/{id}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_find_by_id_replace_or_create(self, id, update_dataset_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_by_id_replace_or_create(
+        self, id, update_dataset_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_by_id_replace_or_create  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1558,10 +1723,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_by_id_replace_or_create_with_http_info(id, update_dataset_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_by_id_replace_or_create_with_http_info(
+            id, update_dataset_dto, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_by_id_replace_or_create_with_http_info(self, id, update_dataset_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_by_id_replace_or_create_with_http_info(
+        self, id, update_dataset_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_by_id_replace_or_create  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1588,41 +1757,45 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'update_dataset_dto'
-        ]
+        all_params = ["id", "update_dataset_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_by_id_replace_or_create" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_by_id_replace_or_create`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_by_id_replace_or_create`"
+            )  # noqa: E501
         # verify the required parameter 'update_dataset_dto' is set
-        if self.api_client.client_side_validation and ('update_dataset_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_dataset_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_dataset_dto` when calling `datasets_controller_find_by_id_replace_or_create`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_dataset_dto" not in local_var_params
+            or local_var_params["update_dataset_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_dataset_dto` when calling `datasets_controller_find_by_id_replace_or_create`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1632,34 +1805,42 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_dataset_dto' in local_var_params:
-            body_params = local_var_params['update_dataset_dto']
+        if "update_dataset_dto" in local_var_params:
+            body_params = local_var_params["update_dataset_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}', 'PUT',
+            "/api/v3/datasets/{id}",
+            "PUT",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_find_one(self, **kwargs):  # noqa: E501
         """datasets_controller_find_one  # noqa: E501
@@ -1682,7 +1863,7 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.datasets_controller_find_one_with_http_info(**kwargs)  # noqa: E501
 
     def datasets_controller_find_one_with_http_info(self, **kwargs):  # noqa: E501
@@ -1711,34 +1892,34 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filter'
-        ]
+        all_params = ["filter"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_one" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filter' in local_var_params and local_var_params['filter'] is not None:  # noqa: E501
-            query_params.append(('filter', local_var_params['filter']))  # noqa: E501
+        if (
+            "filter" in local_var_params and local_var_params["filter"] is not None
+        ):  # noqa: E501
+            query_params.append(("filter", local_var_params["filter"]))  # noqa: E501
 
         header_params = {}
 
@@ -1747,29 +1928,36 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/findOne', 'GET',
+            "/api/v3/datasets/findOne",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_find_one_attachment_and_remove(self, id, fk, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_attachment_and_remove(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_attachment_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1791,10 +1979,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_one_attachment_and_remove_with_http_info(id, fk, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_one_attachment_and_remove_with_http_info(
+            id, fk, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_one_attachment_and_remove_with_http_info(self, id, fk, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_attachment_and_remove_with_http_info(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_attachment_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1821,43 +2013,47 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk'
-        ]
+        all_params = ["id", "fk"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method datasets_controller_find_one_attachment_and_remove" % key
+                    " to method datasets_controller_find_one_attachment_and_remove"
+                    % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_one_attachment_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_one_attachment_and_remove`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `datasets_controller_find_one_attachment_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `datasets_controller_find_one_attachment_and_remove`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -1868,29 +2064,36 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/attachments/{fk}', 'DELETE',
+            "/api/v3/datasets/{id}/attachments/{fk}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_find_one_attachment_and_update(self, id, fk, update_attachment_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_attachment_and_update(
+        self, id, fk, update_attachment_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_attachment_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1913,10 +2116,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_one_attachment_and_update_with_http_info(id, fk, update_attachment_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_one_attachment_and_update_with_http_info(
+            id, fk, update_attachment_dto, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_one_attachment_and_update_with_http_info(self, id, fk, update_attachment_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_attachment_and_update_with_http_info(
+        self, id, fk, update_attachment_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_attachment_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1944,48 +2151,55 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk',
-            'update_attachment_dto'
-        ]
+        all_params = ["id", "fk", "update_attachment_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method datasets_controller_find_one_attachment_and_update" % key
+                    " to method datasets_controller_find_one_attachment_and_update"
+                    % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_one_attachment_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_one_attachment_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `datasets_controller_find_one_attachment_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `datasets_controller_find_one_attachment_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'update_attachment_dto' is set
-        if self.api_client.client_side_validation and ('update_attachment_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_attachment_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_attachment_dto` when calling `datasets_controller_find_one_attachment_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_attachment_dto" not in local_var_params
+            or local_var_params["update_attachment_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_attachment_dto` when calling `datasets_controller_find_one_attachment_and_update`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -1995,36 +2209,46 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_attachment_dto' in local_var_params:
-            body_params = local_var_params['update_attachment_dto']
+        if "update_attachment_dto" in local_var_params:
+            body_params = local_var_params["update_attachment_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/attachments/{fk}', 'PATCH',
+            "/api/v3/datasets/{id}/attachments/{fk}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_find_one_datablock_and_remove(self, id, fk, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_datablock_and_remove(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_datablock_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -2046,10 +2270,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_one_datablock_and_remove_with_http_info(id, fk, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_one_datablock_and_remove_with_http_info(
+            id, fk, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_one_datablock_and_remove_with_http_info(self, id, fk, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_datablock_and_remove_with_http_info(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_datablock_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -2076,43 +2304,46 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk'
-        ]
+        all_params = ["id", "fk"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_one_datablock_and_remove" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_one_datablock_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_one_datablock_and_remove`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `datasets_controller_find_one_datablock_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `datasets_controller_find_one_datablock_and_remove`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -2123,29 +2354,36 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/datablocks/{fk}', 'DELETE',
+            "/api/v3/datasets/{id}/datablocks/{fk}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_find_one_datablock_and_update(self, id, fk, update_datablock_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_datablock_and_update(
+        self, id, fk, update_datablock_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_datablock_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -2168,10 +2406,14 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_one_datablock_and_update_with_http_info(id, fk, update_datablock_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_find_one_datablock_and_update_with_http_info(
+            id, fk, update_datablock_dto, **kwargs
+        )  # noqa: E501
 
-    def datasets_controller_find_one_datablock_and_update_with_http_info(self, id, fk, update_datablock_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_datablock_and_update_with_http_info(
+        self, id, fk, update_datablock_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_datablock_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -2199,48 +2441,54 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk',
-            'update_datablock_dto'
-        ]
+        all_params = ["id", "fk", "update_datablock_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_find_one_datablock_and_update" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_one_datablock_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_one_datablock_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `datasets_controller_find_one_datablock_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `datasets_controller_find_one_datablock_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'update_datablock_dto' is set
-        if self.api_client.client_side_validation and ('update_datablock_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_datablock_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_datablock_dto` when calling `datasets_controller_find_one_datablock_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_datablock_dto" not in local_var_params
+            or local_var_params["update_datablock_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_datablock_dto` when calling `datasets_controller_find_one_datablock_and_update`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -2250,36 +2498,46 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_datablock_dto' in local_var_params:
-            body_params = local_var_params['update_datablock_dto']
+        if "update_datablock_dto" in local_var_params:
+            body_params = local_var_params["update_datablock_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/datablocks/{fk}', 'PATCH',
+            "/api/v3/datasets/{id}/datablocks/{fk}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_find_one_orig_datablock_and_remove(self, id, fk, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_orig_datablock_and_remove(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_orig_datablock_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -2301,10 +2559,16 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_one_orig_datablock_and_remove_with_http_info(id, fk, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return (
+            self.datasets_controller_find_one_orig_datablock_and_remove_with_http_info(
+                id, fk, **kwargs
+            )
+        )  # noqa: E501
 
-    def datasets_controller_find_one_orig_datablock_and_remove_with_http_info(self, id, fk, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_orig_datablock_and_remove_with_http_info(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_orig_datablock_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -2331,43 +2595,47 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk'
-        ]
+        all_params = ["id", "fk"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method datasets_controller_find_one_orig_datablock_and_remove" % key
+                    " to method datasets_controller_find_one_orig_datablock_and_remove"
+                    % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_one_orig_datablock_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_one_orig_datablock_and_remove`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `datasets_controller_find_one_orig_datablock_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `datasets_controller_find_one_orig_datablock_and_remove`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -2378,29 +2646,36 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/origdatablocks/{fk}', 'DELETE',
+            "/api/v3/datasets/{id}/origdatablocks/{fk}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def datasets_controller_find_one_orig_datablock_and_update(self, id, fk, update_origdatablock_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_orig_datablock_and_update(
+        self, id, fk, update_origdatablock_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_orig_datablock_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -2423,10 +2698,16 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_find_one_orig_datablock_and_update_with_http_info(id, fk, update_origdatablock_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return (
+            self.datasets_controller_find_one_orig_datablock_and_update_with_http_info(
+                id, fk, update_origdatablock_dto, **kwargs
+            )
+        )  # noqa: E501
 
-    def datasets_controller_find_one_orig_datablock_and_update_with_http_info(self, id, fk, update_origdatablock_dto, **kwargs):  # noqa: E501
+    def datasets_controller_find_one_orig_datablock_and_update_with_http_info(
+        self, id, fk, update_origdatablock_dto, **kwargs
+    ):  # noqa: E501
         """datasets_controller_find_one_orig_datablock_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -2454,48 +2735,55 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk',
-            'update_origdatablock_dto'
-        ]
+        all_params = ["id", "fk", "update_origdatablock_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
-                    " to method datasets_controller_find_one_orig_datablock_and_update" % key
+                    " to method datasets_controller_find_one_orig_datablock_and_update"
+                    % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_find_one_orig_datablock_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_find_one_orig_datablock_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `datasets_controller_find_one_orig_datablock_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `datasets_controller_find_one_orig_datablock_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'update_origdatablock_dto' is set
-        if self.api_client.client_side_validation and ('update_origdatablock_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_origdatablock_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_origdatablock_dto` when calling `datasets_controller_find_one_orig_datablock_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_origdatablock_dto" not in local_var_params
+            or local_var_params["update_origdatablock_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_origdatablock_dto` when calling `datasets_controller_find_one_orig_datablock_and_update`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -2505,34 +2793,42 @@ class DatasetsApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_origdatablock_dto' in local_var_params:
-            body_params = local_var_params['update_origdatablock_dto']
+        if "update_origdatablock_dto" in local_var_params:
+            body_params = local_var_params["update_origdatablock_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/origdatablocks/{fk}', 'PATCH',
+            "/api/v3/datasets/{id}/origdatablocks/{fk}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_fullfacet(self, **kwargs):  # noqa: E501
         """datasets_controller_fullfacet  # noqa: E501
@@ -2555,7 +2851,7 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.datasets_controller_fullfacet_with_http_info(**kwargs)  # noqa: E501
 
     def datasets_controller_fullfacet_with_http_info(self, **kwargs):  # noqa: E501
@@ -2584,34 +2880,34 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filters'
-        ]
+        all_params = ["filters"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_fullfacet" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filters' in local_var_params and local_var_params['filters'] is not None:  # noqa: E501
-            query_params.append(('filters', local_var_params['filters']))  # noqa: E501
+        if (
+            "filters" in local_var_params and local_var_params["filters"] is not None
+        ):  # noqa: E501
+            query_params.append(("filters", local_var_params["filters"]))  # noqa: E501
 
         header_params = {}
 
@@ -2620,27 +2916,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/fullfacet', 'GET',
+            "/api/v3/datasets/fullfacet",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[object]',  # noqa: E501
+            response_type="list[object]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_fullquery(self, **kwargs):  # noqa: E501
         """datasets_controller_fullquery  # noqa: E501
@@ -2663,7 +2964,7 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.datasets_controller_fullquery_with_http_info(**kwargs)  # noqa: E501
 
     def datasets_controller_fullquery_with_http_info(self, **kwargs):  # noqa: E501
@@ -2692,34 +2993,34 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filters'
-        ]
+        all_params = ["filters"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_fullquery" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filters' in local_var_params and local_var_params['filters'] is not None:  # noqa: E501
-            query_params.append(('filters', local_var_params['filters']))  # noqa: E501
+        if (
+            "filters" in local_var_params and local_var_params["filters"] is not None
+        ):  # noqa: E501
+            query_params.append(("filters", local_var_params["filters"]))  # noqa: E501
 
         header_params = {}
 
@@ -2728,27 +3029,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/fullquery', 'GET',
+            "/api/v3/datasets/fullquery",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_metadata_keys(self, **kwargs):  # noqa: E501
         """datasets_controller_metadata_keys  # noqa: E501
@@ -2771,8 +3077,10 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_metadata_keys_with_http_info(**kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_metadata_keys_with_http_info(
+            **kwargs
+        )  # noqa: E501
 
     def datasets_controller_metadata_keys_with_http_info(self, **kwargs):  # noqa: E501
         """datasets_controller_metadata_keys  # noqa: E501
@@ -2800,34 +3108,34 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filters'
-        ]
+        all_params = ["filters"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_metadata_keys" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filters' in local_var_params and local_var_params['filters'] is not None:  # noqa: E501
-            query_params.append(('filters', local_var_params['filters']))  # noqa: E501
+        if (
+            "filters" in local_var_params and local_var_params["filters"] is not None
+        ):  # noqa: E501
+            query_params.append(("filters", local_var_params["filters"]))  # noqa: E501
 
         header_params = {}
 
@@ -2836,27 +3144,32 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/metadataKeys', 'GET',
+            "/api/v3/datasets/metadataKeys",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[str]',  # noqa: E501
+            response_type="list[str]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def datasets_controller_thumbnail(self, id, **kwargs):  # noqa: E501
         """datasets_controller_thumbnail  # noqa: E501
@@ -2879,8 +3192,10 @@ class DatasetsApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.datasets_controller_thumbnail_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.datasets_controller_thumbnail_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
     def datasets_controller_thumbnail_with_http_info(self, id, **kwargs):  # noqa: E501
         """datasets_controller_thumbnail  # noqa: E501
@@ -2908,36 +3223,37 @@ class DatasetsApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method datasets_controller_thumbnail" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `datasets_controller_thumbnail`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `datasets_controller_thumbnail`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -2948,24 +3264,29 @@ class DatasetsApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/datasets/{id}/thumbnail', 'GET',
+            "/api/v3/datasets/{id}/thumbnail",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

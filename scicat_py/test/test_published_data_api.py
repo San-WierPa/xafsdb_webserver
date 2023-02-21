@@ -29,59 +29,41 @@ class TestPublishedDataApi(unittest.TestCase):
         pass
 
     def test_published_data_controller_count(self):
-        """Test case for published_data_controller_count
-
-        """
+        """Test case for published_data_controller_count"""
         pass
 
     def test_published_data_controller_create(self):
-        """Test case for published_data_controller_create
-
-        """
+        """Test case for published_data_controller_create"""
         pass
 
     def test_published_data_controller_find_all(self):
-        """Test case for published_data_controller_find_all
-
-        """
+        """Test case for published_data_controller_find_all"""
         pass
 
     def test_published_data_controller_find_one(self):
-        """Test case for published_data_controller_find_one
-
-        """
+        """Test case for published_data_controller_find_one"""
         pass
 
     def test_published_data_controller_form_populate(self):
-        """Test case for published_data_controller_form_populate
-
-        """
+        """Test case for published_data_controller_form_populate"""
         pass
 
     def test_published_data_controller_register(self):
-        """Test case for published_data_controller_register
-
-        """
+        """Test case for published_data_controller_register"""
         pass
 
     def test_published_data_controller_remove(self):
-        """Test case for published_data_controller_remove
-
-        """
+        """Test case for published_data_controller_remove"""
         pass
 
     def test_published_data_controller_resync(self):
-        """Test case for published_data_controller_resync
-
-        """
+        """Test case for published_data_controller_resync"""
         pass
 
     def test_published_data_controller_update(self):
-        """Test case for published_data_controller_update
-
-        """
+        """Test case for published_data_controller_update"""
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

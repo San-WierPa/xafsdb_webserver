@@ -16,6 +16,7 @@ import re  # noqa: F401
 
 # python 2 and python 3 compatibility library
 import six
+
 from scicat_py.api_client import ApiClient
 from scicat_py.exceptions import ApiTypeError, ApiValueError  # noqa: F401
 
@@ -53,10 +54,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_create_with_http_info(create_sample_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_create_with_http_info(
+            create_sample_dto, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_create_with_http_info(self, create_sample_dto, **kwargs):  # noqa: E501
+    def samples_controller_create_with_http_info(
+        self, create_sample_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_create  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -82,30 +87,32 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'create_sample_dto'
-        ]
+        all_params = ["create_sample_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_create" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'create_sample_dto' is set
-        if self.api_client.client_side_validation and ('create_sample_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['create_sample_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `create_sample_dto` when calling `samples_controller_create`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "create_sample_dto" not in local_var_params
+            or local_var_params["create_sample_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `create_sample_dto` when calling `samples_controller_create`"
+            )  # noqa: E501
 
         collection_formats = {}
 
@@ -119,36 +126,46 @@ class SamplesApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'create_sample_dto' in local_var_params:
-            body_params = local_var_params['create_sample_dto']
+        if "create_sample_dto" in local_var_params:
+            body_params = local_var_params["create_sample_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples', 'POST',
+            "/api/v3/samples",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='Sample',  # noqa: E501
+            response_type="Sample",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def samples_controller_create_attachments(self, id, create_attachment_dto, **kwargs):  # noqa: E501
+    def samples_controller_create_attachments(
+        self, id, create_attachment_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_create_attachments  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -170,10 +187,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_create_attachments_with_http_info(id, create_attachment_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_create_attachments_with_http_info(
+            id, create_attachment_dto, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_create_attachments_with_http_info(self, id, create_attachment_dto, **kwargs):  # noqa: E501
+    def samples_controller_create_attachments_with_http_info(
+        self, id, create_attachment_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_create_attachments  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -200,41 +221,45 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'create_attachment_dto'
-        ]
+        all_params = ["id", "create_attachment_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_create_attachments" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_create_attachments`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_create_attachments`"
+            )  # noqa: E501
         # verify the required parameter 'create_attachment_dto' is set
-        if self.api_client.client_side_validation and ('create_attachment_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['create_attachment_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `create_attachment_dto` when calling `samples_controller_create_attachments`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "create_attachment_dto" not in local_var_params
+            or local_var_params["create_attachment_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `create_attachment_dto` when calling `samples_controller_create_attachments`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -244,36 +269,46 @@ class SamplesApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'create_attachment_dto' in local_var_params:
-            body_params = local_var_params['create_attachment_dto']
+        if "create_attachment_dto" in local_var_params:
+            body_params = local_var_params["create_attachment_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}/attachments', 'POST',
+            "/api/v3/samples/{id}/attachments",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='Attachment',  # noqa: E501
+            response_type="Attachment",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def samples_controller_create_dataset(self, id, create_raw_dataset_dto, **kwargs):  # noqa: E501
+    def samples_controller_create_dataset(
+        self, id, create_raw_dataset_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_create_dataset  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -295,10 +330,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_create_dataset_with_http_info(id, create_raw_dataset_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_create_dataset_with_http_info(
+            id, create_raw_dataset_dto, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_create_dataset_with_http_info(self, id, create_raw_dataset_dto, **kwargs):  # noqa: E501
+    def samples_controller_create_dataset_with_http_info(
+        self, id, create_raw_dataset_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_create_dataset  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -325,41 +364,45 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'create_raw_dataset_dto'
-        ]
+        all_params = ["id", "create_raw_dataset_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_create_dataset" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_create_dataset`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_create_dataset`"
+            )  # noqa: E501
         # verify the required parameter 'create_raw_dataset_dto' is set
-        if self.api_client.client_side_validation and ('create_raw_dataset_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['create_raw_dataset_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `create_raw_dataset_dto` when calling `samples_controller_create_dataset`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "create_raw_dataset_dto" not in local_var_params
+            or local_var_params["create_raw_dataset_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `create_raw_dataset_dto` when calling `samples_controller_create_dataset`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -369,34 +412,42 @@ class SamplesApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'create_raw_dataset_dto' in local_var_params:
-            body_params = local_var_params['create_raw_dataset_dto']
+        if "create_raw_dataset_dto" in local_var_params:
+            body_params = local_var_params["create_raw_dataset_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}/datasets', 'POST',
+            "/api/v3/samples/{id}/datasets",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='Dataset',  # noqa: E501
+            response_type="Dataset",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_find_all(self, **kwargs):  # noqa: E501
         """samples_controller_find_all  # noqa: E501
@@ -419,7 +470,7 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.samples_controller_find_all_with_http_info(**kwargs)  # noqa: E501
 
     def samples_controller_find_all_with_http_info(self, **kwargs):  # noqa: E501
@@ -448,34 +499,34 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filters'
-        ]
+        all_params = ["filters"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_all" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filters' in local_var_params and local_var_params['filters'] is not None:  # noqa: E501
-            query_params.append(('filters', local_var_params['filters']))  # noqa: E501
+        if (
+            "filters" in local_var_params and local_var_params["filters"] is not None
+        ):  # noqa: E501
+            query_params.append(("filters", local_var_params["filters"]))  # noqa: E501
 
         header_params = {}
 
@@ -484,27 +535,32 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples', 'GET',
+            "/api/v3/samples",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[Sample]',  # noqa: E501
+            response_type="list[Sample]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_find_all_attachments(self, id, **kwargs):  # noqa: E501
         """samples_controller_find_all_attachments  # noqa: E501
@@ -527,10 +583,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_find_all_attachments_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_find_all_attachments_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_find_all_attachments_with_http_info(self, id, **kwargs):  # noqa: E501
+    def samples_controller_find_all_attachments_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_all_attachments  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -556,36 +616,37 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_all_attachments" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_find_all_attachments`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_find_all_attachments`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -596,27 +657,32 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}/attachments', 'GET',
+            "/api/v3/samples/{id}/attachments",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[Attachment]',  # noqa: E501
+            response_type="list[Attachment]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_find_all_datasets(self, id, **kwargs):  # noqa: E501
         """samples_controller_find_all_datasets  # noqa: E501
@@ -639,10 +705,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_find_all_datasets_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_find_all_datasets_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_find_all_datasets_with_http_info(self, id, **kwargs):  # noqa: E501
+    def samples_controller_find_all_datasets_with_http_info(
+        self, id, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_all_datasets  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -668,36 +738,37 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_all_datasets" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_find_all_datasets`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_find_all_datasets`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -708,27 +779,32 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}/datasets', 'GET',
+            "/api/v3/samples/{id}/datasets",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_find_by_id(self, id, **kwargs):  # noqa: E501
         """samples_controller_find_by_id  # noqa: E501
@@ -751,8 +827,10 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_find_by_id_with_http_info(id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_find_by_id_with_http_info(
+            id, **kwargs
+        )  # noqa: E501
 
     def samples_controller_find_by_id_with_http_info(self, id, **kwargs):  # noqa: E501
         """samples_controller_find_by_id  # noqa: E501
@@ -780,36 +858,37 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_by_id" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_find_by_id`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_find_by_id`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -820,27 +899,32 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}', 'GET',
+            "/api/v3/samples/{id}",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_find_one(self, filter, **kwargs):  # noqa: E501
         """samples_controller_find_one  # noqa: E501
@@ -863,10 +947,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_find_one_with_http_info(filter, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_find_one_with_http_info(
+            filter, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_find_one_with_http_info(self, filter, **kwargs):  # noqa: E501
+    def samples_controller_find_one_with_http_info(
+        self, filter, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -892,38 +980,42 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'filter'
-        ]
+        all_params = ["filter"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_one" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'filter' is set
-        if self.api_client.client_side_validation and ('filter' not in local_var_params or  # noqa: E501
-                                                        local_var_params['filter'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `filter` when calling `samples_controller_find_one`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "filter" not in local_var_params
+            or local_var_params["filter"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `filter` when calling `samples_controller_find_one`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
 
         query_params = []
-        if 'filter' in local_var_params and local_var_params['filter'] is not None:  # noqa: E501
-            query_params.append(('filter', local_var_params['filter']))  # noqa: E501
+        if (
+            "filter" in local_var_params and local_var_params["filter"] is not None
+        ):  # noqa: E501
+            query_params.append(("filter", local_var_params["filter"]))  # noqa: E501
 
         header_params = {}
 
@@ -932,29 +1024,36 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/findOne', 'GET',
+            "/api/v3/samples/findOne",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def samples_controller_find_one_attachment_and_remove(self, id, fk, **kwargs):  # noqa: E501
+    def samples_controller_find_one_attachment_and_remove(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one_attachment_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -976,10 +1075,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_find_one_attachment_and_remove_with_http_info(id, fk, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_find_one_attachment_and_remove_with_http_info(
+            id, fk, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_find_one_attachment_and_remove_with_http_info(self, id, fk, **kwargs):  # noqa: E501
+    def samples_controller_find_one_attachment_and_remove_with_http_info(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one_attachment_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1006,43 +1109,46 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk'
-        ]
+        all_params = ["id", "fk"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_one_attachment_and_remove" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_find_one_attachment_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_find_one_attachment_and_remove`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `samples_controller_find_one_attachment_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `samples_controller_find_one_attachment_and_remove`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -1053,29 +1159,36 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}/attachments/{fk}', 'DELETE',
+            "/api/v3/samples/{id}/attachments/{fk}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def samples_controller_find_one_attachment_and_update(self, id, fk, update_attachment_dto, **kwargs):  # noqa: E501
+    def samples_controller_find_one_attachment_and_update(
+        self, id, fk, update_attachment_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one_attachment_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1098,10 +1211,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_find_one_attachment_and_update_with_http_info(id, fk, update_attachment_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_find_one_attachment_and_update_with_http_info(
+            id, fk, update_attachment_dto, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_find_one_attachment_and_update_with_http_info(self, id, fk, update_attachment_dto, **kwargs):  # noqa: E501
+    def samples_controller_find_one_attachment_and_update_with_http_info(
+        self, id, fk, update_attachment_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one_attachment_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1129,48 +1246,54 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk',
-            'update_attachment_dto'
-        ]
+        all_params = ["id", "fk", "update_attachment_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_one_attachment_and_update" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_find_one_attachment_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_find_one_attachment_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `samples_controller_find_one_attachment_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `samples_controller_find_one_attachment_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'update_attachment_dto' is set
-        if self.api_client.client_side_validation and ('update_attachment_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_attachment_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_attachment_dto` when calling `samples_controller_find_one_attachment_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_attachment_dto" not in local_var_params
+            or local_var_params["update_attachment_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_attachment_dto` when calling `samples_controller_find_one_attachment_and_update`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -1180,36 +1303,46 @@ class SamplesApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_attachment_dto' in local_var_params:
-            body_params = local_var_params['update_attachment_dto']
+        if "update_attachment_dto" in local_var_params:
+            body_params = local_var_params["update_attachment_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}/attachments/{fk}', 'PATCH',
+            "/api/v3/samples/{id}/attachments/{fk}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def samples_controller_find_one_dataset_and_remove(self, id, fk, **kwargs):  # noqa: E501
+    def samples_controller_find_one_dataset_and_remove(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one_dataset_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1231,10 +1364,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_find_one_dataset_and_remove_with_http_info(id, fk, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_find_one_dataset_and_remove_with_http_info(
+            id, fk, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_find_one_dataset_and_remove_with_http_info(self, id, fk, **kwargs):  # noqa: E501
+    def samples_controller_find_one_dataset_and_remove_with_http_info(
+        self, id, fk, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one_dataset_and_remove  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1261,43 +1398,46 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk'
-        ]
+        all_params = ["id", "fk"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_one_dataset_and_remove" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_find_one_dataset_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_find_one_dataset_and_remove`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `samples_controller_find_one_dataset_and_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `samples_controller_find_one_dataset_and_remove`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -1308,29 +1448,36 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}/datasets/{fk}', 'DELETE',
+            "/api/v3/samples/{id}/datasets/{fk}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
-    def samples_controller_find_one_dataset_and_update(self, id, fk, update_raw_dataset_dto, **kwargs):  # noqa: E501
+    def samples_controller_find_one_dataset_and_update(
+        self, id, fk, update_raw_dataset_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one_dataset_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1353,10 +1500,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_find_one_dataset_and_update_with_http_info(id, fk, update_raw_dataset_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_find_one_dataset_and_update_with_http_info(
+            id, fk, update_raw_dataset_dto, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_find_one_dataset_and_update_with_http_info(self, id, fk, update_raw_dataset_dto, **kwargs):  # noqa: E501
+    def samples_controller_find_one_dataset_and_update_with_http_info(
+        self, id, fk, update_raw_dataset_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_find_one_dataset_and_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1384,48 +1535,54 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'fk',
-            'update_raw_dataset_dto'
-        ]
+        all_params = ["id", "fk", "update_raw_dataset_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_find_one_dataset_and_update" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_find_one_dataset_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_find_one_dataset_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'fk' is set
-        if self.api_client.client_side_validation and ('fk' not in local_var_params or  # noqa: E501
-                                                        local_var_params['fk'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `fk` when calling `samples_controller_find_one_dataset_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "fk" not in local_var_params or local_var_params["fk"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `fk` when calling `samples_controller_find_one_dataset_and_update`"
+            )  # noqa: E501
         # verify the required parameter 'update_raw_dataset_dto' is set
-        if self.api_client.client_side_validation and ('update_raw_dataset_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_raw_dataset_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_raw_dataset_dto` when calling `samples_controller_find_one_dataset_and_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_raw_dataset_dto" not in local_var_params
+            or local_var_params["update_raw_dataset_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_raw_dataset_dto` when calling `samples_controller_find_one_dataset_and_update`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
-        if 'fk' in local_var_params:
-            path_params['fk'] = local_var_params['fk']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
+        if "fk" in local_var_params:
+            path_params["fk"] = local_var_params["fk"]  # noqa: E501
 
         query_params = []
 
@@ -1435,34 +1592,42 @@ class SamplesApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_raw_dataset_dto' in local_var_params:
-            body_params = local_var_params['update_raw_dataset_dto']
+        if "update_raw_dataset_dto" in local_var_params:
+            body_params = local_var_params["update_raw_dataset_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}/datasets/{fk}', 'PATCH',
+            "/api/v3/samples/{id}/datasets/{fk}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_fullquery(self, **kwargs):  # noqa: E501
         """samples_controller_fullquery  # noqa: E501
@@ -1484,7 +1649,7 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.samples_controller_fullquery_with_http_info(**kwargs)  # noqa: E501
 
     def samples_controller_fullquery_with_http_info(self, **kwargs):  # noqa: E501
@@ -1512,25 +1677,24 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
+        all_params = []
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_fullquery" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
@@ -1545,27 +1709,32 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/fullquery', 'GET',
+            "/api/v3/samples/fullquery",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[Sample]',  # noqa: E501
+            response_type="list[Sample]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_metadata_keys(self, **kwargs):  # noqa: E501
         """samples_controller_metadata_keys  # noqa: E501
@@ -1587,8 +1756,10 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_metadata_keys_with_http_info(**kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_metadata_keys_with_http_info(
+            **kwargs
+        )  # noqa: E501
 
     def samples_controller_metadata_keys_with_http_info(self, **kwargs):  # noqa: E501
         """samples_controller_metadata_keys  # noqa: E501
@@ -1615,25 +1786,24 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
+        all_params = []
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_metadata_keys" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
@@ -1648,27 +1818,32 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/metadataKeys', 'GET',
+            "/api/v3/samples/metadataKeys",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[str]',  # noqa: E501
+            response_type="list[str]",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_remove(self, id, **kwargs):  # noqa: E501
         """samples_controller_remove  # noqa: E501
@@ -1691,7 +1866,7 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.samples_controller_remove_with_http_info(id, **kwargs)  # noqa: E501
 
     def samples_controller_remove_with_http_info(self, id, **kwargs):  # noqa: E501
@@ -1720,36 +1895,37 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id'
-        ]
+        all_params = ["id"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_remove" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_remove`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_remove`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1760,27 +1936,32 @@ class SamplesApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}', 'DELETE',
+            "/api/v3/samples/{id}",
+            "DELETE",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def samples_controller_update(self, id, update_sample_dto, **kwargs):  # noqa: E501
         """samples_controller_update  # noqa: E501
@@ -1804,10 +1985,14 @@ class SamplesApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.samples_controller_update_with_http_info(id, update_sample_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.samples_controller_update_with_http_info(
+            id, update_sample_dto, **kwargs
+        )  # noqa: E501
 
-    def samples_controller_update_with_http_info(self, id, update_sample_dto, **kwargs):  # noqa: E501
+    def samples_controller_update_with_http_info(
+        self, id, update_sample_dto, **kwargs
+    ):  # noqa: E501
         """samples_controller_update  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1834,41 +2019,45 @@ class SamplesApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'id',
-            'update_sample_dto'
-        ]
+        all_params = ["id", "update_sample_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method samples_controller_update" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'id' is set
-        if self.api_client.client_side_validation and ('id' not in local_var_params or  # noqa: E501
-                                                        local_var_params['id'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `id` when calling `samples_controller_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "id" not in local_var_params or local_var_params["id"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `id` when calling `samples_controller_update`"
+            )  # noqa: E501
         # verify the required parameter 'update_sample_dto' is set
-        if self.api_client.client_side_validation and ('update_sample_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['update_sample_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `update_sample_dto` when calling `samples_controller_update`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "update_sample_dto" not in local_var_params
+            or local_var_params["update_sample_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `update_sample_dto` when calling `samples_controller_update`"
+            )  # noqa: E501
 
         collection_formats = {}
 
         path_params = {}
-        if 'id' in local_var_params:
-            path_params['id'] = local_var_params['id']  # noqa: E501
+        if "id" in local_var_params:
+            path_params["id"] = local_var_params["id"]  # noqa: E501
 
         query_params = []
 
@@ -1878,31 +2067,39 @@ class SamplesApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'update_sample_dto' in local_var_params:
-            body_params = local_var_params['update_sample_dto']
+        if "update_sample_dto" in local_var_params:
+            body_params = local_var_params["update_sample_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/samples/{id}', 'PATCH',
+            "/api/v3/samples/{id}",
+            "PATCH",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

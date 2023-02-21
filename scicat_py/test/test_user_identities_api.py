@@ -29,11 +29,9 @@ class TestUserIdentitiesApi(unittest.TestCase):
         pass
 
     def test_user_identities_controller_find_one(self):
-        """Test case for user_identities_controller_find_one
-
-        """
+        """Test case for user_identities_controller_find_one"""
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

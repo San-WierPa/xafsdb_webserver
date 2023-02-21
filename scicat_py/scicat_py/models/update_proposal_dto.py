@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,42 +33,60 @@ class UpdateProposalDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'proposal_id': 'str',
-        'pi_email': 'str',
-        'pi_firstname': 'str',
-        'pi_lastname': 'str',
-        'email': 'str',
-        'firstname': 'str',
-        'lastname': 'str',
-        'title': 'str',
-        'abstract': 'str',
-        'start_time': 'datetime',
-        'end_time': 'datetime'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "proposal_id": "str",
+        "pi_email": "str",
+        "pi_firstname": "str",
+        "pi_lastname": "str",
+        "email": "str",
+        "firstname": "str",
+        "lastname": "str",
+        "title": "str",
+        "abstract": "str",
+        "start_time": "datetime",
+        "end_time": "datetime",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'proposal_id': 'proposalId',
-        'pi_email': 'pi_email',
-        'pi_firstname': 'pi_firstname',
-        'pi_lastname': 'pi_lastname',
-        'email': 'email',
-        'firstname': 'firstname',
-        'lastname': 'lastname',
-        'title': 'title',
-        'abstract': 'abstract',
-        'start_time': 'startTime',
-        'end_time': 'endTime'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "proposal_id": "proposalId",
+        "pi_email": "pi_email",
+        "pi_firstname": "pi_firstname",
+        "pi_lastname": "pi_lastname",
+        "email": "email",
+        "firstname": "firstname",
+        "lastname": "lastname",
+        "title": "title",
+        "abstract": "abstract",
+        "start_time": "startTime",
+        "end_time": "endTime",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, proposal_id=None, pi_email=None, pi_firstname=None, pi_lastname=None, email=None, firstname=None, lastname=None, title=None, abstract=None, start_time=None, end_time=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        proposal_id=None,
+        pi_email=None,
+        pi_firstname=None,
+        pi_lastname=None,
+        email=None,
+        firstname=None,
+        lastname=None,
+        title=None,
+        abstract=None,
+        start_time=None,
+        end_time=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """UpdateProposalDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -451,18 +470,20 @@ class UpdateProposalDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

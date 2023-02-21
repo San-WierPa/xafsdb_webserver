@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,40 +33,57 @@ class Lifecycle(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'archivable': 'bool',
-        'retrievable': 'bool',
-        'publishable': 'bool',
-        'date_of_disk_purging': 'datetime',
-        'archive_retention_time': 'datetime',
-        'date_of_publishing': 'datetime',
-        'published_on': 'datetime',
-        'is_on_central_disk': 'bool',
-        'archive_status_message': 'str',
-        'retrieve_status_message': 'str',
-        'archive_return_message': 'object',
-        'retrieve_return_message': 'object',
-        'exported_to': 'str',
-        'retrieve_integrity_check': 'bool'
+        "archivable": "bool",
+        "retrievable": "bool",
+        "publishable": "bool",
+        "date_of_disk_purging": "datetime",
+        "archive_retention_time": "datetime",
+        "date_of_publishing": "datetime",
+        "published_on": "datetime",
+        "is_on_central_disk": "bool",
+        "archive_status_message": "str",
+        "retrieve_status_message": "str",
+        "archive_return_message": "object",
+        "retrieve_return_message": "object",
+        "exported_to": "str",
+        "retrieve_integrity_check": "bool",
     }
 
     attribute_map = {
-        'archivable': 'archivable',
-        'retrievable': 'retrievable',
-        'publishable': 'publishable',
-        'date_of_disk_purging': 'dateOfDiskPurging',
-        'archive_retention_time': 'archiveRetentionTime',
-        'date_of_publishing': 'dateOfPublishing',
-        'published_on': 'publishedOn',
-        'is_on_central_disk': 'isOnCentralDisk',
-        'archive_status_message': 'archiveStatusMessage',
-        'retrieve_status_message': 'retrieveStatusMessage',
-        'archive_return_message': 'archiveReturnMessage',
-        'retrieve_return_message': 'retrieveReturnMessage',
-        'exported_to': 'exportedTo',
-        'retrieve_integrity_check': 'retrieveIntegrityCheck'
+        "archivable": "archivable",
+        "retrievable": "retrievable",
+        "publishable": "publishable",
+        "date_of_disk_purging": "dateOfDiskPurging",
+        "archive_retention_time": "archiveRetentionTime",
+        "date_of_publishing": "dateOfPublishing",
+        "published_on": "publishedOn",
+        "is_on_central_disk": "isOnCentralDisk",
+        "archive_status_message": "archiveStatusMessage",
+        "retrieve_status_message": "retrieveStatusMessage",
+        "archive_return_message": "archiveReturnMessage",
+        "retrieve_return_message": "retrieveReturnMessage",
+        "exported_to": "exportedTo",
+        "retrieve_integrity_check": "retrieveIntegrityCheck",
     }
 
-    def __init__(self, archivable=None, retrievable=None, publishable=None, date_of_disk_purging=None, archive_retention_time=None, date_of_publishing=None, published_on=None, is_on_central_disk=None, archive_status_message=None, retrieve_status_message=None, archive_return_message=None, retrieve_return_message=None, exported_to=None, retrieve_integrity_check=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        archivable=None,
+        retrievable=None,
+        publishable=None,
+        date_of_disk_purging=None,
+        archive_retention_time=None,
+        date_of_publishing=None,
+        published_on=None,
+        is_on_central_disk=None,
+        archive_status_message=None,
+        retrieve_status_message=None,
+        archive_return_message=None,
+        retrieve_return_message=None,
+        exported_to=None,
+        retrieve_integrity_check=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """Lifecycle - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -445,18 +463,20 @@ class Lifecycle(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

@@ -29,35 +29,25 @@ class TestInstrumentsApi(unittest.TestCase):
         pass
 
     def test_instruments_controller_create(self):
-        """Test case for instruments_controller_create
-
-        """
+        """Test case for instruments_controller_create"""
         pass
 
     def test_instruments_controller_find_all(self):
-        """Test case for instruments_controller_find_all
-
-        """
+        """Test case for instruments_controller_find_all"""
         pass
 
     def test_instruments_controller_find_one(self):
-        """Test case for instruments_controller_find_one
-
-        """
+        """Test case for instruments_controller_find_one"""
         pass
 
     def test_instruments_controller_remove(self):
-        """Test case for instruments_controller_remove
-
-        """
+        """Test case for instruments_controller_remove"""
         pass
 
     def test_instruments_controller_update(self):
-        """Test case for instruments_controller_update
-
-        """
+        """Test case for instruments_controller_update"""
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

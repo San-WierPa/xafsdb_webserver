@@ -16,6 +16,7 @@ import re  # noqa: F401
 
 # python 2 and python 3 compatibility library
 import six
+
 from scicat_py.api_client import ApiClient
 from scicat_py.exceptions import ApiTypeError, ApiValueError  # noqa: F401
 
@@ -53,10 +54,14 @@ class AuthApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.auth_controller_ad_login_with_http_info(credentials_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.auth_controller_ad_login_with_http_info(
+            credentials_dto, **kwargs
+        )  # noqa: E501
 
-    def auth_controller_ad_login_with_http_info(self, credentials_dto, **kwargs):  # noqa: E501
+    def auth_controller_ad_login_with_http_info(
+        self, credentials_dto, **kwargs
+    ):  # noqa: E501
         """auth_controller_ad_login  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -82,30 +87,32 @@ class AuthApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'credentials_dto'
-        ]
+        all_params = ["credentials_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method auth_controller_ad_login" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'credentials_dto' is set
-        if self.api_client.client_side_validation and ('credentials_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['credentials_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `credentials_dto` when calling `auth_controller_ad_login`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "credentials_dto" not in local_var_params
+            or local_var_params["credentials_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `credentials_dto` when calling `auth_controller_ad_login`"
+            )  # noqa: E501
 
         collection_formats = {}
 
@@ -119,34 +126,42 @@ class AuthApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'credentials_dto' in local_var_params:
-            body_params = local_var_params['credentials_dto']
+        if "credentials_dto" in local_var_params:
+            body_params = local_var_params["credentials_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/auth/msad', 'POST',
+            "/api/v3/auth/msad",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def auth_controller_login(self, credentials_dto, **kwargs):  # noqa: E501
         """auth_controller_login  # noqa: E501
@@ -169,10 +184,14 @@ class AuthApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
-        return self.auth_controller_login_with_http_info(credentials_dto, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        return self.auth_controller_login_with_http_info(
+            credentials_dto, **kwargs
+        )  # noqa: E501
 
-    def auth_controller_login_with_http_info(self, credentials_dto, **kwargs):  # noqa: E501
+    def auth_controller_login_with_http_info(
+        self, credentials_dto, **kwargs
+    ):  # noqa: E501
         """auth_controller_login  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -198,30 +217,32 @@ class AuthApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-            'credentials_dto'
-        ]
+        all_params = ["credentials_dto"]
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method auth_controller_login" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
         # verify the required parameter 'credentials_dto' is set
-        if self.api_client.client_side_validation and ('credentials_dto' not in local_var_params or  # noqa: E501
-                                                        local_var_params['credentials_dto'] is None):  # noqa: E501
-            raise ApiValueError("Missing the required parameter `credentials_dto` when calling `auth_controller_login`")  # noqa: E501
+        if self.api_client.client_side_validation and (
+            "credentials_dto" not in local_var_params
+            or local_var_params["credentials_dto"] is None  # noqa: E501
+        ):  # noqa: E501
+            raise ApiValueError(
+                "Missing the required parameter `credentials_dto` when calling `auth_controller_login`"
+            )  # noqa: E501
 
         collection_formats = {}
 
@@ -235,34 +256,42 @@ class AuthApi(object):
         local_var_files = {}
 
         body_params = None
-        if 'credentials_dto' in local_var_params:
-            body_params = local_var_params['credentials_dto']
+        if "credentials_dto" in local_var_params:
+            body_params = local_var_params["credentials_dto"]
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # HTTP header `Content-Type`
-        header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
-            ['application/json'])  # noqa: E501
+        header_params[
+            "Content-Type"
+        ] = self.api_client.select_header_content_type(  # noqa: E501
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/auth/login', 'POST',
+            "/api/v3/auth/login",
+            "POST",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )
 
     def auth_controller_whoami(self, **kwargs):  # noqa: E501
         """auth_controller_whoami  # noqa: E501
@@ -284,7 +313,7 @@ class AuthApi(object):
                  If the method is called asynchronously,
                  returns the request thread.
         """
-        kwargs['_return_http_data_only'] = True
+        kwargs["_return_http_data_only"] = True
         return self.auth_controller_whoami_with_http_info(**kwargs)  # noqa: E501
 
     def auth_controller_whoami_with_http_info(self, **kwargs):  # noqa: E501
@@ -312,25 +341,24 @@ class AuthApi(object):
 
         local_var_params = locals()
 
-        all_params = [
-        ]
+        all_params = []
         all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
             ]
         )
 
-        for key, val in six.iteritems(local_var_params['kwargs']):
+        for key, val in six.iteritems(local_var_params["kwargs"]):
             if key not in all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method auth_controller_whoami" % key
                 )
             local_var_params[key] = val
-        del local_var_params['kwargs']
+        del local_var_params["kwargs"]
 
         collection_formats = {}
 
@@ -345,24 +373,29 @@ class AuthApi(object):
 
         body_params = None
         # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json"]
+        )  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['bearer']  # noqa: E501
+        auth_settings = ["bearer"]  # noqa: E501
 
         return self.api_client.call_api(
-            '/api/v3/auth/whoami', 'GET',
+            "/api/v3/auth/whoami",
+            "GET",
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='object',  # noqa: E501
+            response_type="object",  # noqa: E501
             auth_settings=auth_settings,
-            async_req=local_var_params.get('async_req'),
-            _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=local_var_params.get('_preload_content', True),
-            _request_timeout=local_var_params.get('_request_timeout'),
-            collection_formats=collection_formats)
+            async_req=local_var_params.get("async_req"),
+            _return_http_data_only=local_var_params.get(
+                "_return_http_data_only"
+            ),  # noqa: E501
+            _preload_content=local_var_params.get("_preload_content", True),
+            _request_timeout=local_var_params.get("_request_timeout"),
+            collection_formats=collection_formats,
+        )

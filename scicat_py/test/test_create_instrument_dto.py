@@ -16,8 +16,7 @@ import datetime
 import unittest
 
 import scicat_py
-from scicat_py.models.create_instrument_dto import \
-    CreateInstrumentDto  # noqa: E501
+from scicat_py.models.create_instrument_dto import CreateInstrumentDto  # noqa: E501
 from scicat_py.rest import ApiException
 
 
@@ -32,19 +31,16 @@ class TestCreateInstrumentDto(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test CreateInstrumentDto
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.create_instrument_dto.CreateInstrumentDto()  # noqa: E501
-        if include_optional :
+        if include_optional:
+            return CreateInstrumentDto(name="0", custom_metadata=None)
+        else:
             return CreateInstrumentDto(
-                name = '0', 
-                custom_metadata = None
+                name="0",
             )
-        else :
-            return CreateInstrumentDto(
-                name = '0',
-        )
 
     def testCreateInstrumentDto(self):
         """Test CreateInstrumentDto"""
@@ -52,5 +48,5 @@ class TestCreateInstrumentDto(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

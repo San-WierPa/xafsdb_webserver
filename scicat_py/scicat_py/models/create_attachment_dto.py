@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,30 +33,42 @@ class CreateAttachmentDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'thumbnail': 'str',
-        'caption': 'str',
-        'dataset_id': 'str',
-        'proposal_id': 'str',
-        'sample_id': 'str'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "thumbnail": "str",
+        "caption": "str",
+        "dataset_id": "str",
+        "proposal_id": "str",
+        "sample_id": "str",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'thumbnail': 'thumbnail',
-        'caption': 'caption',
-        'dataset_id': 'datasetId',
-        'proposal_id': 'proposalId',
-        'sample_id': 'sampleId'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "thumbnail": "thumbnail",
+        "caption": "caption",
+        "dataset_id": "datasetId",
+        "proposal_id": "proposalId",
+        "sample_id": "sampleId",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, thumbnail=None, caption=None, dataset_id=None, proposal_id=None, sample_id=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        thumbnail=None,
+        caption=None,
+        dataset_id=None,
+        proposal_id=None,
+        sample_id=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """CreateAttachmentDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -105,8 +118,12 @@ class CreateAttachmentDto(object):
         :param owner_group: The owner_group of this CreateAttachmentDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and owner_group is None:  # noqa: E501
-            raise ValueError("Invalid value for `owner_group`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and owner_group is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `owner_group`, must not be `None`"
+            )  # noqa: E501
 
         self._owner_group = owner_group
 
@@ -130,8 +147,13 @@ class CreateAttachmentDto(object):
         :param access_groups: The access_groups of this CreateAttachmentDto.  # noqa: E501
         :type: list[str]
         """
-        if self.local_vars_configuration.client_side_validation and access_groups is None:  # noqa: E501
-            raise ValueError("Invalid value for `access_groups`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation
+            and access_groups is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `access_groups`, must not be `None`"
+            )  # noqa: E501
 
         self._access_groups = access_groups
 
@@ -155,8 +177,12 @@ class CreateAttachmentDto(object):
         :param created_by: The created_by of this CreateAttachmentDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and created_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `created_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and created_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `created_by`, must not be `None`"
+            )  # noqa: E501
 
         self._created_by = created_by
 
@@ -180,8 +206,12 @@ class CreateAttachmentDto(object):
         :param updated_by: The updated_by of this CreateAttachmentDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and updated_by is None:  # noqa: E501
-            raise ValueError("Invalid value for `updated_by`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and updated_by is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `updated_by`, must not be `None`"
+            )  # noqa: E501
 
         self._updated_by = updated_by
 
@@ -205,8 +235,12 @@ class CreateAttachmentDto(object):
         :param thumbnail: The thumbnail of this CreateAttachmentDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and thumbnail is None:  # noqa: E501
-            raise ValueError("Invalid value for `thumbnail`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and thumbnail is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `thumbnail`, must not be `None`"
+            )  # noqa: E501
 
         self._thumbnail = thumbnail
 
@@ -230,8 +264,12 @@ class CreateAttachmentDto(object):
         :param caption: The caption of this CreateAttachmentDto.  # noqa: E501
         :type: str
         """
-        if self.local_vars_configuration.client_side_validation and caption is None:  # noqa: E501
-            raise ValueError("Invalid value for `caption`, must not be `None`")  # noqa: E501
+        if (
+            self.local_vars_configuration.client_side_validation and caption is None
+        ):  # noqa: E501
+            raise ValueError(
+                "Invalid value for `caption`, must not be `None`"
+            )  # noqa: E501
 
         self._caption = caption
 
@@ -305,18 +343,20 @@ class CreateAttachmentDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

@@ -16,8 +16,7 @@ import datetime
 import unittest
 
 import scicat_py
-from scicat_py.models.create_attachment_dto import \
-    CreateAttachmentDto  # noqa: E501
+from scicat_py.models.create_attachment_dto import CreateAttachmentDto  # noqa: E501
 from scicat_py.rest import ApiException
 
 
@@ -32,35 +31,31 @@ class TestCreateAttachmentDto(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test CreateAttachmentDto
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.create_attachment_dto.CreateAttachmentDto()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return CreateAttachmentDto(
-                owner_group = '0', 
-                access_groups = [
-                    '0'
-                    ], 
-                created_by = '0', 
-                updated_by = '0', 
-                thumbnail = '0', 
-                caption = '0', 
-                dataset_id = '0', 
-                proposal_id = '0', 
-                sample_id = '0'
+                owner_group="0",
+                access_groups=["0"],
+                created_by="0",
+                updated_by="0",
+                thumbnail="0",
+                caption="0",
+                dataset_id="0",
+                proposal_id="0",
+                sample_id="0",
             )
-        else :
+        else:
             return CreateAttachmentDto(
-                owner_group = '0',
-                access_groups = [
-                    '0'
-                    ],
-                created_by = '0',
-                updated_by = '0',
-                thumbnail = '0',
-                caption = '0',
-        )
+                owner_group="0",
+                access_groups=["0"],
+                created_by="0",
+                updated_by="0",
+                thumbnail="0",
+                caption="0",
+            )
 
     def testCreateAttachmentDto(self):
         """Test CreateAttachmentDto"""
@@ -68,5 +63,5 @@ class TestCreateAttachmentDto(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

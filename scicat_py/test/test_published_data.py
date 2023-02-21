@@ -31,63 +31,63 @@ class TestPublishedData(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test PublishedData
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.published_data.PublishedData()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return PublishedData(
-                doi = '0', 
-                affiliation = '0', 
-                creator = [
-                    '0'
-                    ], 
-                publisher = '0', 
-                publication_year = 1.337, 
-                title = '0', 
-                url = '0', 
-                abstract = '0', 
-                data_description = '0', 
-                resource_type = '0', 
-                number_of_files = 1.337, 
-                size_of_archive = 1.337, 
-                pid_array = [
-                    '0'
-                    ], 
-                authors = [
-                    '0'
-                    ], 
-                registered_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                status = '0', 
-                scicat_user = '0', 
-                thumbnail = '0', 
-                related_publications = [
-                    '0'
-                    ], 
-                download_link = '0', 
-                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
+                doi="0",
+                affiliation="0",
+                creator=["0"],
+                publisher="0",
+                publication_year=1.337,
+                title="0",
+                url="0",
+                abstract="0",
+                data_description="0",
+                resource_type="0",
+                number_of_files=1.337,
+                size_of_archive=1.337,
+                pid_array=["0"],
+                authors=["0"],
+                registered_time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                status="0",
+                scicat_user="0",
+                thumbnail="0",
+                related_publications=["0"],
+                download_link="0",
+                created_at=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                updated_at=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
             )
-        else :
+        else:
             return PublishedData(
-                doi = '0',
-                creator = [
-                    '0'
-                    ],
-                publisher = '0',
-                publication_year = 1.337,
-                title = '0',
-                abstract = '0',
-                data_description = '0',
-                resource_type = '0',
-                pid_array = [
-                    '0'
-                    ],
-                registered_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                status = '0',
-                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-        )
+                doi="0",
+                creator=["0"],
+                publisher="0",
+                publication_year=1.337,
+                title="0",
+                abstract="0",
+                data_description="0",
+                resource_type="0",
+                pid_array=["0"],
+                registered_time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                status="0",
+                created_at=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                updated_at=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+            )
 
     def testPublishedData(self):
         """Test PublishedData"""
@@ -95,5 +95,5 @@ class TestPublishedData(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

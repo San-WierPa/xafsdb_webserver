@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,28 +33,39 @@ class UpdateOrigdatablockDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'instrument_group': 'str',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'dataset_id': 'str',
-        'size': 'float',
-        'data_file_list': 'list[DataFile]'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "instrument_group": "str",
+        "created_by": "str",
+        "updated_by": "str",
+        "dataset_id": "str",
+        "size": "float",
+        "data_file_list": "list[DataFile]",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'instrument_group': 'instrumentGroup',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'dataset_id': 'datasetId',
-        'size': 'size',
-        'data_file_list': 'dataFileList'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "instrument_group": "instrumentGroup",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "dataset_id": "datasetId",
+        "size": "size",
+        "data_file_list": "dataFileList",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, instrument_group=None, created_by=None, updated_by=None, dataset_id=None, size=None, data_file_list=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        instrument_group=None,
+        created_by=None,
+        updated_by=None,
+        dataset_id=None,
+        size=None,
+        data_file_list=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """UpdateOrigdatablockDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -267,18 +279,20 @@ class UpdateOrigdatablockDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

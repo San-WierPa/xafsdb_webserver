@@ -14,6 +14,7 @@ import pprint
 import re  # noqa: F401
 
 import six
+
 from scicat_py.configuration import Configuration
 
 
@@ -32,30 +33,42 @@ class UpdateAttachmentDto(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'owner_group': 'str',
-        'access_groups': 'list[str]',
-        'created_by': 'str',
-        'updated_by': 'str',
-        'thumbnail': 'str',
-        'caption': 'str',
-        'dataset_id': 'str',
-        'proposal_id': 'str',
-        'sample_id': 'str'
+        "owner_group": "str",
+        "access_groups": "list[str]",
+        "created_by": "str",
+        "updated_by": "str",
+        "thumbnail": "str",
+        "caption": "str",
+        "dataset_id": "str",
+        "proposal_id": "str",
+        "sample_id": "str",
     }
 
     attribute_map = {
-        'owner_group': 'ownerGroup',
-        'access_groups': 'accessGroups',
-        'created_by': 'createdBy',
-        'updated_by': 'updatedBy',
-        'thumbnail': 'thumbnail',
-        'caption': 'caption',
-        'dataset_id': 'datasetId',
-        'proposal_id': 'proposalId',
-        'sample_id': 'sampleId'
+        "owner_group": "ownerGroup",
+        "access_groups": "accessGroups",
+        "created_by": "createdBy",
+        "updated_by": "updatedBy",
+        "thumbnail": "thumbnail",
+        "caption": "caption",
+        "dataset_id": "datasetId",
+        "proposal_id": "proposalId",
+        "sample_id": "sampleId",
     }
 
-    def __init__(self, owner_group=None, access_groups=None, created_by=None, updated_by=None, thumbnail=None, caption=None, dataset_id=None, proposal_id=None, sample_id=None, local_vars_configuration=None):  # noqa: E501
+    def __init__(
+        self,
+        owner_group=None,
+        access_groups=None,
+        created_by=None,
+        updated_by=None,
+        thumbnail=None,
+        caption=None,
+        dataset_id=None,
+        proposal_id=None,
+        sample_id=None,
+        local_vars_configuration=None,
+    ):  # noqa: E501
         """UpdateAttachmentDto - a model defined in OpenAPI"""  # noqa: E501
         if local_vars_configuration is None:
             local_vars_configuration = Configuration()
@@ -299,18 +312,20 @@ class UpdateAttachmentDto(object):
         for attr, _ in six.iteritems(self.openapi_types):
             value = getattr(self, attr)
             if isinstance(value, list):
-                result[attr] = list(map(
-                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
-                    value
-                ))
+                result[attr] = list(
+                    map(lambda x: x.to_dict() if hasattr(x, "to_dict") else x, value)
+                )
             elif hasattr(value, "to_dict"):
                 result[attr] = value.to_dict()
             elif isinstance(value, dict):
-                result[attr] = dict(map(
-                    lambda item: (item[0], item[1].to_dict())
-                    if hasattr(item[1], "to_dict") else item,
-                    value.items()
-                ))
+                result[attr] = dict(
+                    map(
+                        lambda item: (item[0], item[1].to_dict())
+                        if hasattr(item[1], "to_dict")
+                        else item,
+                        value.items(),
+                    )
+                )
             else:
                 result[attr] = value
 

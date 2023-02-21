@@ -31,30 +31,37 @@ class TestLifecycle(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test Lifecycle
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # model = scicat_py.models.lifecycle.Lifecycle()  # noqa: E501
-        if include_optional :
+        if include_optional:
             return Lifecycle(
-                archivable = True, 
-                retrievable = True, 
-                publishable = True, 
-                date_of_disk_purging = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                archive_retention_time = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                date_of_publishing = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                published_on = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
-                is_on_central_disk = True, 
-                archive_status_message = '0', 
-                retrieve_status_message = '0', 
-                archive_return_message = None, 
-                retrieve_return_message = None, 
-                exported_to = '0', 
-                retrieve_integrity_check = True
+                archivable=True,
+                retrievable=True,
+                publishable=True,
+                date_of_disk_purging=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                archive_retention_time=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                date_of_publishing=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                published_on=datetime.datetime.strptime(
+                    "2013-10-20 19:20:30.00", "%Y-%m-%d %H:%M:%S.%f"
+                ),
+                is_on_central_disk=True,
+                archive_status_message="0",
+                retrieve_status_message="0",
+                archive_return_message=None,
+                retrieve_return_message=None,
+                exported_to="0",
+                retrieve_integrity_check=True,
             )
-        else :
-            return Lifecycle(
-        )
+        else:
+            return Lifecycle()
 
     def testLifecycle(self):
         """Test Lifecycle"""
@@ -62,5 +69,5 @@ class TestLifecycle(unittest.TestCase):
         inst_req_and_optional = self.make_instance(include_optional=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
