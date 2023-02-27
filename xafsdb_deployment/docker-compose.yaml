@@ -74,48 +74,49 @@ services:
        - traefik.http.services.mongo-express.loadbalancer.server.port=8081
        - "traefik.http.routers.mongo-express.middlewares=auth"
        - "traefik.http.middlewares.auth.basicauth.users=admin:$$2a$$12$$vyTh8.zQ85OygVq1q4cX4u50QJXfW1tSJn/dr2zuQFzAW6F31VUtq"
-volumes:
-  PG_DATA:
 
   # https://github.com/tiredofit/docker-db-backup#configuration
-#  db-backup-pg:
-#    container_name: db-backup-pg
-#    image: tiredofit/db-backup
-#    volumes:
-#      - ./backups-pg:/backup
-#    environment:
-#      # - DEBUG_MODE=TRUE
-#      - DB_TYPE=pgsql
-#      - DB_HOST=db
-#      - DB_NAME=${POSTGRES_USER}
-#      - DB_USER=${POSTGRES_PASSWORD}
-#      - DB_PASS=${POSTGRES_DB}
-#      - DB_DUMP_FREQ=1            # backup every minute
-#      # - DB_DUMP_BEGIN=0000      # backup starts immediately
-#      - DB_CLEANUP_TIME=5         # clean backups they are older than 5 minute
-#      - CHECKSUM=SHA1
-#      - COMPRESSION=GZ
-#      - SPLIT_DB=FALSE
-#      - CONTAINER_ENABLE_MONITORING=FALSE
-#    restart: always
-#
-#  db-backup-mongo:
-#    container_name: db-backup-mongo
-#    image: tiredofit/db-backup
-#    volumes:
-#      - ./backups-mongo:/backup
-#    environment:
-#      # - DEBUG_MODE=TRUE
-#      - DB_TYPE=mongo
-#      - DB_HOST=db
-#      #- DB_NAME=${MONGODB_DATABASE}
-#      #- DB_USER=${MONGODB_USERNAME}
-#      #- DB_PASS=${MONGODB_PASSWORD}
-#      - DB_DUMP_FREQ=1            # backup every minute | for 1 day you can change DB_DUMP_FREQ=1440
-#      # - DB_DUMP_BEGIN=0000      # backup starts immediately
-#      - DB_CLEANUP_TIME=5         # clean backups they are older than 5 minute
-#      - CHECKSUM=SHA1
-#      - COMPRESSION=GZ
-#      - SPLIT_DB=FALSE
-#      - CONTAINER_ENABLE_MONITORING=FALSE
-#    restart: always
+  db-backup-pg:
+    container_name: db-backup-pg
+    image: tiredofit/db-backup
+    volumes:
+      - ./backups-pg:/backup
+    environment:
+      # - DEBUG_MODE=TRUE
+      - DB_TYPE=pgsql
+      - DB_HOST=db
+      - DB_NAME=${POSTGRES_USER}
+      - DB_USER=${POSTGRES_PASSWORD}
+      - DB_PASS=${POSTGRES_DB}
+      - DB_DUMP_FREQ=1            # backup every minute
+      # - DB_DUMP_BEGIN=0000      # backup starts immediately
+      - DB_CLEANUP_TIME=5         # clean backups they are older than 5 minute
+      - CHECKSUM=SHA1
+      - COMPRESSION=GZ
+      - SPLIT_DB=FALSE
+      - CONTAINER_ENABLE_MONITORING=FALSE
+    restart: always
+
+  db-backup-mongo:
+    container_name: db-backup-mongo
+    image: tiredofit/db-backup
+    volumes:
+      - ./backups-mongo:/backup
+    environment:
+      # - DEBUG_MODE=TRUE
+      - DB_TYPE=mongo
+      - DB_HOST=db
+      #- DB_NAME=${MONGODB_DATABASE}
+      #- DB_USER=${MONGODB_USERNAME}
+      #- DB_PASS=${MONGODB_PASSWORD}
+      - DB_DUMP_FREQ=1            # backup every minute | for 1 day you can change DB_DUMP_FREQ=1440
+      # - DB_DUMP_BEGIN=0000      # backup starts immediately
+      - DB_CLEANUP_TIME=5         # clean backups they are older than 5 minute
+      - CHECKSUM=SHA1
+      - COMPRESSION=GZ
+      - SPLIT_DB=FALSE
+      - CONTAINER_ENABLE_MONITORING=FALSE
+    restart: always
+
+volumes:
+  PG_DATA:
