@@ -83,7 +83,7 @@
         {% endif %}
         {% for i in dataset_meta_list.paginator.page_range %}
           {% if dataset_meta_list.number == i %}
-            <li{{ i }}>(current)</li>
+            <li{{ i }}(current)</li>
           {% else %}
             <a href="?page={{ i }}">{{ i }}</a>
           {% endif %}
@@ -91,7 +91,7 @@
         {% if dataset_meta_list.has_next %}
           <a href="?page={{ dataset_meta_list.next_page_number }}">&raquo;</a>
         {% else %}
-          <li><a>&raquo;</a></li>
+          <li&raquo;</li>
         {% endif %}
         {% endif %}
     </div></center>

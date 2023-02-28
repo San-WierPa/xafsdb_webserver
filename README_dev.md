@@ -226,6 +226,16 @@ python manage.py makemigrations # optional?
 python manage.py migrate
 ```
 
++ `Flush` under `docker-compose`:
+  - First, make sure that your Docker Compose setup is running `docker-compose up -d`
+  - Once your Docker Compose setup is running, open a new terminal window and navigate to the directory where your Django project is located.
+  - Run the command:
+  ```shell
+  docker-compose exec web python manage.py flush
+  ```
+  This command will execute the flush command inside the web container. The web container is the container that runs your Django project.
+  - The flush command will clear the database and reset all the tables. Once the command finishes executing, you can exit the terminal window.
+
 ### MongoDB
 
 + Access mongodb-express (browser) via (use admin and password out of `_auth_constants.py`):
