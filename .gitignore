@@ -157,3 +157,11 @@ tinyurl.com/
 
 # docs (only temporarily)
 docs/
+
+# temp
+temp/*
+!/temp/.gitkeep
+auto_dataset_create_old.py
+auto_dataset_create_WORKINGLOCALLY.py
+xafsdb_web/_auth_constants.py
+xafsdb_web/views_old.py
