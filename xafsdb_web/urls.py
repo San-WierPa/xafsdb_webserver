@@ -47,4 +47,8 @@ urlpatterns = [
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
+    # quality control file upload feature related endpoints
+    path("dataset/upload_view", views.dataset_upload_view, name="dataset_upload_view"),
+    path("dataset/upload", views.dataset_upload, name="dataset_upload"),
+    path("dataset/verify_upload", views.verify_upload, name="verify_upload"),
 ]

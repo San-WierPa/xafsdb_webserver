@@ -163,5 +163,9 @@ temp/*
 !/temp/.gitkeep
 auto_dataset_create_old.py
 auto_dataset_create_WORKINGLOCALLY.py
+auto_dataset_create_NEWEDIT.py
 xafsdb_web/_auth_constants.py
 xafsdb_web/views_old.py
+xafsdb_web/views_NEWEDIT.py
+xafsdb_web/templates/landing/upload.html
+xafsdb_web/templates/landing/verify.html

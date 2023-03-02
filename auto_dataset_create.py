@@ -17,7 +17,10 @@ import scicat_py
 
 # from pprint import pprint
 from quality_control.quality_check import check_quality
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
 
 class AutoDatasetCreation(object):
     """
@@ -51,8 +54,10 @@ class AutoDatasetCreation(object):
         with scicat_py.ApiClient(configuration=self.configuration) as api_client:
             api_instance = scicat_py.AuthApi(api_client)
             credentials_dto = scicat_py.CredentialsDto(
-                username=os.environ["USERNAME_AUTH"],
-                password=os.environ["PASSWORD_AUTH"],
+                #username=os.environ["USERNAME_AUTH"],
+                #password=os.environ["PASSWORD_AUTH"],
+                username=env("USERNAME_AUTH"),
+                password=env("PASSWORD_AUTH"),
             )
             api_response = api_instance.auth_controller_login(credentials_dto)
             self.access_token = api_response["access_token"]
@@ -85,7 +90,6 @@ class AutoDatasetCreation(object):
                 "RAW": {
                     "edge_step": {
                         "value": 0.0,
-                        "unit": "1",
                         "documentation": "height of the detected edge step",
                     },
                     "k_max": {
@@ -95,7 +99,6 @@ class AutoDatasetCreation(object):
                     },
                     "noise": {
                         "value": 0.0,
-                        "unit": "1",
                         "documentation": "noise of the measurement",
                     },
                     "energy_resolution": {
@@ -114,7 +117,6 @@ class AutoDatasetCreation(object):
                                 "value": 0.0,
                             },
                         },
-                        "unit": "1",
                         "documentation": "amplitude factor from the processed spectrum",
                     }
                 },

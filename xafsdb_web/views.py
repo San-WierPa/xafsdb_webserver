@@ -1,6 +1,12 @@
 """
 @author: Sebastian Paripsa
 """
+import json
+import os
+import sys
+from datetime import datetime
+
+from rest_framework.decorators import api_view
 
 import scicat_py
 from django import forms
@@ -18,12 +24,73 @@ from django.views.generic.base import TemplateView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
+#from auto_dataset_create import AutoDatasetCreation
 from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
 
 from ._auth_constants import CONFIGURATION
 from .models import Files
 from .serializers import FileCreateUpdateSerializer, FileSerializer
 from .utils import get_access, get_all_datasets, term_checker
+
+
+# render the file upload view and navigate to the html page
+#def dataset_upload_view(request):
+#    return render(request, 'landing/upload.html', CONTEXT)
+#
+#
+## read the uploaded file and send the data to verify view
+#@api_view(['POST'])
+#def dataset_upload(request):
+#    temporary_uploaded_file = request.FILES.get('file')
+#    try:
+#        decoded_file = temporary_uploaded_file.read().decode('utf-8')
+#        decoded_list = str(decoded_file).split('\r\n')
+#
+#        # save file in temp folder
+#        file = open("temp/" + temporary_uploaded_file.name, "w")
+#        file.write(decoded_file)
+#        file.close()
+#
+#        if len(decoded_list) > 0:
+#            data = [str(data).split('\t') for data in decoded_list]
+#            headers = data[0]
+#            context = {
+#                'headers': headers,
+#                'decode_file_name': temporary_uploaded_file.name,
+#                'description': "{0} uploaded {1}".format(temporary_uploaded_file.name, str(datetime.now())),
+#                'summary': "Uploaded File: " + str(temporary_uploaded_file.name) + " has " + str(
+#                    len(headers)) + " array columns with " + str(len(data) - 1) + " data rows."
+#            }
+#
+#            return render(request, 'landing/verify.html', context)
+#
+#    except Exception as e:
+#        try:
+#            os.remove("temp/" + temporary_uploaded_file.name)
+#        except Exception as e:
+#            pass
+#        error_msg = json.dumps({'detail': 'Internal Server Error _' + str(e)})
+#        return HttpResponse(error_msg, status=500)
+#
+#
+#@api_view(['POST'])
+#def verify_upload(request):
+#    file_path = request.POST.get("decode_filename")
+#    try:
+#        AutoDatasetCreation(s3_data_path="temp/" + file_path, data_set_name=file_path)
+#        try:
+#            os.remove("temp/" + file_path)
+#        except Exception as e:
+#            pass
+#        return render(request, 'landing/home.html')
+#
+#    except Exception as e:
+#        try:
+#            os.remove("temp/" + file_path)
+#        except Exception as e:
+#            pass
+#        error_msg = json.dumps({'detail': 'Internal Server Error _' + str(e)})
+#        return HttpResponse(error_msg, status=500)
 
 
 async def dataset_list(request):
