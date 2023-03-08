@@ -116,6 +116,12 @@ docker ps -aq | xargs docker stop | xargs docker rm
 ```shell
 docker system prune
 ```
+And
+```shell
+docker image prune -a
+```
+**Warning**
+When using first `system prune` and then `image prune`, the cleansing is much deeper. Also working scicat-images might disappear!
 
 + With more control than the above, we can limit the pruning down to a single part, like the images, by issuing something like:
 ```shell

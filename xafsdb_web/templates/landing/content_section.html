@@ -60,12 +60,12 @@
                         <tr>
                         <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.id }} > {{ dataset_meta.id }} </abbr></td>
                         <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.datasetName }} > {{ dataset_meta.datasetName }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.GENERAL_INFO.collection_code }} > {{ dataset_meta.scientificMetadata.GENERAL_INFO.collection_code }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.GENERAL_INFO.physical_state }} > {{ dataset_meta.scientificMetadata.GENERAL_INFO.physical_state }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.GENERAL_INFO.crystal_orientation }} > {{ dataset_meta.scientificMetadata.GENERAL_INFO.crystal_orientation }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.GENERAL_INFO.temperature }} > {{ dataset_meta.scientificMetadata.GENERAL_INFO.temperature }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.GENERAL_INFO.pressure }} > {{ dataset_meta.scientificMetadata.GENERAL_INFO.pressure }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.GENERAL_INFO.sample_environment }} > {{ dataset_meta.scientificMetadata.GENERAL_INFO.sample_environment }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.general_info.coll_code }} > {{ dataset_meta.scientificMetadata.general_info.coll_code }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.general_info.physical_state }} > {{ dataset_meta.scientificMetadata.general_info.physical_state }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.general_info.crystal_orientation }} > {{ dataset_meta.scientificMetadata.general_info.crystal_orientation }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.general_info.temperature }} > {{ dataset_meta.scientificMetadata.general_info.temperature }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.general_info.pressure }} > {{ dataset_meta.scientificMetadata.general_info.pressure }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.general_info.sample_environment }} > {{ dataset_meta.scientificMetadata.general_info.sample_environment }} </abbr></td>
                         <table id="table_detail" >
                             <tr>
                                 <td> Abstract: {{ dataset_meta.scientificMetadata.Abstract }}</td>
@@ -73,7 +73,7 @@
                         </table>
                         <table id="table_detail" >
                             <tr>
-                                <td> General remarks: {{ dataset_meta.scientificMetadata.GENERAL_INFO.general_remarks }}</td>
+                                <td> General remarks: {{ dataset_meta.scientificMetadata.general_info.general_remarks }}</td>
                             </tr>
                         </table>
                     </tr>
@@ -89,27 +89,27 @@
                         <tr>
                         <th>Facility</th>
                         <th>Beamline</th>
-                        <th class="longTextHover" style="max-width: 100px;"><abbr title= Aquisition mode </abbr> Aq. mode</th>
+                        <th class="longTextHover" style="max-width: 100px;"><abbr title= "Acquisition mode" </abbr> Acq. mode</th>
                         <th>Crystals</th>
                         <th>Mirrors</th>
                         <th>Detectors</th>
                         <th>Element</th>
                         <th>Edge</th>
-                        <th class="longTextHover" style="max-width: 100px;"><abbr title= Maximum k-range (EXAFS) </abbr> Max k-range</th>
+                        <th class="longTextHover" style="max-width: 100px;"><abbr title= "Maximum k-range (EXAFS)" </abbr> Max k-range</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!--<tr id="hidden_row2" class="hidden_row">-->
                     <tr>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.facility }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.facility }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.beamline }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.beamline }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.aquisition_mode }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.aquisition_mode }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.crystals }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.crystals }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.mirrors }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.mirrors }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.detectors }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.detectors }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.element }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.element }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.edge }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.edge }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.INSTRUMENT.max_k_range }} > {{ dataset_meta.scientificMetadata.INSTRUMENT.max_k_range }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.facility }} > {{ dataset_meta.scientificMetadata.instrument.facility }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.beamline }} > {{ dataset_meta.scientificMetadata.instrument.beamline }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.aquisition_mode }} > {{ dataset_meta.scientificMetadata.instrument.aquisition_mode }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.crystals }} > {{ dataset_meta.scientificMetadata.instrument.crystals }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.mirrors }} > {{ dataset_meta.scientificMetadata.instrument.mirrors }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.detectors }} > {{ dataset_meta.scientificMetadata.instrument.detectors }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.element_input }} > {{ dataset_meta.scientificMetadata.instrument.element_input }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.edge_input }} > {{ dataset_meta.scientificMetadata.instrument.edge_input }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.instrument.max_k_range }} > {{ dataset_meta.scientificMetadata.instrument.max_k_range }} </abbr></td>
                     </tr>
                 </tbody>
             </table>
@@ -131,11 +131,11 @@
                 <tbody>
                     <!--<tr id="hidden_row7" class="hidden_row">-->
                     <tr>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.BIBLIOGRAPHY.doi }} > {{ dataset_meta.scientificMetadata.BIBLIOGRAPHY.doi }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.bibliography.doi }} > {{ dataset_meta.scientificMetadata.bibliography.doi }} </abbr></td>
                         <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.owner }} > {{ dataset_meta.owner }} </abbr></td>
                         <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.ownerGroup }} > {{ dataset_meta.ownerGroup }} </abbr></td>
                         <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.contactEmail }} > {{ dataset_meta.contactEmail }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.BIBLIOGRAPHY.reference }} > {{ dataset_meta.scientificMetadata.BIBLIOGRAPHY.reference }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 100px;"><abbr title= {{ dataset_meta.scientificMetadata.bibliography.reference }} > {{ dataset_meta.scientificMetadata.bibliography.reference }} </abbr></td>
                     </tr>
                 </tbody>
             </table>

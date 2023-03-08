@@ -8,7 +8,6 @@ ffoerste@physik.tu-berlin.de
 """
 
 import json
-
 ##############################################################################
 from glob import glob
 

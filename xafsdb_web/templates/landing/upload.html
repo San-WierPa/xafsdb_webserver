@@ -1,0 +1,118 @@
+{% load static %}
+
+<header>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
+
+    {% block title %}
+        <title>xafsDB - Data File Upload Form</title>
+    {% endblock %}
+
+</header>
+
+
+
+    {% include "landing/navbar.html" %}
+
+    <main class="page">
+
+      <body>
+      
+      <div>
+
+        <form method="post" action="/dataset/upload" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="banner">
+            <h1 class="uploadQCD">Upload Quality Control Data</h1>
+          </div>
+            <br>
+            <p class="top-info" style="font-size: 20px;font-family:Sen,sans-serif;font-weight: 700;">Please check all the below instructions before uploading the file.</p>
+            <ul type="square" style="font-size: 15px;font-family:Sen,sans-serif;">
+              <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam tincidunt mauris eu risus. Vestibulum auctor dapibus neque.</li>
+              <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam tincidunt mauris eu risus. Vestibulum auctor dapibus neque.</li>
+              <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam tincidunt mauris eu risus. Vestibulum auctor dapibus neque.</li>
+              <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam tincidunt mauris eu risus. Vestibulum auctor dapibus neque.</li>
+              <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam tincidunt mauris eu risus. Vestibulum auctor dapibus neque.</li>
+            </ul>
+          <div class="item_browse" >
+            <input class="input_upload" type="file" name="file" accept="file/*" style="height: 40px;">
+          </div>
+          <div class="btn-block">
+            <button class="upload_btn" type="submit" href="/">Verify & Upload</button>
+          </div>
+        </form>
+      </div>
+    </body>
+
+    </main>
+
+    <style>
+      .input_upload {
+        width: calc(100% - 10px);
+      padding: 5px;
+      }
+      .uploadQCD {
+        position: absolute;
+      margin: 0;
+      font-size: 38px;
+      color: #4dbf00;
+      font-family:Sen,sans-serif;
+      z-index: 2;
+      }
+        .banner {
+          position: relative;
+          height: 210px;
+          background-size: cover;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          }
+          .banner::after {
+          content: "";
+          background-color: rgba(0, 0, 0);
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          }
+          .btn-block {
+            margin-top: 10px;
+            text-align: center;
+          }
+      .upload_btn {
+        width: 400px;
+      height: 80px;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #1c87c9;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      }
+      button:hover {
+        background: #1e6fa0;
+      }
+      .item_browse:hover p, .item_browse:hover i, .question:hover p, .question label:hover, input:hover::placeholder {
+        color: #1c87c9;
+        }
+        .item_browse input:hover, .item_browse select:hover {
+        border: 1px solid transparent;
+        box-shadow: 0 0 6px 0 #1c87c9;
+        color: #1c87c9;
+        }
+        .item_browse {
+        position: relative;
+        margin: 20px 0;
+        }
+
+    </style>
+
+{% include "landing/footer.html" %}
+

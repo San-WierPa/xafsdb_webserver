@@ -63,6 +63,7 @@
                 </td>
                 <td>
                     <form action="{% url 'dataset_details' dataset_id=dataset_meta.id %}">
+                      {% csrf_token %}
                         <button class="button-more button4" type="submit" />More</button>
                     </form>
                 </td>

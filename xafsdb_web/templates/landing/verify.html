@@ -1,0 +1,706 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xafsDB - Verify and submit </title>
+    <link rel="stylesheet" href="style.css">
+  <style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    width: 100%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.registration-container {
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.registration-container h2 {
+    font-weight: bold;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.registration-container h2::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    height: 3px;
+    width: 20%;
+    border-radius: 2px;
+    background-color: #e65b00;
+}
+
+.three-details-item {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+hr {
+    width: 70%;
+    height: 1px;
+    background-color: #d2d2d2;
+    margin: 1rem 0;
+    border: none;
+}
+
+.personal-details,
+.identity-details {
+    margin: .2rem 0;
+}
+
+.personal-details label,
+.identity-details label {
+    margin: .5rem 1rem;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.three-details-item input {
+    outline: none;
+    font-size: .8rem;
+    border-radius: .2rem;
+    border: 1px solid rgb(113, 101, 101);
+    padding: .1rem;
+    background-color: transparent;
+}
+
+.submit-btn {
+    border: none;
+    background-color: #e65b00;
+    color: white;
+    padding: .3rem 1rem;
+    display: block;
+    width: 50%;
+    margin: .6rem auto;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+}</style>
+</head>
+
+
+<body>
+    <section class="registration-container">
+        <h2> Verify Data </h2>
+        <section class="details-section">
+            <form action="/dataset/verify_upload" method=post id="verify_form" class="registration-form">
+                {% csrf_token %}
+                <!-- PGeneral info Section -->
+                <label for="name">
+                    Dataset Title   <input type="text" name="dataset_name" id="name" value={{decode_file_name}} placeholder="Enter your dataset name">
+                </label>
+                <hr>
+                <h4> General Info </h4>
+                <section class="identity-details">
+                    <div class="three-details-item">
+                        <label for="Coll.code">
+                            <p> Collection code </p>
+                            <input type="text" name="Coll.code" id="Coll.code" placeholder="Enter collection code">
+                        </label>
+                        <label for="Phys.state">
+                            <p> Physical state </p>
+                            <input type="text" name="Phys.state" id="Phys.state"
+                                placeholder="Enter physical state">
+                        </label>
+                        <label for="crystal orientation">
+                            <p> Crystal orientation </p>
+                            <input type="text" name="crystal orientation" id="crystal orientation" placeholder="Enter crystal orientation">
+                        </label>
+                    </div>
+                    
+                    <div class="three-details-item">
+                        <label for="Temperature">
+                            <p> Temperature </p>
+                            <input type="text" name="Temperature" id="Temperature" placeholder="Enter temperature">
+                        </label>
+                        <label for="Pressure">
+                            <p> Pressure  </p>
+                            <input type="text" name="Pressure" id="Pressure" placeholder="Enter pressure">
+                        </label>
+                        <label for="Sample environment">
+                            <p> Sample environment </p>
+                            <input type="text" name="Sample environment" id="Sample environment" placeholder="Enter sample environment">
+                        </label>
+                    </div>
+
+                    <div class="three-details-item">
+                        <label for="Abstract">
+                            <p> Abstract</p>
+                            <textarea type="text" name="Abstract" id="Abstract" placeholder="Enter abstract"></textarea>
+                        </label>
+                        <label for="General remarks">
+                            <p> General remarks </p>
+                            <textarea type="text" name="General remarks" id="General remarks" placeholder="Enter general remarks"></textarea>
+                        </label>
+                    </div>
+                </section>
+                <hr>
+                <h4> Instrument </h4>
+                <section class="identity-details">
+                    <div class="three-details-item">
+                        <label for="Facility">
+                            <p> Facility </p>
+                            <input type="text" name="Facility" id="Facility" placeholder="Enter facility">
+                        </label>
+                        <label for="Beamline" >
+                            <p> Beamline </p>
+                        <select  name='Beamline' id="Beamline">
+                            <option value="&lt;Select Beamline&gt;"  selected=1  > &lt;Select Beamline&gt;</option>
+
+                            <option value="AichiSR"  > AichiSR</option>
+                                                
+                            <option value="ALBA CLAESS"  > ALBA CLAESS</option>
+                                                
+                            <option value="ALS 10.3.2"  > ALS 10.3.2</option>
+                                                
+                            <option value="ANKA INE"  > ANKA INE</option>
+                                                
+                            <option value="ANKA SUL-X"  > ANKA SUL-X</option>
+                                                
+                            <option value="ANKA XAS"  > ANKA XAS</option>
+                                                
+                            <option value="APS 10-BM-B"  > APS 10-BM-B</option>
+                                                
+                            <option value="APS 10-ID-B"  > APS 10-ID-B</option>
+                                                
+                            <option value="APS 11-ID-D"  > APS 11-ID-D</option>
+                                                
+                            <option value="APS 12-BM-B"  > APS 12-BM-B</option>
+                                                
+                            <option value="APS 13-BM-D"  > APS 13-BM-D</option>
+                                                
+                            <option value="APS 13-ID-C,D"  > APS 13-ID-C,D</option>
+                                                
+                            <option value="APS 13-ID-E"  > APS 13-ID-E</option>
+                                                
+                            <option value="APS 16-BM-D"  > APS 16-BM-D</option>
+                                                
+                            <option value="APS 18-ID-D"  > APS 18-ID-D</option>
+                                                
+                            <option value="APS 20-BM-B"  > APS 20-BM-B</option>
+                                                
+                            <option value="APS 20-ID-B,C"  > APS 20-ID-B,C</option>
+                                                
+                            <option value="APS 2-ID-D"  > APS 2-ID-D</option>
+                                                
+                            <option value="APS 4-ID-C"  > APS 4-ID-C</option>
+                                                
+                            <option value="APS 4-ID-D"  > APS 4-ID-D</option>
+                                                
+                            <option value="APS 5-BM-D"  > APS 5-BM-D</option>
+                                                
+                            <option value="APS 7-ID-B,C,D"  > APS 7-ID-B,C,D</option>
+                                                
+                            <option value="APS 9-BM-B,C"  > APS 9-BM-B,C</option>
+                                                
+                            <option value="AS XAS"  > AS XAS</option>
+                                                
+                            <option value="BSRF 4W1B"  > BSRF 4W1B</option>
+                                                
+                            <option value="CAMD DCM"  > CAMD DCM</option>
+                                                
+                            <option value="CLS HXMA"  > CLS HXMA</option>
+                                                
+                            <option value="CLS REIXS"  > CLS REIXS</option>
+                                                
+                            <option value="CLS SGM"  > CLS SGM</option>
+                                                
+                            <option value="CLS SXRMB"  > CLS SXRMB</option>
+                                                
+                            <option value="CLS VESPERS"  > CLS VESPERS</option>
+                                                
+                            <option value="DAFNE DXR-1"  > DAFNE DXR-1</option>
+                                                
+                            <option value="DLS B18"  > DLS B18</option>
+                                                
+                            <option value="DLS I06"  > DLS I06</option>
+                                                
+                            <option value="DLS I09"  > DLS I09</option>
+                                                
+                            <option value="DLS I10"  > DLS I10</option>
+                                                
+                            <option value="DLS I18"  > DLS I18</option>
+                                                
+                            <option value="DLS I20"  > DLS I20</option>
+                                                
+                            <option value="ELETTRA ALOISA"  > ELETTRA ALOISA</option>
+                                                
+                            <option value="ELETTRA BACH"  > ELETTRA BACH</option>
+                                                
+                            <option value="ELETTRA BEAR"  > ELETTRA BEAR</option>
+                                                
+                            <option value="ELETTRA POLAR"  > ELETTRA POLAR</option>
+                                                
+                            <option value="ELETTRA TWINMIC"  > ELETTRA TWINMIC</option>
+                                                
+                            <option value="ELETTRA XAFS"  > ELETTRA XAFS</option>
+                                                
+                            <option value="ESRF BM2"  > ESRF BM2</option>
+                                                
+                            <option value="ESRF BM20"  > ESRF BM20</option>
+                                                
+                            <option value="ESRF BM23"  > ESRF BM23</option>
+                                                
+                            <option value="ESRF BM25A"  > ESRF BM25A</option>
+                                                
+                            <option value="ESRF BM26A"  > ESRF BM26A</option>
+                                                
+                            <option value="ESRF BM30B"  > ESRF BM30B</option>
+                                                
+                            <option value="ESRF BM8"  > ESRF BM8</option>
+                                                
+                            <option value="ESRF ID08"  > ESRF ID08</option>
+                                                
+                            <option value="ESRF ID12"  > ESRF ID12</option>
+                                                
+                            <option value="ESRF ID21"  > ESRF ID21</option>
+                                                
+                            <option value="ESRF ID22"  > ESRF ID22</option>
+                                                
+                            <option value="ESRF ID24"  > ESRF ID24</option>
+                                                
+                            <option value="ESRF ID26"  > ESRF ID26</option>
+                                                
+                            <option value="LNLS DXAS"  > LNLS DXAS</option>
+                                                
+                            <option value="LNLS XAFS1"  > LNLS XAFS1</option>
+                                                
+                            <option value="LNLS XAFS2"  > LNLS XAFS2</option>
+                                                
+                            <option value="MAX IV I811"  > MAX IV I811</option>
+                                                
+                            <option value="NSLS-II 4-BM"  > NSLS-II 4-BM</option>
+                                                
+                            <option value="NSLS-II 5-ID"  > NSLS-II 5-ID</option>
+                                                
+                            <option value="NSLS-II 6-BM"  > NSLS-II 6-BM</option>
+                                                
+                            <option value="NSLS-II 7-BM"  > NSLS-II 7-BM</option>
+                                                
+                            <option value="NSLS-II 7-ID"  > NSLS-II 7-ID</option>
+                                                
+                            <option value="NSLS-II 8-BM"  > NSLS-II 8-BM</option>
+                                                
+                            <option value="NSLS-II 8-ID"  > NSLS-II 8-ID</option>
+                                                
+                            <option value="NSLS X10C"  > NSLS X10C</option>
+                                                
+                            <option value="NSLS X11A"  > NSLS X11A</option>
+                                                
+                            <option value="NSLS X11B"  > NSLS X11B</option>
+                                                
+                            <option value="NSLS X15B"  > NSLS X15B</option>
+                                                
+                            <option value="NSLS X18B"  > NSLS X18B</option>
+                                                
+                            <option value="NSLS X19A"  > NSLS X19A</option>
+                                                
+                            <option value="NSLS X23A2"  > NSLS X23A2</option>
+                                                
+                            <option value="NSLS X24A"  > NSLS X24A</option>
+                                                
+                            <option value="NSLS X3B"  > NSLS X3B</option>
+                                                
+                            <option value="NSRL U19"  > NSRL U19</option>
+                                                
+                            <option value="NSRL U7C"  > NSRL U7C</option>
+                                                
+                            <option value="NSRRC BL01C1"  > NSRRC BL01C1</option>
+                                                
+                            <option value="NSRRC BL16A1"  > NSRRC BL16A1</option>
+                                                
+                            <option value="NSRRC BL17C1"  > NSRRC BL17C1</option>
+                                                
+                            <option value="P65"  > P65</option>
+                                                
+                            <option value="P65 (1)"  > P65 (1)</option>
+                                                
+                            <option value="P65 (2)"  > P65 (2)</option>
+                                                
+                            <option value="P65 (3)"  > P65 (3)</option>
+                                                
+                            <option value="P65 (4)"  > P65 (4)</option>
+                                                
+                            <option value="P65 (5)"  > P65 (5)</option>
+                                                
+                            <option value="PETRA III P04"  > PETRA III P04</option>
+                                                
+                            <option value="PETRA III P06"  > PETRA III P06</option>
+                                                
+                            <option value="PF AR-NW10A"  > PF AR-NW10A</option>
+                                                
+                            <option value="PF AR-NW14A"  > PF AR-NW14A</option>
+                                                
+                            <option value="PF AR-NW2A"  > PF AR-NW2A</option>
+                                                
+                            <option value="PF BL-11A"  > PF BL-11A</option>
+                                                
+                            <option value="PF BL-11B"  > PF BL-11B</option>
+                                                
+                            <option value="PF BL-12C"  > PF BL-12C</option>
+                                                
+                            <option value="PF BL-27B"  > PF BL-27B</option>
+                                                
+                            <option value="PF BL-2A"  > PF BL-2A</option>
+                                                
+                            <option value="PF BL-2C"  > PF BL-2C</option>
+                                                
+                            <option value="PF BL-4A"  > PF BL-4A</option>
+                                                
+                            <option value="PF BL-7A"  > PF BL-7A</option>
+                                                
+                            <option value="PF BL-7C"  > PF BL-7C</option>
+                                                
+                            <option value="PF BL-9A"  > PF BL-9A</option>
+                                                
+                            <option value="PF BL-9C"  > PF BL-9C</option>
+                                                
+                            <option value="PLS 10B"  > PLS 10B</option>
+                                                
+                            <option value="PLS 3C1"  > PLS 3C1</option>
+                                                
+                            <option value="PLS 7C1"  > PLS 7C1</option>
+                                                
+                            <option value="PLS 8C1"  > PLS 8C1</option>
+                                                
+                            <option value="SESAME A1"  > SESAME A1</option>
+                                                
+                            <option value="SLRI BL4"  > SLRI BL4</option>
+                                                
+                            <option value="SLRI BL8"  > SLRI BL8</option>
+                                                
+                            <option value="SLS MicroXAS"  > SLS MicroXAS</option>
+                                                
+                            <option value="SLS SuperXAS"  > SLS SuperXAS</option>
+                                                
+                            <option value="SOLEIL DIFFABS"  > SOLEIL DIFFABS</option>
+                                                
+                            <option value="SOLEIL LUCIA"  > SOLEIL LUCIA</option>
+                                                
+                            <option value="SOLEIL ODE"  > SOLEIL ODE</option>
+                                                
+                            <option value="SOLEIL PROXIMA 1"  > SOLEIL PROXIMA 1</option>
+                                                
+                            <option value="SOLEIL SAMBA"  > SOLEIL SAMBA</option>
+                                                
+                            <option value="SPring-8 BL01B1"  > SPring-8 BL01B1</option>
+                                                
+                            <option value="SPring-8 BL14B2"  > SPring-8 BL14B2</option>
+                                                
+                            <option value="SPring-8 BL28B2"  > SPring-8 BL28B2</option>
+                                                
+                            <option value="SPring-8 BL37XU"  > SPring-8 BL37XU</option>
+                                                
+                            <option value="SPring-8 BL39XU"  > SPring-8 BL39XU</option>
+                                                
+                            <option value="SPring-8 BL40XU"  > SPring-8 BL40XU</option>
+                                                
+                            <option value="SSLS XDD"  > SSLS XDD</option>
+                                                
+                            <option value="SSRC EXAFS"  > SSRC EXAFS</option>
+                                                
+                            <option value="SSRC Soft EXAFS"  > SSRC Soft EXAFS</option>
+                                                
+                            <option value="SSRF BL08U1-A"  > SSRF BL08U1-A</option>
+                                                
+                            <option value="SSRF BL14W1"  > SSRF BL14W1</option>
+                                                
+                            <option value="SSRL 10-1"  > SSRL 10-1</option>
+                                                
+                            <option value="SSRL 10-2a"  > SSRL 10-2a</option>
+                                                
+                            <option value="SSRL 11-2"  > SSRL 11-2</option>
+                                                
+                            <option value="SSRL 13-2"  > SSRL 13-2</option>
+                                            
+                            <option value="SSRL 14-3"  > SSRL 14-3</option>
+                                                
+                            <option value="SSRL 2-3"  > SSRL 2-3</option>                                                
+                            <option value="SSRL 4-1"  > SSRL 4-1</option>
+                            <option value="SSRL 4-3"  > SSRL 4-3</option>
+                            <option value="SSRL 6-2a"  > SSRL 6-2a</option>
+                            <option value="SSRL 7-3"  > SSRL 7-3</option>                                                
+                            <option value="SSRL 8-2"  > SSRL 8-2</option>
+
+                            <option value="SSRL 9-3"  > SSRL 9-3</option>
+                        </select>
+                        </label>
+                        <label for="Acq. mode">
+                            <p> Acquistion mode </p>
+                            <input type="text" name="Acq. mode" id="Acq. mode"
+                                placeholder="Enter acquistion mode">
+                        </label>
+                    </div>
+
+                    <div class="three-details-item">
+                        <label for="Crystals">
+                            <p> Crystals </p>
+                            <input type="text" name="Crystals" id="Crystals" placeholder="Enter crystals">
+                        </label>
+                        <label for="Mirrors">
+                            <p> Mirrors </p>
+                            <input type="text" name="Mirrors" id="Mirrors" placeholder="Enter mirrors">
+                        </label>
+                        <label for="Detectors">
+                            <p> Detectors  </p>
+                            <input type="text" name="Detectors" id="Detectors" placeholder="Enter detectors ">
+                        </label>
+                    </div>
+
+                    
+                    <div class="three-details-item">
+                        <label for="Element" >
+                            <p> Element </p>
+                        <select  name='Element' id="Element">
+                            <option value=As  selected=1 >As</option>
+                            <option value=H >H</option>
+                            <option value=He >He</option>
+                            <option value=Li >Li</option>
+                            <option value=Be >Be</option>
+                            <option value=B >B</option>
+                            <option value=C >C</option>
+                            <option value=N >N</option>
+                            <option value=O >O</option>
+                            <option value=F >F</option>
+                            <option value=Ne >Ne</option>
+                            <option value=Na >Na</option>
+                            <option value=Mg >Mg</option>
+                            <option value=Al >Al</option>
+                            <option value=Si >Si</option>
+                            <option value=P >P</option>
+                            <option value=S >S</option>
+                            <option value=Cl >Cl</option>
+                            <option value=Ar >Ar</option>
+                            <option value=K >K</option>
+                            <option value=Ca >Ca</option>
+                            <option value=Sc >Sc</option>
+                            <option value=Ti >Ti</option>
+                            <option value=V >V</option>
+                            <option value=Cr >Cr</option>
+                            <option value=Mn >Mn</option>
+                            <option value=Fe >Fe</option>
+                            <option value=Co >Co</option>
+                            <option value=Ni >Ni</option>
+                            <option value=Cu >Cu</option>
+                            <option value=Zn >Zn</option>
+                            <option value=Ga >Ga</option>
+                            <option value=Ge >Ge</option>
+                            <option value=Se >Se</option>
+                            <option value=Br >Br</option>
+                            <option value=Kr >Kr</option>
+                            <option value=Rb >Rb</option>
+                            <option value=Sr >Sr</option>
+                            <option value=Y >Y</option>
+                            <option value=Zr >Zr</option>
+                            <option value=Nb >Nb</option>
+                            <option value=Mo >Mo</option>
+                            <option value=Tc >Tc</option>
+                            <option value=Ru >Ru</option>
+                            <option value=Rh >Rh</option>
+                            <option value=Pd >Pd</option>
+                            <option value=Ag >Ag</option>
+                            <option value=Cd >Cd</option>
+                            <option value=In >In</option>
+                            <option value=Sn >Sn</option>
+                            <option value=Sb >Sb</option>
+                            <option value=Te >Te</option>
+                            <option value=I >I</option>
+                            <option value=Xe >Xe</option>
+                            <option value=Cs >Cs</option>
+                            <option value=Ba >Ba</option>
+                            <option value=La >La</option>
+                            <option value=Ce >Ce</option>
+                            <option value=Pr >Pr</option>
+                            <option value=Nd >Nd</option>
+                            <option value=Pm >Pm</option>
+                            <option value=Sm >Sm</option>
+                            <option value=Eu >Eu</option>
+                            <option value=Gd >Gd</option>
+                            <option value=Tb >Tb</option>
+                            <option value=Dy >Dy</option>
+                            <option value=Ho >Ho</option>
+                            <option value=Er >Er</option>
+                            <option value=Tm >Tm</option>
+                            <option value=Yb >Yb</option>
+                            <option value=Lu >Lu</option>
+                            <option value=Hf >Hf</option>
+                            <option value=Ta >Ta</option>
+                            <option value=W >W</option>
+                            <option value=Re >Re</option>
+                            <option value=Os >Os</option>
+                            <option value=Ir >Ir</option>
+                            <option value=Pt >Pt</option>
+                            <option value=Au >Au</option>
+                            <option value=Hg >Hg</option>
+                            <option value=Tl >Tl</option>
+                            <option value=Pb >Pb</option>
+                            <option value=Bi >Bi</option>
+                            <option value=Po >Po</option>
+                            <option value=At >At</option>
+                            <option value=Rn >Rn</option>
+                            <option value=Fr >Fr</option>
+                            <option value=Ra >Ra</option>
+                            <option value=Ac >Ac</option>
+                            <option value=Th >Th</option>
+                            <option value=Pa >Pa</option>
+                            <option value=U >U</option>
+                            <option value=Np >Np</option>
+                            <option value=Pu >Pu</option>
+                            <option value=Am >Am</option>
+                            <option value=Cm >Cm</option>
+                            <option value=Bk >Bk</option>
+                            <option value=Cf >Cf</option>
+                            <option value=Es >Es</option>
+                            <option value=Fm >Fm</option>
+                            <option value=Md >Md</option>
+                            <option value=No >No</option>
+                            <option value=Lw >Lw</option>
+                            <option value=Rf >Rf</option>
+                            <option value=Ha >Ha</option>
+                            <option value=Sg >Sg</option>
+                            <option value=Bh >Bh</option>
+                            <option value=Hs >Hs</option>
+                            <option value=Mt >Mt</option>
+                            <option value=Ds >Ds</option>
+                            <option value=Rg >Rg</option>
+                            <option value=Cn >Cn</option>
+                        </select>
+                        </label>
+                        <label for="Edge" >
+                            <p> Edge </p>
+                        <select  name='Edge' id="Edge">
+                            <option value="K"  selected=1  > K</option>
+                            <option value="L3"  > L3</option>
+                            <option value="L2"  > L2</option>
+                            <option value="L1"  > L1</option>
+                            <option value="M4,5"  > M4,5</option>
+                        </select>
+                        </label>
+                        <label for="Max k-range">
+                            <p> Max k-range </p>
+                            <input type="text" name="Max k-range" id="Max k-range" placeholder="Enter max k-range">
+                        </label>
+                    </div>
+                </section>
+
+                 <hr>
+                <h4> Bibliography </h4>
+                <section class="identity-details">
+                    <div class="three-details-item">
+                        <label for="DOI">
+                            <p> DOI </p>
+                            <input type="text" name="DOI" id="DOI" placeholder="Enter DOI">
+                        </label>
+                        <label for="Reference">
+                            <p> Reference </p>
+                            <input type="text" name="Reference" id="Reference"
+                                placeholder="Enter Reference">
+                        </label>
+                    </div>
+
+                    <div class="three-details-item">
+                        <label for="Owner group">
+                            <p> Owner group </p>
+                            <input type="text" name="Owner group" id="Owner group" placeholder="Enter owner group">
+                        </label>
+                        <label for="Owner">
+                            <p> Owner </p>
+                            <input type="text" name="Owner" id="Owner"
+                                placeholder="Enter owner">
+                        </label>
+                        <label for="Contact email">
+                            <p> Contact email </p>
+                            <input type="text" name="Contact email" id="Contact email"
+                                placeholder="Enter contact email">
+                        </label>
+                    </div>
+
+                </section>
+                <hr>
+                <h4> Data </h4>
+                <section class="identity-details">
+                    <div class="three-details-item">
+                        <label for="Measurement Mode" >
+                            <p> Measurement Mode </p>
+                        <select  name='Measurement Mode' id="Measurement Mode">
+                            <option value="transmission"  selected=1  > transmission</option>
+
+                            <option value="fluorescence"  > fluorescence</option>
+        
+                            <option value="fluorescence, total yield"  > fluorescence, total yield</option>
+        
+                            <option value="fluorescence, energy analyzed"  > fluorescence, energy analyzed</option>
+        
+                            <option value="herfd"  > herfd</option>
+        
+                            <option value="raman"  > raman</option>
+        
+                            <option value="xeol"  > xeol</option>
+        
+                            <option value="electron emission"  > electron emission</option>
+                        </select>
+                        </label>
+
+                        <label for="Energy Column" >
+                            <p> Energy Column </p>
+                        <select  name='Energy Column' id="Energy Column">
+                            <option value=None  > None</option>
+                            <option value=energy  selected=1  > energy</option>
+                            <option value=i0  > i0</option>
+                            <option value=itrans  > itrans</option>
+                            <option value=irefer  > irefer</option>
+                        </select>
+                        </label>
+
+                        <label for="I0 Column" >
+                            <p> I0 Column </p>
+                        <select  name='I0 Column' id="I0 Column">
+                            <option value=None  > None</option>
+                            <option value=energy  > energy</option>
+                            <option value=i0  selected=1  > i0</option>
+                            <option value=itrans  > itrans</option>
+                            <option value=irefer  > irefer</option>
+                        </select>
+                        </label>
+
+                        <label for="Transmission Column" >
+                            <p> Transmission Column </p>
+                        <select  name='Transmission Column' id="Transmission Column">
+                            <option value=None  >None</option>
+                            <option value=energy  >energy</option>
+                            <option value=i0  >i0</option>
+                            <option value=itrans  selected=1  >itrans</option>
+                            <option value=irefer  >irefer</option>
+                        </select>
+                        </label>
+
+                    </div>
+                </section>
+                
+                <button class="submit-btn" value="Verify Data"> Submit </button>
+            </form>
+        </section>
+    </section>
+    
+</body>
+
+</html>

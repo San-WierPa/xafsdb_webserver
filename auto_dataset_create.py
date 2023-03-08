@@ -9,18 +9,18 @@ import os
 from datetime import datetime
 from sys import path
 
+import environ
 # from scicat_py.rest import ApiException
 import numpy as np
 import pyshorteners
 import requests
 import scicat_py
-
 # from pprint import pprint
 from quality_control.quality_check import check_quality
-import environ
 
 env = environ.Env()
 environ.Env.read_env()
+
 
 class AutoDatasetCreation(object):
     """
@@ -28,7 +28,11 @@ class AutoDatasetCreation(object):
     and serves all to the webserver
     """
 
-    def __init__(self):
+    def __init__(self, s3_data_path, data_set_name, verify_data):
+        self.data_set_name = data_set_name
+        self.s3_data_path = s3_data_path
+        self.verify_data = verify_data
+
         print("Dataset creation initialized...how exciting!")
         print(
             "While you are waiting; why dont you go ahead and check out this awesome artist: https://open.spotify.com/artist/358PxMTt58AnnMo4tEFOVQ?si=qW1Oyl1LQzyfkFWvAVXEEA"
@@ -54,8 +58,8 @@ class AutoDatasetCreation(object):
         with scicat_py.ApiClient(configuration=self.configuration) as api_client:
             api_instance = scicat_py.AuthApi(api_client)
             credentials_dto = scicat_py.CredentialsDto(
-                #username=os.environ["USERNAME_AUTH"],
-                #password=os.environ["PASSWORD_AUTH"],
+                # username=os.environ["USERNAME_AUTH"],
+                # password=os.environ["PASSWORD_AUTH"],
                 username=env("USERNAME_AUTH"),
                 password=env("PASSWORD_AUTH"),
             )
@@ -68,9 +72,9 @@ class AutoDatasetCreation(object):
         """
         Create dataset with quality_control data
         """
-        titlename = input("Enter name of dataset title: ")
+        titlename = self.data_set_name
         self.dummy_data2 = {
-            "owner_group": "University of Wuppertal",
+            "owner_group": self.verify_data.get("Owner group"),
             "access_groups": "NO_THUMBNAIL",
             "creation_location": "wuppertal",
             "principal_investigator": "someone",
@@ -81,15 +85,16 @@ class AutoDatasetCreation(object):
             "is_published": False,
             "creation_time": str(datetime.now().isoformat()),
             "source_folder": "None",
-            "owner": "None",
-            "contact_email": "a@b.de",
+            "owner": self.verify_data.get("Owner"),
+            "contact_email": self.verify_data.get("Contact email"),
             "scientific_metadata": {
-                "Abstract": "This is a very descriptive and long informative abstract to understand this dataset a bit better!",
+                "Abstract": self.verify_data.get("Abstract"),
                 "Source": "LABORATORY",
                 "Mode": "ABSORPTION",
                 "RAW": {
                     "edge_step": {
                         "value": 0.0,
+                        "unit": "1",
                         "documentation": "height of the detected edge step",
                     },
                     "k_max": {
@@ -99,6 +104,7 @@ class AutoDatasetCreation(object):
                     },
                     "noise": {
                         "value": 0.0,
+                        "unit": "1",
                         "documentation": "noise of the measurement",
                     },
                     "energy_resolution": {
@@ -117,6 +123,7 @@ class AutoDatasetCreation(object):
                                 "value": 0.0,
                             },
                         },
+                        "unit": "1",
                         "documentation": "amplitude factor from the processed spectrum",
                     }
                 },
@@ -124,6 +131,30 @@ class AutoDatasetCreation(object):
                     "data": None,
                     "k": None,
                     "R": None,
+                },
+                "general_info": {
+                    "coll_code": self.verify_data.get("Coll.code"),
+                    "physical_state": self.verify_data.get("Phys.state"),
+                    "crystal_orientation ": self.verify_data.get("crystal orientation"),
+                    "temperature": self.verify_data.get("Temperature"),
+                    "pressure": self.verify_data.get("Pressure"),
+                    "sample_environment": self.verify_data.get("Sample environment"),
+                    "general_remarks": self.verify_data.get("General remarks"),
+                },
+                "instrument": {
+                    "facility": self.verify_data.get("Facility"),
+                    "beamline": self.verify_data.get("Beamline"),
+                    "aquisition_mode": self.verify_data.get("Acq. mode"),
+                    "crystals": self.verify_data.get("Crystals"),
+                    "mirrors": self.verify_data.get("Mirrors"),
+                    "detectors": self.verify_data.get("Detectors"),
+                    "element_input": self.verify_data.get("Element"),
+                    "edge_input": self.verify_data.get("Edge"),
+                    "max_k_range": self.verify_data.get("Max k-range"),
+                },
+                "bibliography": {
+                    "doi": self.verify_data.get("DOI"),
+                    "reference": self.verify_data.get("Reference"),
                 },
             },
         }
@@ -144,10 +175,7 @@ class AutoDatasetCreation(object):
         """
         Post to S3 amazon object storage
         """
-        filename = input("Enter name of input file: ")
-        files = {
-            "file": open(self.qc_path + "example data/LABORATORY/" + filename, "rb")
-        }
+        files = {"file": open(self.s3_data_path, "rb")}
         values = {"dataset_id": self.datasetId}
         self.responds = requests.post(
             "http://35.233.84.253/file/file/", files=files, data=values
@@ -323,6 +351,3 @@ class AutoDatasetCreation(object):
             response = json.loads(api_response.data)
             # pprint(response)
             print("ALL DONE!")
-
-
-var = AutoDatasetCreation()
