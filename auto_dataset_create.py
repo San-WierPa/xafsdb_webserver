@@ -135,7 +135,7 @@ class AutoDatasetCreation(object):
                 "general_info": {
                     "coll_code": self.verify_data.get("Coll.code"),
                     "physical_state": self.verify_data.get("Phys.state"),
-                    "crystal_orientation ": self.verify_data.get("crystal orientation"),
+                    "crystal_orientation": self.verify_data.get("Crystal orientation"),
                     "temperature": self.verify_data.get("Temperature"),
                     "pressure": self.verify_data.get("Pressure"),
                     "sample_environment": self.verify_data.get("Sample environment"),
