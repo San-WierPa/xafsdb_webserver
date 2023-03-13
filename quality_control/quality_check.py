@@ -6,15 +6,21 @@ Created on Mon Mar 23 14:33:49 2020
 @author: Frank Foerste
 ffoerste@physik.tu-berlin.de
 """
+##############################################################################
+### import packages ###
+##############################################################################
 
 import json
-##############################################################################
 from glob import glob
-
 import matplotlib.pyplot as plt
 import numpy as np
 from larch import Group, Interpreter, fitting, xafs
 from PIL import Image
+import base64
+import io
+import os
+from datetime import datetime
+from sys import path, platform
 
 plt.ioff()
 plt.rcParams["xtick.direction"] = "in"
@@ -22,18 +28,16 @@ plt.rcParams["xtick.top"] = True
 plt.rcParams["ytick.direction"] = "in"
 plt.rcParams["ytick.right"] = True
 plt.rcParams["axes.grid.which"] = "both"
-import base64
-import io
-import os
-from datetime import datetime
-from sys import path, platform
-
-path.append("/".join(os.path.abspath(os.curdir).split("/")[:-1]) + "/plugins")
-from plugins.read_data import read_data
-
 
 ##############################################################################
-### define ###
+### import custom packages ###
+##############################################################################
+
+path.append("/".join(os.path.abspath(os.curdir).split("/")[:-1]) + "/plugins/")
+from read_data import read_data
+
+##############################################################################
+### define quality check and testing feature ###
 ##############################################################################
 class check_quality(object):
     """
@@ -46,15 +50,11 @@ class check_quality(object):
         with open(quality_criteria_json, "r") as f:
             self.quality_criteria = json.load(f)
 
-    def load_data(
-        self,
-        measurement_data,
-        source="SYNCHROTRON",
-        mode="ABSORPTION",
-        processed="RAW",
-        name=None,
-        plot=True,
-    ):
+
+    def load_data(self, measurement_data, source="SYNCHROTRON",
+                  mode="ABSORPTION", processed="RAW", 
+                  name=None, plot=True,
+                  ):
         """
         This function loads the data to process it further.
 
@@ -91,9 +91,7 @@ class check_quality(object):
         self.data.energy = measurement_data[:, 0]
         self.data.mu = measurement_data[:, 1]
 
-    def preprocess_data(
-        self,
-    ):
+    def preprocess_data(self, ):
         """
         This function preprocesses the data, finds the edge, fits the pre and post
         edge.
@@ -109,7 +107,7 @@ class check_quality(object):
             mu=self.data.mu,
             e0=self.data.e0,
             group=self.data,
-            pre1=-140,
+            pre1=-100,
             pre2=-30,
             make_flat=True,
             nvict=3,
@@ -138,6 +136,7 @@ class check_quality(object):
         )
         return self.data
 
+
     def plot_background(self, show=False, save_path=None):
         ### define figures
         self.fig_data = plt.figure("{}".format(self.name), figsize=(10, 6.25))
@@ -148,32 +147,25 @@ class check_quality(object):
         minor_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 20)
 
         ### plot data
-        self.ax_data.plot(
-            self.data.energy, self.data.mu, label="Measuement {}".format(self.name)
-        )
-        self.ax_data.plot(
-            self.data.e0,
-            self.data.mu[np.where(self.data.e0 == self.data.energy)],
-            "r*",
-            label="edge position",
-        )
-        self.ax_data.plot(
-            self.data.energy, self.data.pre_edge, label="Pre Edge Background"
-        )
-        self.ax_data.plot(
-            self.data.energy, self.data.post_edge, label="Post Edge Background"
-        )
-        self.ax_data.plot(
-            self.data.energy,
-            self.data.flat,
-            label="Flattened Normalized {}".format(self.name),
-        )
+        self.ax_data.plot(self.data.energy, self.data.mu,
+                          label="Measuement {}".format(self.name),
+                          color = "#003161")
+        self.ax_data.plot(self.data.e0,
+                          self.data.mu[np.where(self.data.e0 == self.data.energy)],
+                          marker = "*", color = "#69398B", 
+                          label="edge position",)
+        self.ax_data.plot(self.data.energy, self.data.pre_edge, 
+                          label="Pre Edge Background")
+        self.ax_data.plot(self.data.energy, self.data.post_edge, 
+                          label="Post Edge Background")
+        self.ax_data.plot(self.data.energy, self.data.flat,
+                          label="Flattened Normalized {}".format(self.name),)
         self.ax_data.set_title(self.name)
         self.ax_data.set_xlabel(r" Energy | eV")
         self.ax_data.set_ylabel(r"$\mu (E)$ | a.u.")
         self.ax_data.set_xlim(self.data.energy[0], self.data.energy[-1])
-        self.ax_data.set_ylim(0.0)
-        self.ax_data.legend(loc=1)
+        # self.ax_data.set_ylim(0.0)
+        self.ax_data.legend(loc = 'best')
         self.ax_data.set_xticks(major_ticks)
         self.ax_data.set_xticks(minor_ticks, minor=True)
         if show:
@@ -181,6 +173,73 @@ class check_quality(object):
         if save_path:
             self.fig_data.savefig(save_path)
         return self.fig_data
+    
+    
+    def plot_raw_data(self, show=False, save_path=None):
+        ### define figures
+        self.fig_raw_data = plt.figure("Raw {}".format(self.name), figsize=(10, 6.25))
+        self.fig_raw_data.clf()
+        self.ax_raw_data = self.fig_raw_data.subplots()
+        self.ax_raw_data.grid()
+        major_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 100)
+        minor_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 20)
+
+        ### plot raw data
+        self.ax_raw_data.plot(self.data.energy, self.data.mu,
+                              label="Measuement {}".format(self.name),
+                              color = "#003161")
+        self.ax_raw_data.plot(self.data.e0,
+                              self.data.mu[np.where(self.data.e0 == self.data.energy)],
+                              marker = "*", color = "#69398B", 
+                              label="edge position",)
+        
+        self.ax_raw_data.set_title(self.name)
+        self.ax_raw_data.set_xlabel(r" Energy | eV")
+        self.ax_raw_data.set_ylabel(r"$\mu (E)$ | a.u.")
+        self.ax_raw_data.set_xlim(self.data.energy[0], self.data.energy[-1])
+        # self.ax_raw_data.set_ylim(0.0)
+        self.ax_raw_data.legend(loc = 'best')
+        self.ax_raw_data.set_xticks(major_ticks)
+        self.ax_raw_data.set_xticks(minor_ticks, minor=True)
+        if show:
+            self.fig_raw_data.show()
+        if save_path:
+            self.fig_raw_data.savefig(save_path)
+        return self.fig_raw_data
+
+
+    def plot_normalized_data(self, show=False, save_path=None):
+        ### define figures
+        self.fig_normalized_data = plt.figure("Normalized {}".format(self.name), figsize=(10, 6.25))
+        self.fig_normalized_data.clf()
+        self.ax_normalized_data = self.fig_normalized_data.subplots()
+        self.ax_normalized_data.grid()
+        major_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 100)
+        minor_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 20)
+
+        ### plot raw data
+        self.ax_normalized_data.plot(self.data.energy, self.data.flat, 
+                                     label="Normalized {}".format(self.name),
+                                     color = "#003161")
+        self.ax_normalized_data.plot(self.data.e0,
+                                     self.data.flat[np.where(self.data.e0 == self.data.energy)],
+                                     marker = "*", color = "#69398B", 
+                                     label="edge position",)
+        
+        self.ax_normalized_data.set_title(self.name)
+        self.ax_normalized_data.set_xlabel(r" Energy | eV")
+        self.ax_normalized_data.set_ylabel(r"$\mu (E)$ | a.u.")
+        self.ax_normalized_data.set_xlim(self.data.energy[0], self.data.energy[-1])
+        # self.ax_normalized_data.set_ylim(0.0)
+        self.ax_normalized_data.legend(loc = 'best')
+        self.ax_normalized_data.set_xticks(major_ticks)
+        self.ax_normalized_data.set_xticks(minor_ticks, minor=True)
+        if show:
+            self.fig_normalized_data.show()
+        if save_path:
+            self.fig_normalized_data.savefig(save_path)
+        return self.fig_normalized_data
+
 
     def plot_k(self, show=False, save_path=None):
         self.fig_k = plt.figure("k {}".format(self.name), figsize=(10, 6.25))
@@ -188,48 +247,50 @@ class check_quality(object):
         self.ax_k = self.fig_k.subplots()
         self.ax_k.grid()
         data = self.data.k**2 * self.data.chi
-        self.ax_k.plot(self.data.k, data, label="data")
+        self.ax_k.plot(self.data.k, data, 
+                       label="k", color = "#003161")
         self.ax_k.set_title(self.name)
         self.ax_k.set_xlabel("k | $\AA^{-1}$")
         self.ax_k.set_ylabel(r"$k^2\chi(k) | \AA^{-1}$")
         self.ax_k.set_xlim(self.data.k[0], self.data.k[-1])
-        self.ax_k.legend(loc=1)
+        self.ax_k.legend(loc = 'best')
         self.ax_k.set_xticks(np.arange(self.data.k[0], self.data.k[-1], 2))
         self.ax_k.set_xticks(
             np.arange(self.data.k[0], self.data.k[-1], 0.5), minor=True
         )
-        self.ax_k.set_ylim(-np.max(data) - 0.01, np.max(data) + 0.01)
+        self.ax_k.set_ylim(np.min(data) - 0.01, np.max(data) + 0.01)
         if show:
             self.fig_k.show()
         if save_path:
             self.fig_k.savefig(save_path)
         return self.fig_k
 
+
     def plot_R(self, show=False, save_path=None):
         self.fig_R = plt.figure("r {}".format(self.name), figsize=(10, 6.25))
         self.fig_R.clf()
         self.ax_R = self.fig_R.subplots()
         self.ax_R.grid()
-        self.ax_R.plot(self.data.r, np.abs(self.data.chir), label="data")
+        self.ax_R.plot(self.data.r, np.abs(self.data.chir), 
+                       label="R", color = "#003161")
         self.ax_R.set_title(self.name)
         self.ax_R.set_xlabel(r"$R(\AA)$")
         self.ax_R.set_ylabel(r"$\left| \chi(R) \right| \AA^{-3}$")
         self.ax_R.set_xlim(self.data.r[0], self.data.r[-1])
-        self.ax_R.legend(loc=1)
+        self.ax_R.legend(loc = 'best')
         self.ax_R.set_xticks(np.arange(self.data.r[0], self.data.r[-1], 2))
         self.ax_R.set_xticks(
             np.arange(self.data.r[0], self.data.r[-1], 0.5), minor=True
         )
-        self.ax_R.set_ylim(0)
+        # self.ax_R.set_ylim(0)
         if show:
             self.fig_R.show()
         if save_path:
             self.fig_R.savefig(save_path)
         return self.fig_R
 
-    def check_edge_step(
-        self,
-    ):
+
+    def check_edge_step(self, ):
         """
         this function automatically evaluates the edge step of the given data
         """
@@ -244,9 +305,8 @@ class check_quality(object):
             print("\u274e edge step doesn't meet standards: ", self.data.edge_step)
             return False, self.data.edge_step
 
-    def check_energy_resolution(
-        self,
-    ):
+
+    def check_energy_resolution(self, ):
         """
         this function automatically evaluates the energy resolution of the
         given data
@@ -271,9 +331,8 @@ class check_quality(object):
             )
             return False, self.data.energy_resolution
 
-    def check_k(
-        self,
-    ):
+
+    def check_k(self, ):
         """
         this function automatically evaluates the k range of the given data
         """
@@ -288,9 +347,8 @@ class check_quality(object):
             print("\u274e k max doesn't meet standards: ", self.data.k[-1], "\u212b⁻¹")
             return False, self.data.k[-1]
 
-    def estimate_noise(
-        self,
-    ):
+
+    def estimate_noise(self, ):
         """
         this function automatically estimates the noise in the k regime of
         the given data
@@ -309,9 +367,8 @@ class check_quality(object):
             )
             return False, self.data.epsilon_k
 
-    def create_data_json(
-        self,
-    ):
+
+    def create_data_json(self, ):
         data = {
             "owner_group": "Technische Universität Berlin",
             "access_groups": "None",
@@ -339,9 +396,8 @@ class check_quality(object):
         ) as tofile:
             json.dump(data, tofile, indent=4, ensure_ascii=False)
 
-    def first_shell_fit(
-        self,
-    ):
+
+    def first_shell_fit(self, ):
         pars = fitting.param_group(
             amp=fitting.param(1.0, vary=True),
             del_e0=fitting.param(0.0, vary=True),
@@ -349,11 +405,13 @@ class check_quality(object):
             del_r=fitting.guess(0.0, vary=True),
         )
 
+
     def encode_base64_figure(self, figure):
         buffer = io.BytesIO()
         figure.savefig(buffer, format="jpeg")
         data = base64.b64encode(buffer.getbuffer()).decode("ascii")
         return f"data:image/jpeg;base64,{data}"
+
 
     def decode_base64_figure(self, base64_string):
         image_base64 = base64_string.replace("data:image/jpeg;base64,", "")
@@ -372,25 +430,26 @@ class check_quality_control(object):
     or not.
     """
 
-    def __init__(self, facility_type, plot_data=False, plot_k=False, plot_R=False):
+    def __init__(self, facility_type, 
+                 plot_raw_data = False, plot_normalized_data = False,
+                 plot_k = False, plot_R = False):
         self.facility_type = facility_type
-        self.plot_data = plot_data
+        self.plot_raw_data = plot_raw_data
+        self.plot_normalized_data = plot_normalized_data
         self.plot_k = plot_k
         self.plot_R = plot_R
+        self.read_data = read_data(source = facility_type)
         self.results = self.check_data()
 
-    def check_data(
-        self,
-    ):
+
+    def check_data(self, ):
         ### define data input
         cq_json = os.path.abspath(os.curdir) + "/Criteria.json"
         folder = os.path.abspath(os.curdir) + "/example data/{}/".format(
             self.facility_type
         )
-        if self.facility_type == "LABORATORY":
-            files = sorted(glob(folder + "*.dat"))
-        elif self.facility_type == "SYNCHROTRON":
-            files = sorted(glob(folder + "*.xdi"))
+        files = glob(folder+'*')
+        # files = glob(folder+'*')
         cq = check_quality(quality_criteria_json=cq_json)
         for file in files:
             print("file:\t", file)
@@ -399,16 +458,19 @@ class check_quality_control(object):
             else:
                 name = file.split("/")[-1].split(".")[0]
             self.qc_list = []
-            if file.split(".")[-1] == "dat":
-                meas_data = read_data().load_dat(file)
-            elif file.split(".")[-1] == "xdi":
-                meas_data = read_data().load_xdi(file)
+            self.read_data.process_data(data_path = file)
+            meas_data =  self.read_data.data
+            print('meas data loaded:', meas_data.shape)
             cq.load_data(meas_data, source=self.facility_type, name=name)
             self.data = cq.preprocess_data()
-            if self.plot_data:
-                fig_data = cq.plot_background(show=True, save_path=None)
-                fig_data_base64 = cq.encode_base64_figure(fig_data)
-                image_data = cq.decode_base64_figure(base64_string=fig_data_base64)
+            if self.plot_raw_data:
+                fig_raw_data = cq.plot_raw_data(show=True, save_path=None)
+                fig_raw_data_base64 = cq.encode_base64_figure(fig_raw_data)
+                image_data = cq.decode_base64_figure(base64_string=fig_raw_data_base64)
+            if self.plot_normalized_data:
+                fig_normalized_data = cq.plot_normalized_data(show=True, save_path=None)
+                fig_normalized_data_base64 = cq.encode_base64_figure(fig_normalized_data)
+                image_data = cq.decode_base64_figure(base64_string=fig_normalized_data_base64)
             if self.plot_k:
                 fig_k = cq.plot_k(show=True, save_path=None)
                 fig_k_base64 = cq.encode_base64_figure(fig_k)
@@ -427,7 +489,18 @@ class check_quality_control(object):
             else:
                 print("data not approved")
             cq.first_shell_fit()
-        # return self.qc_list
-
-
-#
+            
+if __name__ == '__main__':
+    # test = check_quality_control(facility_type = 'SYNCHROTRON', 
+    #                               plot_raw_data = True,
+    #                               plot_normalized_data = True,
+    #                               plot_R = True,
+    #                               plot_k = True
+    #                               )
+    # test = check_quality_control(facility_type = 'LABORATORY', 
+    #                               plot_raw_data = True,
+    #                               plot_normalized_data = True,
+    #                               plot_R = True,
+    #                               plot_k = True
+    #                               )
+    pass
