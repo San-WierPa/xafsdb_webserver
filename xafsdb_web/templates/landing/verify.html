@@ -6,8 +6,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xafsDB - Verify and submit </title>
-    <link rel="stylesheet" href="style.css">
   <style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
 * {
@@ -95,7 +93,27 @@ hr {
     border-radius: 2rem;
     font-size: 1.1rem;
 }
+
+.cancel-btn {
+    border: none;
+    background-color: #e65b00;
+    color: white;
+    padding: .3rem 1rem;
+    display: block;
+    width: 50%;
+    margin: .6rem auto;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+}
+a {
+    text-decoration: none;
+    color: white;
+}
 </style>
+
+    {% block title %}
+        <title>xafsDB - Verify and submit</title>
+    {% endblock %}
 </head>
 
 
@@ -105,42 +123,42 @@ hr {
         <section class="details-section">
             <form action="/dataset/verify_upload" method=post id="verify_form" class="registration-form">
                 {% csrf_token %}
-                <!-- PGeneral info Section -->
+                <!--Sample info Section -->
                 <label for="name">
                     Dataset Title   <input type="text" name="dataset_name" id="name" value={{decode_file_name}} placeholder="Enter your dataset name">
                 </label>
                 <hr>
-                <h4> General Info </h4>
+                <h4> Sample Info </h4>
                 <section class="identity-details">
                     <div class="three-details-item">
                         <label for="Coll.code">
                             <p> Collection code </p>
-                            <input type="text" name="Coll.code" id="Coll.code" placeholder="Enter collection code">
+                            <input type="text" name="Coll.code" id="Coll.code" placeholder="20210308-PtO2-XAS-01">
                         </label>
                         <label for="Phys.state">
                             <p> Physical state </p>
                             <input type="text" name="Phys.state" id="Phys.state"
-                                placeholder="Enter physical state">
+                                placeholder="Solid">
                         </label>
                         <label for="Crystal orientation">
                             <p> Crystal orientation </p>
                             <input type="text" name="Crystal orientation" id="Crystal orientation"
-                                placeholder="Enter crystal orientation">
+                                placeholder="Miller indices">
                         </label>
                     </div>
                     
                     <div class="three-details-item">
                         <label for="Temperature">
-                            <p> Temperature </p>
-                            <input type="text" name="Temperature" id="Temperature" placeholder="Enter temperature">
+                            <p> Temperature in <b>K</b> </p>
+                            <input type="text" name="Temperature" id="Temperature" placeholder="298.15">
                         </label>
                         <label for="Pressure">
-                            <p> Pressure  </p>
-                            <input type="text" name="Pressure" id="Pressure" placeholder="Enter pressure">
+                            <p> Pressure in <b>bar</b>  </p>
+                            <input type="text" name="Pressure" id="Pressure" placeholder="1">
                         </label>
                         <label for="Sample environment">
                             <p> Sample environment </p>
-                            <input type="text" name="Sample environment" id="Sample environment" placeholder="Enter sample environment">
+                            <input type="text" name="Sample environment" id="Sample environment" placeholder="Vacuum chamber">
                         </label>
                     </div>
 
@@ -152,6 +170,10 @@ hr {
                         <label for="General remarks">
                             <p> General remarks </p>
                             <textarea type="text" name="General remarks" id="General remarks" placeholder="Enter general remarks"></textarea>
+                        </label>
+                        <label for="Sample preparation">
+                            <p> Sample preparation </p>
+                            <textarea type="text" name="Sample preparation" id="Sample preparation" placeholder="Technique of sample preparation..."></textarea>
                         </label>
                     </div>
                 </section>
@@ -169,141 +191,73 @@ hr {
                             <option value="&lt;Select Beamline&gt;"  selected=1  > &lt;Select Beamline&gt;</option>
 
                             <option value="AichiSR"  > AichiSR</option>
-                                                
                             <option value="ALBA CLAESS"  > ALBA CLAESS</option>
-                                                
                             <option value="ALS 10.3.2"  > ALS 10.3.2</option>
-                                                
                             <option value="ANKA INE"  > ANKA INE</option>
-                                                
                             <option value="ANKA SUL-X"  > ANKA SUL-X</option>
-                                                
                             <option value="ANKA XAS"  > ANKA XAS</option>
-                                                
                             <option value="APS 10-BM-B"  > APS 10-BM-B</option>
-                                                
                             <option value="APS 10-ID-B"  > APS 10-ID-B</option>
-                                                
                             <option value="APS 11-ID-D"  > APS 11-ID-D</option>
-                                                
                             <option value="APS 12-BM-B"  > APS 12-BM-B</option>
-                                                
                             <option value="APS 13-BM-D"  > APS 13-BM-D</option>
-                                                
                             <option value="APS 13-ID-C,D"  > APS 13-ID-C,D</option>
-                                                
                             <option value="APS 13-ID-E"  > APS 13-ID-E</option>
-                                                
                             <option value="APS 16-BM-D"  > APS 16-BM-D</option>
-                                                
                             <option value="APS 18-ID-D"  > APS 18-ID-D</option>
-                                                
                             <option value="APS 20-BM-B"  > APS 20-BM-B</option>
-                                                
                             <option value="APS 20-ID-B,C"  > APS 20-ID-B,C</option>
-                                                
                             <option value="APS 2-ID-D"  > APS 2-ID-D</option>
-                                                
                             <option value="APS 4-ID-C"  > APS 4-ID-C</option>
-                                                
                             <option value="APS 4-ID-D"  > APS 4-ID-D</option>
-                                                
                             <option value="APS 5-BM-D"  > APS 5-BM-D</option>
-                                                
                             <option value="APS 7-ID-B,C,D"  > APS 7-ID-B,C,D</option>
-                                                
                             <option value="APS 9-BM-B,C"  > APS 9-BM-B,C</option>
-                                                
                             <option value="AS XAS"  > AS XAS</option>
-                                                
                             <option value="BSRF 4W1B"  > BSRF 4W1B</option>
-                                                
                             <option value="CAMD DCM"  > CAMD DCM</option>
-                                                
                             <option value="CLS HXMA"  > CLS HXMA</option>
-                                                
                             <option value="CLS REIXS"  > CLS REIXS</option>
-                                                
                             <option value="CLS SGM"  > CLS SGM</option>
-                                                
                             <option value="CLS SXRMB"  > CLS SXRMB</option>
-                                                
                             <option value="CLS VESPERS"  > CLS VESPERS</option>
-                                                
                             <option value="DAFNE DXR-1"  > DAFNE DXR-1</option>
-                                                
                             <option value="DLS B18"  > DLS B18</option>
-                                                
                             <option value="DLS I06"  > DLS I06</option>
-                                                
                             <option value="DLS I09"  > DLS I09</option>
-                                                
                             <option value="DLS I10"  > DLS I10</option>
-                                                
                             <option value="DLS I18"  > DLS I18</option>
-                                                
                             <option value="DLS I20"  > DLS I20</option>
-                                                
                             <option value="ELETTRA ALOISA"  > ELETTRA ALOISA</option>
-                                                
                             <option value="ELETTRA BACH"  > ELETTRA BACH</option>
-                                                
                             <option value="ELETTRA BEAR"  > ELETTRA BEAR</option>
-                                                
                             <option value="ELETTRA POLAR"  > ELETTRA POLAR</option>
-                                                
                             <option value="ELETTRA TWINMIC"  > ELETTRA TWINMIC</option>
-                                                
                             <option value="ELETTRA XAFS"  > ELETTRA XAFS</option>
-                                                
                             <option value="ESRF BM2"  > ESRF BM2</option>
-                                                
                             <option value="ESRF BM20"  > ESRF BM20</option>
-                                                
                             <option value="ESRF BM23"  > ESRF BM23</option>
-                                                
                             <option value="ESRF BM25A"  > ESRF BM25A</option>
-                                                
                             <option value="ESRF BM26A"  > ESRF BM26A</option>
-                                                
                             <option value="ESRF BM30B"  > ESRF BM30B</option>
-                                                
                             <option value="ESRF BM8"  > ESRF BM8</option>
-                                                
                             <option value="ESRF ID08"  > ESRF ID08</option>
-                                                
                             <option value="ESRF ID12"  > ESRF ID12</option>
-                                                
                             <option value="ESRF ID21"  > ESRF ID21</option>
-                                                
                             <option value="ESRF ID22"  > ESRF ID22</option>
-                                                
                             <option value="ESRF ID24"  > ESRF ID24</option>
-                                                
                             <option value="ESRF ID26"  > ESRF ID26</option>
-                                                
                             <option value="LNLS DXAS"  > LNLS DXAS</option>
-                                                
                             <option value="LNLS XAFS1"  > LNLS XAFS1</option>
-                                                
                             <option value="LNLS XAFS2"  > LNLS XAFS2</option>
-                                                
                             <option value="MAX IV I811"  > MAX IV I811</option>
-                                                
                             <option value="NSLS-II 4-BM"  > NSLS-II 4-BM</option>
-                                                
                             <option value="NSLS-II 5-ID"  > NSLS-II 5-ID</option>
-                                                
                             <option value="NSLS-II 6-BM"  > NSLS-II 6-BM</option>
-                                                
                             <option value="NSLS-II 7-BM"  > NSLS-II 7-BM</option>
-                                                
                             <option value="NSLS-II 7-ID"  > NSLS-II 7-ID</option>
-                                                
                             <option value="NSLS-II 8-BM"  > NSLS-II 8-BM</option>
-                                                
                             <option value="NSLS-II 8-ID"  > NSLS-II 8-ID</option>
-                                                
                             <option value="NSLS X10C"  > NSLS X10C</option>
                                                 
                             <option value="NSLS X11A"  > NSLS X11A</option>
@@ -407,40 +361,25 @@ hr {
                             <option value="SPring-8 BL01B1"  > SPring-8 BL01B1</option>
                                                 
                             <option value="SPring-8 BL14B2"  > SPring-8 BL14B2</option>
-                                                
                             <option value="SPring-8 BL28B2"  > SPring-8 BL28B2</option>
-                                                
                             <option value="SPring-8 BL37XU"  > SPring-8 BL37XU</option>
-                                                
                             <option value="SPring-8 BL39XU"  > SPring-8 BL39XU</option>
-                                                
                             <option value="SPring-8 BL40XU"  > SPring-8 BL40XU</option>
-                                                
                             <option value="SSLS XDD"  > SSLS XDD</option>
-                                                
                             <option value="SSRC EXAFS"  > SSRC EXAFS</option>
-                                                
                             <option value="SSRC Soft EXAFS"  > SSRC Soft EXAFS</option>
-                                                
                             <option value="SSRF BL08U1-A"  > SSRF BL08U1-A</option>
-                                                
                             <option value="SSRF BL14W1"  > SSRF BL14W1</option>
-                                                
                             <option value="SSRL 10-1"  > SSRL 10-1</option>
-                                                
                             <option value="SSRL 10-2a"  > SSRL 10-2a</option>
-                                                
                             <option value="SSRL 11-2"  > SSRL 11-2</option>
-                                                
                             <option value="SSRL 13-2"  > SSRL 13-2</option>
-                                            
                             <option value="SSRL 14-3"  > SSRL 14-3</option>
-                                                
-                            <option value="SSRL 2-3"  > SSRL 2-3</option>                                                
+                            <option value="SSRL 2-3"  > SSRL 2-3</option>
                             <option value="SSRL 4-1"  > SSRL 4-1</option>
                             <option value="SSRL 4-3"  > SSRL 4-3</option>
                             <option value="SSRL 6-2a"  > SSRL 6-2a</option>
-                            <option value="SSRL 7-3"  > SSRL 7-3</option>                                                
+                            <option value="SSRL 7-3"  > SSRL 7-3</option>
                             <option value="SSRL 8-2"  > SSRL 8-2</option>
 
                             <option value="SSRL 9-3"  > SSRL 9-3</option>
@@ -449,22 +388,22 @@ hr {
                         <label for="Acq. mode">
                             <p> Acquistion mode </p>
                             <input type="text" name="Acq. mode" id="Acq. mode"
-                                placeholder="Enter acquistion mode">
+                                placeholder="Continuous scan">
                         </label>
                     </div>
 
                     <div class="three-details-item">
                         <label for="Crystals">
                             <p> Crystals </p>
-                            <input type="text" name="Crystals" id="Crystals" placeholder="Enter crystals">
+                            <input type="text" name="Crystals" id="Crystals" placeholder="Fe2O3 (hematite)">
                         </label>
                         <label for="Mirrors">
                             <p> Mirrors </p>
-                            <input type="text" name="Mirrors" id="Mirrors" placeholder="Enter mirrors">
+                            <input type="text" name="Mirrors" id="Mirrors" placeholder="Kirkpatrick-Baez (KB)">
                         </label>
                         <label for="Detectors">
                             <p> Detectors  </p>
-                            <input type="text" name="Detectors" id="Detectors" placeholder="Enter detectors ">
+                            <input type="text" name="Detectors" id="Detectors" placeholder="Silicon drift detector (SDD)">
                         </label>
                     </div>
 
@@ -598,7 +537,7 @@ hr {
                         </select>
                         </label>
                         <label for="Max k-range">
-                            <p> Max k-range </p>
+                            <p> Max k-range in <b>1/Angstrom</b> </p>
                             <input type="text" name="Max k-range" id="Max k-range" placeholder="Enter max k-range">
                         </label>
                     </div>
@@ -610,7 +549,7 @@ hr {
                     <div class="three-details-item">
                         <label for="DOI">
                             <p> DOI </p>
-                            <input type="text" name="DOI" id="DOI" placeholder="Enter DOI">
+                            <input type="text" name="DOI" id="DOI" placeholder="10.123/456789abcdef">
                         </label>
                         <label for="Reference">
                             <p> Reference </p>
@@ -641,30 +580,34 @@ hr {
                 <h4> Data </h4>
                 <section class="identity-details">
                     <div class="three-details-item">
+
+                        <label for="Source" >
+                            <p> Source </p>
+                        <select  name='Source' id="Source">
+                            <option value=SYNCHROTRON  > SYNCHROTRON</option>
+                            <option value=LABORATORY  > LABORATORY</option>
+                        </select>
+                        </label>
+
                         <label for="Measurement Mode" >
                             <p> Measurement Mode </p>
                         <select  name='Measurement Mode' id="Measurement Mode">
-                            <option value="transmission"  selected=1  > transmission</option>
-
-                            <option value="fluorescence"  > fluorescence</option>
-        
-                            <option value="fluorescence, total yield"  > fluorescence, total yield</option>
-        
-                            <option value="fluorescence, energy analyzed"  > fluorescence, energy analyzed</option>
-        
-                            <option value="herfd"  > herfd</option>
-        
-                            <option value="raman"  > raman</option>
-        
-                            <option value="xeol"  > xeol</option>
-        
-                            <option value="electron emission"  > electron emission</option>
+                            <option value="Absorption"  selected=1  > Absorption</option>
+                            <option value="Fluorescence"  > Fluorescence</option>
+                            <option value="Transmission" > Transmission</option>
+                            <option value="Fluorescence, total yield"  > Fluorescence, total yield</option>
+                            <option value="Fluorescence, energy analyzed"  > Fluorescence, energy analyzed</option>
+                            <option value="Herfd"  > Herfd</option>
+                            <option value="Raman"  > Raman</option>
+                            <option value="Xeol"  > Xeol</option>
+                            <option value="Electron emission"  > Electron emission</option>
                         </select>
                         </label>
 
                         <label for="Energy Column" >
                             <p> Energy Column </p>
                         <select  name='Energy Column' id="Energy Column">
+                            <option value=eV  > eV</option>
                             <option value=None  > None</option>
                             <option value=energy  selected=1  > energy</option>
                             <option value=i0  > i0</option>
@@ -697,7 +640,7 @@ hr {
 
                     </div>
                 </section>
-                
+                <button class="cancel-btn" ><a href="{% url 'dataset_list' %}">Cancel</a></button>
                 <button class="submit-btn" value="Verify Data"> Submit </button>
             </form>
         </section>

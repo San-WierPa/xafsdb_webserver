@@ -472,9 +472,9 @@ tr:hover {
 
 .responsive_coll {
     width: 50%;
-    max-width: 200px;
+    max-width: 100px;
     min-width: 50px;
-    height: auto;
+    max-height: 40px;
     padding: 30px;
     padding-bottom: 20px;
 }

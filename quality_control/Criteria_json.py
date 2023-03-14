@@ -16,25 +16,25 @@ criteria = {
                     "min": 0.5,  # alias: edge jump
                     "max": 2.0,
                     "unit": "1",
-                    "documentation": "height of the detected edge step",
+                    "documentation": "Height of the detected edge step.",
                 },
                 "k max": {
                     "min": 15.0,
                     "max": 20.0,
                     "unit": "1/angstrom",
-                    "documentation": "considered angular wavenumber",
+                    "documentation": "Considered angular wavenumber.",
                 },
                 "noise": {
                     "min": 0,  ### not that clear, depends on method, Abhijeet will "figure it out"
                     "max": 0.1,  ### further discussion needed --> research methods define criteria (example SNR)
                     "unit": "1",
-                    "documentation": "noise of the measurement",
+                    "documentation": "Noise of the measurement.",
                 },
                 "energy resolution": {
                     "min": 0.2,
                     "max": 2.0,
                     "unit": "eV",
-                    "documentation": "energy resolution of the measured spectrum in eV",
+                    "documentation": "Energy resolution of the measured spectrum in eV.",
                 },
             },
             "PROCESSED": {

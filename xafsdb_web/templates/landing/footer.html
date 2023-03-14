@@ -1,9 +1,35 @@
 {% load static %}
 
 <footer>
-    <div class="footer-text">
-        <p>&copy; <span id="date"></span> Sebastian Paripsa. All rights reserved.</p>
+    <div class="footer-text logo-text-container">
+        <p class="text-footer" >&copy; <span id="date"></span> <a href="mailto:paripsa@uni-wuppertal.de">Sebastian Paripsa</a> (<a href="https://www.hydrogen.uni-wuppertal.de/en/">Bergische Universität Wuppertal</a>)
+            <br>
+            and <a href="mailto:ffoerste@physik.tu-berlin.de">Frank Förste</a> (<a href="https://www.blix.tu-berlin.de/">Technische Universität Berlin</a>).
+            <br>
+            This work was supported by the consortium <a href="https://www.daphne4nfdi.de/english/index.php">DAPHNE4NFDI</a>
+            in the context of the work of the NFDI e.V. The consortium is funded by the <a href="https://www.dfg.de/">DFG</a> - project number 460248799.</p>
+            <img class="logo-footer" src="{% static 'img/collab_logo.png' %}" alt="collaboration" >
     </div>
 </footer>
+
+
+<style>
+ .logo-text-container {
+    position: relative;
+ }
+ .logo-footer {
+    position: absolute;
+    display: inline-block;
+    width: 30%;
+    max-width: 200px;
+    min-width: 50px;
+    height: auto;
+    margin-top: 15px;
+    margin-left: 60px;
+ }
+ .text-footer {
+    display: inline-block;
+ }
+  </style>
 
 <script src="{% static 'js/app.js' %}" type="text/javascript"></script>

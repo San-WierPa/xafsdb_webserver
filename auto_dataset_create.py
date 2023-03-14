@@ -89,28 +89,28 @@ class AutoDatasetCreation(object):
             "contact_email": self.verify_data.get("Contact email"),
             "scientific_metadata": {
                 "Abstract": self.verify_data.get("Abstract"),
-                "Source": "LABORATORY",
-                "Mode": "ABSORPTION",
+                "Source": self.verify_data.get("Source"),
+                "Mode": self.verify_data.get("Measurement Mode"),
                 "RAW": {
                     "edge_step": {
                         "value": 0.0,
-                        "unit": "1",
-                        "documentation": "height of the detected edge step",
+                        "unit": "a.u.",
+                        "documentation": "Height of the detected edge step.",
                     },
                     "k_max": {
                         "value": 0.0,
                         "unit": "1/angstrom",
-                        "documentation": "considered angular wavenumber",
-                    },
-                    "noise": {
-                        "value": 0.0,
-                        "unit": "1",
-                        "documentation": "noise of the measurement",
+                        "documentation": "Considered angular wavenumber.",
                     },
                     "energy_resolution": {
                         "value": 0.0,
                         "unit": "eV",
-                        "documentation": "energy resolution of the measured spectrum in eV",
+                        "documentation": "Energy resolution of the measured spectrum in eV.",
+                    },
+                    "noise": {
+                        "value": 0.0,
+                        "unit": "a.u.",
+                        "documentation": "Noise of the measurement.",
                     },
                 },
                 "PROCESSED": {
@@ -123,16 +123,16 @@ class AutoDatasetCreation(object):
                                 "value": 0.0,
                             },
                         },
-                        "unit": "1",
+                        "unit": "a.u.",
                         "documentation": "amplitude factor from the processed spectrum",
                     }
                 },
                 "Figures": {
-                    "data": None,
+                    "data": None, #TODO data -> absorbance
                     "k": None,
                     "R": None,
                 },
-                "general_info": {
+                "sample_info": {
                     "coll_code": self.verify_data.get("Coll.code"),
                     "physical_state": self.verify_data.get("Phys.state"),
                     "crystal_orientation": self.verify_data.get("Crystal orientation"),
@@ -140,6 +140,7 @@ class AutoDatasetCreation(object):
                     "pressure": self.verify_data.get("Pressure"),
                     "sample_environment": self.verify_data.get("Sample environment"),
                     "general_remarks": self.verify_data.get("General remarks"),
+                    "sample_prep": self.verify_data.get("Sample preparation"),
                 },
                 "instrument": {
                     "facility": self.verify_data.get("Facility"),
@@ -157,6 +158,7 @@ class AutoDatasetCreation(object):
                     "reference": self.verify_data.get("Reference"),
                 },
             },
+            "keywords": "None",
         }
 
         with scicat_py.ApiClient(self.configuration) as api_client:
@@ -254,11 +256,15 @@ class AutoDatasetCreation(object):
             ][
                 1
             ]  ### add to dummy data
+            self.edge_step = self.dummy_data2["scientific_metadata"]["RAW"]["edge_step"]["value"]
+            self.energy_res = self.dummy_data2["scientific_metadata"]["RAW"]["energy_resolution"]["value"]
+            self.k_max = self.dummy_data2["scientific_metadata"]["RAW"]["k_max"]["value"]
             # print(dummy_data2)
             if all(qc_list):
                 print("DO SERVER COMMUNICATION -> CREATE DATASET")
                 update_dataset_dto = scicat_py.UpdateDatasetDto(
-                    source_folder=self.short_url
+                    source_folder=self.short_url,
+                    keywords=[self.edge_step, self.k_max, self.energy_res],
                 )  # UpdateDatasetDto |
                 api_response = (
                     api_instance.datasets_controller_find_by_id_replace_or_create(
