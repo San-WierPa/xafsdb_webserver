@@ -45,16 +45,12 @@ docker run -p 8000:8000 <image-id>
   - Once the new build is deployed, monitor your production environment closely for any issues that may arise. If you do discover issues, you may need to roll back the changes to the previous version of your code.
   - Repeat this process as necessary, always working on feature branches and merging them into the development branch before deploying to production.
 
-+ Respectively with respect to versioning:
+### 'git fetch' and 'git pull'
 
-  - Start by creating a new feature branch for each new feature or change you want to make.
-  - Commit your changes to your feature branch as you work on them.
-  - Once you're happy with your changes, merge your feature branch into the development branch.
-  - Test your changes in the development branch and make any necessary bug fixes.
-  - When you're ready to release a new version of your software, create a new release branch based on the development branch.
-  - Update the version number in your code to reflect the changes you've made since the last release.
-  - Build and test your code in the release branch to ensure everything is working as expected.
-  - When you're ready to deploy your code to production, merge the release branch into the production branch.
+Both commands that are used to update the local repository with changes from a remote repository. However, they work in slightly different ways.
+- 'git fetch' retrieves the latest changes from the remote repository and stores them in the local repository, but it does not automatically merge the changes with the local code. This means that 'git fetch'     only updates the local repository's view of the remote repository, but it does not modify your local code or any of your local branches. You can use 'git fetch' to preview changes made by other developers without making any changes to your local code.
+- 'git pull', on the other hand, does two things: it retrieves the latest changes from the remote repository and automatically merges them with your local code. This means that 'git pull' updates both your local repository's view of the remote repository and your local code or branch. This can be useful if you want to quickly update your code with the latest changes from the remote repository and don't need to preview the changes before merging them.
+- In summary, 'git fetch' updates your local repository's view of the remote repository without modifying your local code or branch, while 'git pull' updates both your local repository's view of the remote repository and your local code or branch by merging the changes automatically.
 
 ## Python tests
 
