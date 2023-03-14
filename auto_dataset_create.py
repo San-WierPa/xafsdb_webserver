@@ -263,12 +263,37 @@ class AutoDatasetCreation(object):
                 self.k_fig = self.dummy_data2["scientific_metadata"]["Figures"]["k"]
                 self.R_fig = self.dummy_data2["scientific_metadata"]["Figures"]["R"]
 
-    def upload_data(self):
+    def upload_raw_data(self):
         """
         QC attachment -> Upload main data
         """
         QC_attach_data = {
-            "thumbnail": self.data_fig,
+            "thumbnail": self.raw_data_fig,
+            "caption": "some caption",
+            "access_groups": "None",
+            "created_by": "string",
+            "updated_by": "string",
+            "owner_group": "some group",
+        }
+        with scicat_py.ApiClient(self.configuration) as api_client:
+            api_client.configuration.access_token = self.access_token
+            api_instance = scicat_py.DatasetsApi(api_client)
+            create_attachment_dto = scicat_py.CreateAttachmentDto(**QC_attach_data)
+            api_response = api_instance.datasets_controller_create_attachment(
+                self.datasetId,
+                create_attachment_dto,
+                async_req=False,
+                _preload_content=False,
+            )
+            response = json.loads(api_response.data)
+            # pprint(response)
+            
+    def upload_normalized_data(self):
+        """
+        QC attachment -> Upload main data
+        """
+        QC_attach_data = {
+            "thumbnail": self.normalized_data_fig,
             "caption": "some caption",
             "access_groups": "None",
             "created_by": "string",

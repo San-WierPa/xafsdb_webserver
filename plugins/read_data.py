@@ -22,10 +22,10 @@ class read_data(object):
     def __init__(self, source):
         print('read_data class initialized')
         self.source = source
-        self.supported_facilities = {"SYNCHROTRON" : ["CATACT KIT", 
+        self.supported_beamlines = {"SYNCHROTRON" : ["CATACT KIT", 
                                                       "PETRA III Extension Beamline P65",
-                                                      "Elettra", "SLRI", "BM 23 ESRF", 
-                                                      "ROCK Soleil", "SAMBA Soleil",
+                                                      "Elettra", "SLRI", "ESRF BM 23", 
+                                                      "SOLEIL ROCK", "SOLEIL SAMBA",
                                                       "SLS", 
                                                       ],
                                      "LABORATORY" : ["TU Berlin",
@@ -35,33 +35,128 @@ class read_data(object):
                                            "PETRA III Extension Beamline P65" : ["PETRA III Extension Beamline P65",],
                                            "Elettra" : ["Project Name:"],
                                            "SLRI" : ["BL8: X-ray Absorption Spectroscopy"],
-                                           "BM 23 ESRF" : ["#ZapEnergy"],
-                                           "ROCK Soleil" : ["Synchrotron SOLEIL"],
-                                           "SAMBA Soleil" : ["# Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
+                                           "ESRF BM 23" : ["#ZapEnergy"],
+                                           "SOLEIL ROCK" : ["Synchrotron SOLEIL"],
+                                           "SOLEIL SAMBA" : ["# Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
                                            "SLS" : ["#posX	SAI01-MEAN	SAI02-MEAN"],
                                            },
                           "LABORATORY" : {"TU Berlin" : ["# Energies_eV"],
                                           }
                           }
-        self.facility = None
+        self.beamline = None ### variable to determine if a beamline was matched
+        self.header_extraction = False ### variable set True if header of file should be extracted
     
     
-    def extract_header(self, ):
+    def extract_header(self, data_path):
         """
         Function to exctract data from the header
 
         Parameters
         ----------
-         : TYPE
-            DESCRIPTION.
+        data_path : str
+            Path to the loaded data.
 
         Returns
         -------
-        None.
+        dictionary
+            containing all the found meta data
 
         """
+        ### enable header extraction mode
+        self.header_extraction = True
+        ### determine beamline
+        self.process_data(data_path = data_path)
+        ### fill all the meta data contained in the files provided by the facilities
+        ### into the dictionary
+        self.meta_data_dict = {}
+        self.meta_data_dict['Beamline'] = self.beamline
+        coll_code = ''
+        if self.beamline == "CATACT KIT":
+            self.meta_data_dict['Facility'] = 'KIT Light Source'
+            with open(data_path, 'r') as f:
+                for line in f:
+                    line = line.replace('\n','')
+                    if '#F' in line: coll_code += line.split()[-1] + ' '
+                    elif '#E' in line: coll_code += line.split()[-1]
+                    elif '#D' in line: 
+                        coll_code += line.replace('#D ','')
+                        self.meta_data_dict['Coll.code'] = coll_code
+                    elif '#C' in line: self.meta_data_dict['Owner'] = line.split()[-1]
+            ### no further needed (as for 20230314) meta data in file
+        elif self.beamline == "PETRA III Extension Beamline P65":
+            self.meta_data_dict['Facility'] = "DESY"
+            self.meta_data_dict['Beamline'] = "P65"
+            ### no further needed (as for 20230314) meta data in file
+        elif self.beamline == "Elettra":
+            self.meta_data_dict['Facility'] = "Elettra"
+            self.meta_data_dict['Beamline'] = "XAFS"
+            with open(data_path, 'r') as f:
+                for line in f:
+                    line = line.replace('\n','')
+                    if 'Project Name' in line: self.meta_data_dict["Coll.code"] = line.split()[-1]
+            ### no further needed (as for 20230314) meta data in file
+        elif self.beamline == "SLRI":
+            self.meta_data_dict['Facility'] = "SLRI"
+            with open(data_path, 'r') as f:
+                for line in f:
+                    line = line.replace('\n','')
+                    if '#B' in line: self.meta_data_dict["Beamline"] = line.split(':')[0].replace('#','')
+                    elif '#Transmission' in line: 
+                        self.meta_data_dict["Acq. mode"] = "Transmission"
+            ### no further needed (as for 20230314) meta data in file
+        elif self.beamline == "ESRF BM 23":
+            self.meta_data_dict['Facility'] = "ESRF"
+            ### no further needed (as for 20230314) meta data in file
+        elif self.beamline == "SOLEIL ROCK":
+            self.meta_data_dict['Facility'] = "SOLEIL"
+            with open(data_path, 'r') as f:
+                for line in f:
+                    line = line.replace('\n','')
+                    if '#Sample temperature' in line:
+                        try: self.meta_data_dict["Temperature"] = int(line.split('=')[-1])
+                        except: pass
+            ### no further needed (as for 20230314) meta data in file
+        elif self.beamline == "SOLEIL SAMBA":
+            self.meta_data_dict['Facility'] = "SOLEIL"
+            ### no further meta data in file
+        elif self.beamline == "SLS":
+            self.meta_data_dict['Facility'] = "SLS"
+            self.meta_data_dict['Beamline'] = "SLS SuperXAS"
+            ### no further meta data in file
+        elif self.beamline == "TU Berlin":
+            self.meta_data_dict['Facility'] = "TU Berlin"
+            ### no further meta data in file
+            
+        ### This dict only represents the URL Widget names, not important for 
+        ### read out only for reference
+        dummy_dict = {"owner_group": "Owner group",
+                      "owner": "Owner",
+                      "contact_email": "Contact email",
+                      "Abstract": "Abstract",
+                      "coll_code": "Coll.code",
+                      "physical_state": "Phys.state",
+                      "crystal_orientation": "Crystal orientation",
+                      "temperature": "Temperature",
+                      "pressure": "Pressure",
+                      "sample_environment": "Sample environment",
+                      "general_remarks": "General remarks",
+                      "facility": "Facility",
+                      "beamline": "Beamline",
+                      "aquisition_mode": "Acq. mode",
+                      "crystals": "Crystals",
+                      "mirrors": "Mirrors",
+                      "detectors": "Detectors",
+                      "element_input": "Element",
+                      "edge_input": "Edge",
+                      "max_k_range": "Max k-range",
+                      "doi": "DOI",
+                      "reference": "Reference",}
+        ### disable header extraction mode
+        self.header_extraction = False
+        # print(self.meta_data_dict)
+        return self.meta_data_dict
         
-    
+        
     def process_data(self, data_path):
         """
         This function determines the datafile. If it is .hdf it will open
@@ -89,7 +184,7 @@ class read_data(object):
     def read_out_file(self,):
         """
         This function reads every line of the file and checks, if any known
-        keyword is in the file. When succesful, the facility is stored and the
+        keyword is in the file. When succesful, the beamline is stored and the
         specified load_data function is called.
 
         Returns
@@ -99,17 +194,18 @@ class read_data(object):
         """
         with open(self.data_path, 'r') as f:
             for line in f:
-                for facility in self.supported_facilities[self.source]:
-                    for keyword in self.key_words[self.source][facility]:
+                for beamline in self.supported_beamlines[self.source]:
+                    for keyword in self.key_words[self.source][beamline]:
                         if keyword in line:
-                            print('line with key word: ', line)
-                            self.facility = facility
+                            # print('line with key word: ', line)
+                            self.beamline = beamline
                             break
-        if self.facility:
-            print('facility found:\t', self.facility)
-            self.load_data()
+        if self.beamline:
+            # print('beamline found:\t', self.beamline)
+            if not self.header_extraction:
+                self.load_data()
         else:
-            print('no keyword found')
+            print('no beamline found')
                 
     
     def load_data(self,):
@@ -123,31 +219,31 @@ class read_data(object):
             array([energy, mu])
 
         """
-        if self.facility == "CATACT KIT":
+        if self.beamline == "CATACT KIT":
             data = np.loadtxt(self.data_path, skiprows = 35)
             self.data = np.array([data[:, 0]*1000, np.log(data[:, 5] / data[:, 6])]).T
-        elif self.facility == "PETRA III Extension Beamline P65":
+        elif self.beamline == "PETRA III Extension Beamline P65":
             data = np.loadtxt(self.data_path, skiprows=45)
             self.data = np.array([data[:, 1], np.log(data[:, 11] / data[:, 12])]).T
-        elif self.facility == "Elettra":
+        elif self.beamline == "Elettra":
             data = np.loadtxt(self.data_path, skiprows=25)
             self.data = np.array([data[:, 0], np.log(data[:, 2] / data[:, 3])]).T
-        elif self.facility == "SLRI":
+        elif self.beamline == "SLRI":
             data = np.loadtxt(self.data_path, skiprows=20)
             self.data = np.array([data[:, 0], np.log(data[:, 3] / data[:, 4])]).T
-        elif self.facility == "BM 23 ESRF":
+        elif self.beamline == "ESRF BM 23":
             data = np.loadtxt(self.data_path, skiprows=20)
             self.data = np.array([data[:, 0]*1000, np.log(data[:, 1] / data[:, 2])]).T
-        elif self.facility == "ROCK Soleil":
+        elif self.beamline == "SOLEIL ROCK":
             data = np.loadtxt(self.data_path, skiprows=20)
             self.data = np.array([data[:, 0], data[:,1]]).T
-        elif self.facility == "SAMBA Soleil":
+        elif self.beamline == "SOLEIL SAMBA":
             data = np.loadtxt(self.data_path, skiprows=5)
             self.data = np.array([data[:, 0], np.log(data[:, 6] / data[:, 8])]).T
-        elif self.facility == "SLS":
+        elif self.beamline == "SLS":
             data = np.loadtxt(self.data_path, skiprows=5)
             self.data = np.array([data[:, 0]*1000, np.log(data[:, 2] / data[:, 3])]).T
-        elif self.facility == "TU Berlin":
+        elif self.beamline == "TU Berlin":
             data = np.loadtxt(self.data_path, skiprows=3)
             self.data = np.array([data[:, 0], data[:, 1]]).T
         
