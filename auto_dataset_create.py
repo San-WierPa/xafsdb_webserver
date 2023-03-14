@@ -202,58 +202,46 @@ class AutoDatasetCreation(object):
             api_client.configuration.access_token = self.access_token
             api_instance = scicat_py.DatasetsApi(api_client)
 
-            ## CHECK QUALITY CONTROL ->
-
-            cq_json = (
-                self.qc_path + "Criteria.json"
-            )  ### loading the json criteria file for reference
-            cq = check_quality(
-                quality_criteria_json=cq_json
-            )  ### initialize quality check object
+            ### CHECK QUALITY CONTROL ###
+            ### loading the json criteria file for reference
+            cq_json = (self.qc_path + "Criteria.json")
+            ### initialize quality check object
+            cq = check_quality(quality_criteria_json=cq_json)  
             qc_list = []  ### this list will contain the quality criteria
-            meas_data = np.loadtxt(
-                self.short_url, skiprows=1
-            )  ### here the measurement data has to be forwarded, where will the data be stored in SciCat?
-            cq.load_data(
-                meas_data,
-                source=self.dummy_data2["scientific_metadata"]["Source"],
-                name=self.dummy_data2["dataset_name"],
-            )
-            data = cq.preprocess_data()  ### perform preprocessing on the data
-            fig_data = (
-                cq.plot_background()
-            )  ### plot the data and return the figure object
+            ### here the measurement data has to be forwarded, where will the data be stored in SciCat?
+            meas_data = np.loadtxt(self.short_url, skiprows=1)  
+            cq.load_data(meas_data,
+                         source=self.dummy_data2["scientific_metadata"]["Source"],
+                         name=self.dummy_data2["dataset_name"],)
+            ### perform preprocessing on the data
+            data = cq.preprocess_data() 
+            ### plot the data and return the figure object
+            fig_raw_data = (cq.plot_raw_data())
+            fig_normalized_data = (cq.plot_normalized_data())
             fig_k = cq.plot_k()  ### plot data in k and return the figure object
             fig_R = cq.plot_R()  ### plot data in R and return the figure object
-            self.dummy_data2["scientific_metadata"]["Figures"][
-                "data"
-            ] = cq.encode_base64_figure(fig_data)
-            self.dummy_data2["scientific_metadata"]["Figures"][
-                "k"
-            ] = cq.encode_base64_figure(fig_k)
-            self.dummy_data2["scientific_metadata"]["Figures"][
-                "R"
-            ] = cq.encode_base64_figure(fig_R)
-            qc_list.append(cq.check_edge_step())  ### check for the edge step
-            self.dummy_data2["scientific_metadata"]["RAW"]["edge_step"][
-                "value"
-            ] = qc_list[0][
-                1
-            ]  ### add to dummy data
-            qc_list.append(
-                cq.check_energy_resolution()
-            )  ### check for the energy resolution
+            self.dummy_data2["scientific_metadata"]["Figures"
+                                                    ]["raw data"] = cq.encode_base64_figure(fig_raw_data)
+            self.dummy_data2["scientific_metadata"]["Figures"
+                                                    ]["normalized data"] = cq.encode_base64_figure(fig_normalized_data)
+            self.dummy_data2["scientific_metadata"]["Figures"]["k"
+                                                               ] = cq.encode_base64_figure(fig_k)
+            self.dummy_data2["scientific_metadata"]["Figures"]["R"
+                                                               ] = cq.encode_base64_figure(fig_R)
+            ### check for the edge step
+            qc_list.append(cq.check_edge_step())  
+            ### add to dummy data
+            self.dummy_data2["scientific_metadata"]["RAW"]["edge_step"]["value"
+                                                                        ] = qc_list[0][1]  
+            ### check for the energy resolution
+            qc_list.append(cq.check_energy_resolution())  
+            ### add to dummy data
             self.dummy_data2["scientific_metadata"]["RAW"]["energy_resolution"][
-                "value"
-            ] = qc_list[1][
-                1
-            ]  ### add to dummy data
+                "value"] = qc_list[1][1]
             qc_list.append(cq.check_k())
-            self.dummy_data2["scientific_metadata"]["RAW"]["k_max"]["value"] = qc_list[
-                2
-            ][
-                1
-            ]  ### add to dummy data
+            ### add to dummy data
+            self.dummy_data2["scientific_metadata"]["RAW"]["k_max"][
+                "value"] = qc_list[2][1]  
             # print(dummy_data2)
             if all(qc_list):
                 print("DO SERVER COMMUNICATION -> CREATE DATASET")
@@ -270,9 +258,8 @@ class AutoDatasetCreation(object):
                 )
                 response = json.loads(api_response.data)
                 # pprint(response)
-                self.data_fig = self.dummy_data2["scientific_metadata"]["Figures"][
-                    "data"
-                ]
+                self.raw_data_fig = self.dummy_data2["scientific_metadata"]["Figures"]["raw data"]
+                self.normalized_data_fig = self.dummy_data2["scientific_metadata"]["Figures"]["normalized data"]
                 self.k_fig = self.dummy_data2["scientific_metadata"]["Figures"]["k"]
                 self.R_fig = self.dummy_data2["scientific_metadata"]["Figures"]["R"]
 
