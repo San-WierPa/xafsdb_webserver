@@ -52,7 +52,7 @@ def dataset_upload(request):
 
         if len(decoded_list) > 0:
             data = [
-                str(data).split("\t") for data in decoded_list if data.startswith("#")
+                str(data).split("\t") for data in decoded_list
             ]
             context = {
                 "decode_file_name": temporary_uploaded_file.name,
