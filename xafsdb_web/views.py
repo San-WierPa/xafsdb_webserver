@@ -54,9 +54,7 @@ def dataset_upload(request):
             data = [
                 str(data).split("\t") for data in decoded_list if data.startswith("#")
             ]
-            headers = data[0]
             context = {
-                "headers": headers,
                 "decode_file_name": temporary_uploaded_file.name,
                 "description": "{0} uploaded {1}".format(
                     temporary_uploaded_file.name, str(datetime.now())
@@ -64,7 +62,6 @@ def dataset_upload(request):
                 "summary": "Uploaded File: "
                 + str(temporary_uploaded_file.name)
                 + " has "
-                + str(len(headers))
                 + " array columns with "
                 + str(len(data) - 1)
                 + " data rows.",
