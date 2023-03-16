@@ -19,26 +19,27 @@ class read_data(object):
     supported.
     """
 
-    def __init__(self, source):
+    def __init__(self, source = "SYNCHROTRON"):
         print('read_data class initialized')
         self.source = source
         self.supported_beamlines = {"SYNCHROTRON" : ["CATACT KIT", 
                                                       "PETRA III Extension Beamline P65",
-                                                      "Elettra", "SLRI", "ESRF BM 23", 
+                                                      "ELETTTRA XAFS", "SLRI", "ESRF BM 23", 
                                                       "SOLEIL ROCK", "SOLEIL SAMBA",
-                                                      "SLS", 
+                                                      "SLS", "DELTA",
                                                       ],
                                      "LABORATORY" : ["TU Berlin",
                                                      ]
                                      }
         self.key_words = {"SYNCHROTRON" : {"CATACT KIT" : ["catexp",],
                                            "PETRA III Extension Beamline P65" : ["PETRA III Extension Beamline P65",],
-                                           "Elettra" : ["Project Name:"],
+                                           "ELETTTRA XAFS" : ["Project Name:"],
                                            "SLRI" : ["BL8: X-ray Absorption Spectroscopy"],
                                            "ESRF BM 23" : ["#ZapEnergy"],
                                            "SOLEIL ROCK" : ["Synchrotron SOLEIL"],
                                            "SOLEIL SAMBA" : ["# Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
                                            "SLS" : ["#posX	SAI01-MEAN	SAI02-MEAN"],
+                                           "DELTA" : ["# created:"]
                                            },
                           "LABORATORY" : {"TU Berlin" : ["# Energies_eV"],
                                           }
@@ -87,8 +88,8 @@ class read_data(object):
             self.meta_data_dict['Facility'] = "DESY"
             self.meta_data_dict['Beamline'] = "P65"
             ### no further needed (as for 20230314) meta data in file
-        elif self.beamline == "Elettra":
-            self.meta_data_dict['Facility'] = "Elettra"
+        elif self.beamline == "ELETTRA XAFS":
+            self.meta_data_dict['Facility'] = "ELETTRA XAFS"
             self.meta_data_dict['Beamline'] = "XAFS"
             with open(data_path, 'r') as f:
                 for line in f:
@@ -205,7 +206,8 @@ class read_data(object):
             if not self.header_extraction:
                 self.load_data()
         else:
-            print('no beamline found')
+            print('no beamline found, going to numpy extraction mode')
+            self.data = np.loadtxt(self.data_path)
                 
     
     def load_data(self,):
@@ -225,7 +227,7 @@ class read_data(object):
         elif self.beamline == "PETRA III Extension Beamline P65":
             data = np.loadtxt(self.data_path, skiprows=45)
             self.data = np.array([data[:, 1], np.log(data[:, 11] / data[:, 12])]).T
-        elif self.beamline == "Elettra":
+        elif self.beamline == "ELETTRA XAFS":
             data = np.loadtxt(self.data_path, skiprows=25)
             self.data = np.array([data[:, 0], np.log(data[:, 2] / data[:, 3])]).T
         elif self.beamline == "SLRI":
@@ -243,6 +245,9 @@ class read_data(object):
         elif self.beamline == "SLS":
             data = np.loadtxt(self.data_path, skiprows=5)
             self.data = np.array([data[:, 0]*1000, np.log(data[:, 2] / data[:, 3])]).T
+        elif self.beamline == "DELTA":
+            data = np.loadtxt(self.data_path, skiprows=5)
+            self.data = np.array([data[:, 0]*1000, data[:, 1]]).T
         elif self.beamline == "TU Berlin":
             data = np.loadtxt(self.data_path, skiprows=3)
             self.data = np.array([data[:, 0], data[:, 1]]).T
