@@ -243,6 +243,7 @@ class check_quality(object):
 
 
     def plot_k(self, show=False, save_path=None):
+        ### define figures
         self.fig_k = plt.figure("k {}".format(self.name), figsize=(10, 6.25))
         self.fig_k.clf()
         self.ax_k = self.fig_k.subplots()

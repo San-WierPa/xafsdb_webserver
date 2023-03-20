@@ -13,8 +13,13 @@
             <div>
               <div class="mySlides ">
                 <br>
-                <center><img src="{{ data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
-                <div class="text">Raw and Normalized XAFS</div>
+                <center><img src="{{ raw_data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                <div class="text">Raw XAFS</div>
+              </div>
+              <div class="mySlides ">
+                <br>
+                <center><img src="{{ normalized_data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                <div class="text">Normalized XAFS</div>
               </div>
               <div class="mySlides ">
                 <br>
@@ -33,6 +38,7 @@
               <span class="dot" onclick="currentSlide(1)"></span>
               <span class="dot" onclick="currentSlide(2)"></span>
               <span class="dot" onclick="currentSlide(3)"></span>
+              <span class="dot" onclick="currentSlide(4)"></span>
             </div>
           </body>
 

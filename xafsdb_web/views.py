@@ -5,6 +5,7 @@ import json
 import sys
 from datetime import datetime
 import logging
+from typing import Type, List, Dict
 
 import scicat_py
 from auto_dataset_create import AutoDatasetCreation
@@ -31,7 +32,16 @@ from plugins.read_data import read_data
 
 
 # render the file upload view and navigate to the html page
-def dataset_upload_view(request):
+def dataset_upload_view(request) -> HttpResponse:
+    """
+    Renders the "upload.html" template with the provided context.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered "upload.html" template.
+    """
     return render(request, "landing/upload.html", CONTEXT)
 
 
@@ -47,9 +57,11 @@ def dataset_upload(request):
 
         decoded_file = temporary_uploaded_file.read().decode("utf-8")
         decoded_list = str(decoded_file).split("\r\n")
+        #print(decoded_list)
 
         # save file in temp folder
         file = open("temp/" + temporary_uploaded_file.name, "w")
+        print("File from dataset_upload:", file)
         file.write(decoded_file)
         file.close()
 
@@ -57,7 +69,7 @@ def dataset_upload(request):
             data = [
                 str(data).split("\t") for data in decoded_list
             ]
-            reader = read_data(source="SYNCHROTRON")
+            reader = read_data()
             dictionary = reader.extract_header(data_path="temp/" + temporary_uploaded_file.name)
             #print("I'm here:", dictionary)
             context = {
@@ -74,6 +86,7 @@ def dataset_upload(request):
                 ### pass the dictionary to the template context
                 "dictionary": dictionary
             }
+            print("Context:", context)
 
             return render(request, "landing/verify.html", context)
 
@@ -83,28 +96,51 @@ def dataset_upload(request):
 
 
 @api_view(["POST"])
-def verify_upload(request):
+def verify_upload(request) -> HttpResponse:
+    """
+    View function that verifies the uploaded file and creates a test dataset.
+    If successful, redirects to the dataset details page for the new dataset.
+    If an error occurs, logs the error and returns a server error response.
+
+    Args:
+        request: HTTP request object containing the uploaded file and other data.
+
+    Returns:
+        If successful, a redirect response to the dataset details page.
+        If an error occurs, a server error response with an error message.
+    """
     logger = logging.getLogger(__name__)
     try:
         verify_data = request.POST
+        print("verify_data:", verify_data)
         file_path = request.POST.get("dataset_name")
+        print("FILE_path from verify_upload:", str(file_path))
         AutoDatasetCreation(
-            s3_data_path="temp/" + file_path,
+            s3_data_path="temp/" + str(file_path),
             data_set_name=file_path,
             verify_data=verify_data,
         )
+        #dataset_id = adc.create_testdata()
+        #return redirect("dataset_details", dataset_id=dataset_id)
         return render(request, "landing/home.html")
 
     except Exception as e:
         logger.exception("Error occurred while verifying upload: %s", str(e))
         return HttpResponseServerError("Error occurred while verifying upload")
 
-    #except Exception as e:
-    #    error_msg = json.dumps({"detail": "Internal Server Error _" + str(e)})
-    #    return HttpResponse(error_msg, status=500)
 
+async def dataset_list(request) -> HttpResponse:
+    """
+    View function that retrieves a list of all datasets from the SciCat API
+    and displays them in a paginated HTML view.
 
-async def dataset_list(request):
+    Args:
+        request: HttpRequest object representing the incoming request
+
+    Returns:
+        HttpResponse object representing the HTTP response that will be sent
+        back to the client
+    """
     with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
         access_token = get_access()
         api_client.configuration.access_token = access_token
@@ -115,7 +151,7 @@ async def dataset_list(request):
             filter=filter
         )
 
-        debug_data = {"dataset_id": "1"}
+        debug_data: Dict[str, str] = {"dataset_id": "1"}
 
         page = request.GET.get("page", 1)
         paginator = Paginator(dataset_meta_list, 15)
@@ -133,7 +169,21 @@ async def dataset_list(request):
     )
 
 
-def dataset_details(request, dataset_id: str):
+def dataset_details(request, dataset_id: str) -> HttpResponse:
+    """
+    Retrieves information about the given dataset from scicat and renders the dataset details page with the
+    relevant information.
+
+    Args:
+        request: The HTTP request object.
+        dataset_id: The ID of the dataset to retrieve information for.
+
+    Returns:
+        The rendered HTML page with information about the dataset.
+
+    Raises:
+        Redirects to the 'error' page if there is an error while retrieving information about the dataset.
+    """
     with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
         access_token = get_access()
         api_client.configuration.access_token = access_token
@@ -144,17 +194,18 @@ def dataset_details(request, dataset_id: str):
         attachment_response = (
             api_instance_dataset.datasets_controller_find_all_attachments(dataset_id)
         )
+        print(len(attachment_response))
+        print(attachment_response)
 
-        try:
-            raw_data_fig = attachment_response[0].thumbnail
-            normalized_data_fig = attachment_response[1].thumbnail
-            k_fig = attachment_response[2].thumbnail
-            R_fig = attachment_response[3].thumbnail
-        except IndexError:
-            # return HttpResponse("Oops. Looks like you have note uploaded a picture yet.")
-            return redirect("error")
+        #try:
+        raw_data_fig = attachment_response[0].thumbnail
+        normalized_data_fig = attachment_response[1].thumbnail
+        k_fig = attachment_response[2].thumbnail
+        R_fig = attachment_response[3].thumbnail
+        #except IndexError:
+        #    return redirect("error")
 
-        item_list = Files.objects.filter(dataset_id=dataset_id)
+        item_list: List[Dict[str, str]] = Files.objects.filter(dataset_id=dataset_id)
     return render(
         request,
         "landing/base.html",
@@ -192,13 +243,32 @@ class SearchView(TemplateView):
 
 
 class FileViewSets(ModelViewSet):
-    queryset = Files.objects.all()
-    serializer_class = FileSerializer
-    parser_classes = [MultiPartParser, FileUploadParser]
-    lookup_field = "pk"
+    """
+    Viewset for managing files uploaded to the system.
 
-    def get_serializer_class(self):
-        serializer = self.serializer_class
+    The viewset supports CRUD (Create, Retrieve, Update, Delete) operations
+    for files, with support for uploading files via the MultiPartParser or
+    FileUploadParser. The default serializer used is `FileSerializer`, which
+    provides basic read-only functionality. For write operations, the
+    `FileCreateUpdateSerializer` serializer is used, which provides additional
+    validation and serialization/deserialization of uploaded files.
+
+    The `lookup_field` attribute is set to `"pk"`, which is the primary key
+    field used for looking up files.
+
+    Methods
+    -------
+    get_serializer_class(self)
+        Returns the serializer class to use for the current request, depending
+        on the HTTP method used.
+    """
+    queryset: Type[Files] = Files.objects.all()
+    serializer_class: Type[FileSerializer] = FileSerializer
+    parser_classes = [MultiPartParser, FileUploadParser]
+    lookup_field: str = "pk"
+
+    def get_serializer_class(self) -> Type[FileSerializer]:
+        serializer: Type[FileSerializer] = self.serializer_class
         if self.action in {"create", "partial_update", "update"}:
             serializer = FileCreateUpdateSerializer
         return serializer
@@ -269,6 +339,25 @@ def error(request, exception):
 
 
 class ContactForm(forms.Form):
+    """
+    A Django form for contacting the website owner.
+
+    Fields:
+    - first_name: Optional string field for the user's first name.
+    - last_name: Required string field for the user's last name.
+    - email_address: Required email field for the user's email address.
+    - message: Required text field for the user's message.
+
+    Usage example:
+
+    form = ContactForm(request.POST)
+    if form.is_valid():
+        # Process the form data
+        ...
+    else:
+        # Render the form with error messages
+        ...
+    """
     first_name = forms.CharField(required=False, max_length=50, label="First name")
     last_name = forms.CharField(required=True, max_length=50, label="Last name")
     email_address = forms.EmailField(
@@ -280,6 +369,28 @@ class ContactForm(forms.Form):
 
 
 def contact(request):
+    """
+    Render the contact page and handle the contact form submission.
+
+    If the request method is "POST", validate the form data submitted
+    by the user. If the form is valid, send an email to the site admin
+    with the form data. If the email is successfully sent, redirect the
+    user to the homepage. If the email fails to send, return an HTTP
+    response indicating the error.
+
+    If the request method is not "POST", render the contact page with a
+    new ContactForm instance.
+
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object, containing the rendered
+        contact page or a redirect to the homepage.
+
+    Raises:
+        BadHeaderError: If an invalid email header is found.
+    """
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():

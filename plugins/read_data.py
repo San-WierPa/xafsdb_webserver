@@ -46,7 +46,7 @@ class read_data(object):
                           }
         self.beamline = None ### variable to determine if a beamline was matched
         self.header_extraction = False ### variable set True if header of file should be extracted
-    
+        self.meta_data_dict = {}
     
     def extract_header(self, data_path):
         """
@@ -175,8 +175,9 @@ class read_data(object):
 
         """
         self.data_path = data_path
-        print(data_path)
+        print("data_path from process_data:", data_path)
         self.data_type = self.data_path.split('.')[-1]
+        #print("self.data_type from process_data:", self.data_type)
         if self.data_type in ['h5', 'hdf', 'hdf5']:
             self.load_hdf(self)
         else:
@@ -253,5 +254,3 @@ class read_data(object):
     
     def load_hdf(self,):
         print("Will be implemented soon. Stay tuned you awesome dude!")
-                
-

@@ -3,14 +3,13 @@
 """
 
 from __future__ import print_function
-
+from pprint import pprint
 import json
 import os
 from datetime import datetime
 from sys import path
-
+from typing import Optional
 import environ
-# from scicat_py.rest import ApiException
 import numpy as np
 import pyshorteners
 import requests
@@ -27,10 +26,11 @@ class AutoDatasetCreation(object):
     This class automatically creates a dataset, does the quality_control
     and serves all to the webserver
     """
-
     def __init__(self, s3_data_path, data_set_name, verify_data):
         self.data_set_name = data_set_name
+        print("data_set_name:", data_set_name)
         self.s3_data_path = s3_data_path
+        print("s3_data_path:", s3_data_path)
         self.verify_data = verify_data
 
         print("Dataset creation initialized...how exciting!")
@@ -40,26 +40,33 @@ class AutoDatasetCreation(object):
         self.configuration = scicat_py.Configuration(
             host="http://35.233.84.253",
         )
-        self.qc_path = "quality_control/"  # "quality_control/"  # "/app/"
+        self.qc_path = "quality_control/"
         path.append(self.qc_path)
         self.auth_login()
         self.create_testdata()
         self.post_sthree()
         self.short_url()
         self.qc_and_update()
-        #self.upload_data()
-        self.upload_k()
-        self.upload_R()
+        self.upload_figure_data(figure=self.data_dict["scientific_metadata"]["Figures"]["raw_data"],
+                                caption="Raw data")
+        self.upload_figure_data(figure=self.data_dict["scientific_metadata"]["Figures"]["normalized_data"],
+                                caption="Normalized data")
+        self.upload_figure_data(figure=self.data_dict["scientific_metadata"]["Figures"]["k"],
+                                caption="k")
+        self.upload_figure_data(figure=self.data_dict["scientific_metadata"]["Figures"]["R"],
+                                caption="R")
 
-    def auth_login(self) -> str:
+    def auth_login(self) -> Optional[str]:
         """
-        Verify access
+        Authenticates with the SciCat API by logging in with provided credentials
+        and retrieves an access token for subsequent requests.
+
+        Returns:
+            The access token string or None (hence the Optional[str]) if there was an error
         """
         with scicat_py.ApiClient(configuration=self.configuration) as api_client:
             api_instance = scicat_py.AuthApi(api_client)
             credentials_dto = scicat_py.CredentialsDto(
-                # username=os.environ["USERNAME_AUTH"],
-                # password=os.environ["PASSWORD_AUTH"],
                 username=env("USERNAME_AUTH"),
                 password=env("PASSWORD_AUTH"),
             )
@@ -68,12 +75,15 @@ class AutoDatasetCreation(object):
             # print(self.access_token)
             return self.access_token
 
-    def create_testdata(self):
+    def create_testdata(self) -> Optional[str]:
         """
-        Create dataset with quality_control data
+        Creates a new test dataset and returns its ID.
+
+        Returns:
+            str or None: The ID of the created dataset or None if an error occurred.
         """
         titlename = self.data_set_name
-        self.dummy_data2 = {
+        self.data_dict = {
             "owner_group": self.verify_data.get("Owner group"),
             "access_groups": "NO_THUMBNAIL",
             "creation_location": "wuppertal",
@@ -128,7 +138,8 @@ class AutoDatasetCreation(object):
                     }
                 },
                 "Figures": {
-                    "data": None, #TODO data -> absorbance
+                    "raw_data": None,
+                    "normalized_data": None,
                     "k": None,
                     "R": None,
                 },
@@ -164,7 +175,7 @@ class AutoDatasetCreation(object):
         with scicat_py.ApiClient(self.configuration) as api_client:
             api_client.configuration.access_token = self.access_token
             api_instance = scicat_py.DatasetsApi(api_client)
-            create_dataset_dto = scicat_py.CreateDatasetDto(**self.dummy_data2)
+            create_dataset_dto = scicat_py.CreateDatasetDto(**self.data_dict)
             api_response = api_instance.datasets_controller_create(
                 create_dataset_dto, async_req=False, _preload_content=False
             )
@@ -178,6 +189,7 @@ class AutoDatasetCreation(object):
         Post to S3 amazon object storage
         """
         files = {"file": open(self.s3_data_path, "rb")}
+        print("I'm self.s3_data_path in post_sthree:", self.s3_data_path)
         values = {"dataset_id": self.datasetId}
         self.responds = requests.post(
             "http://35.233.84.253/file/file/", files=files, data=values
@@ -191,9 +203,10 @@ class AutoDatasetCreation(object):
 
         TODO: creates folder and downloads the file -> should not do it
         """
+        #self.short_url = self.responds.json()["file"].split("?")[0]
         type_tiny = pyshorteners.Shortener()
         self.short_url = type_tiny.tinyurl.short(self.responds.json()["file"])
-        # print(self.short_url)
+        #print(self.short_url)
         return self.short_url
 
     def qc_and_update(self):
@@ -212,39 +225,39 @@ class AutoDatasetCreation(object):
             qc_list = [] ### this list will contain the quality criteria
             ### here the measurement data has to be forwarded, where will the data be stored in SciCat?
             meas_data = np.loadtxt(self.short_url, skiprows=1)
+            #print("Meas_data from qc_and_update:", meas_data)
             cq.load_data(
                 meas_data,
-                source=self.dummy_data2["scientific_metadata"]["Source"],
-                name=self.dummy_data2["dataset_name"],
+                source=self.data_dict["scientific_metadata"]["Source"],
+                name=self.data_dict["dataset_name"],
             )
             ### perform preprocessing on the data
             data = cq.preprocess_data()
             ### plot the data and return the figure object
-            fig_raw_data = (cq.plot_raw_data())
-            fig_normalized_data = (cq.plot_normalized_data())
+            fig_raw_data = cq.plot_raw_data()
+            fig_normalized_data = cq.plot_normalized_data()
             fig_k = cq.plot_k()  ### plot data in k and return the figure object
             fig_R = cq.plot_R()  ### plot data in R and return the figure object
-            self.dummy_data2["scientific_metadata"]["Figures"]["raw data"] = cq.encode_base64_figure(fig_raw_data)
-            self.dummy_data2["scientific_metadata"]["Figures"]["normalized data"] = cq.encode_base64_figure(fig_normalized_data)
-            self.dummy_data2["scientific_metadata"]["Figures"]["k"] = cq.encode_base64_figure(fig_k)
-            self.dummy_data2["scientific_metadata"]["Figures"]["R"] = cq.encode_base64_figure(fig_R)
+            self.data_dict["scientific_metadata"]["Figures"]["raw_data"] = cq.encode_base64_figure(fig_raw_data)
+            self.data_dict["scientific_metadata"]["Figures"]["normalized_data"] = cq.encode_base64_figure(fig_normalized_data)
+            self.data_dict["scientific_metadata"]["Figures"]["k"] = cq.encode_base64_figure(fig_k)
+            self.data_dict["scientific_metadata"]["Figures"]["R"] = cq.encode_base64_figure(fig_R)
             ### check for the edge step
             qc_list.append(cq.check_edge_step())
             ### add to dummy data
-            self.dummy_data2["scientific_metadata"]["RAW"]["edge_step"]["value"] = qc_list[0][1]
+            self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"] = qc_list[0][1]
             ### check for the energy resolution
             qc_list.append(cq.check_energy_resolution())
             ### add to dummy data
-            self.dummy_data2["scientific_metadata"]["RAW"]["energy_resolution"]["value"] = qc_list[1][1]
+            self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"] = qc_list[1][1]
             ### check for k
             qc_list.append(cq.check_k())
             ### add to dummy data
-            self.dummy_data2["scientific_metadata"]["RAW"]["k_max"]["value"] = qc_list[2][1]
+            self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"] = qc_list[2][1]
             ### Hand over quality criteria to webserver
-            self.edge_step = self.dummy_data2["scientific_metadata"]["RAW"]["edge_step"]["value"]
-            self.energy_res = self.dummy_data2["scientific_metadata"]["RAW"]["energy_resolution"]["value"]
-            self.k_max = self.dummy_data2["scientific_metadata"]["RAW"]["k_max"]["value"]
-            # print(dummy_data2)
+            self.edge_step = self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"]
+            self.energy_res = self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"]
+            self.k_max = self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"]
             if all(qc_list):
                 print("DO SERVER COMMUNICATION -> CREATE DATASET")
                 update_dataset_dto = scicat_py.UpdateDatasetDto(
@@ -261,18 +274,19 @@ class AutoDatasetCreation(object):
                 )
                 response = json.loads(api_response.data)
                 # pprint(response)
-                self.raw_data_fig = self.dummy_data2["scientific_metadata"]["Figures"]["raw data"]
-                self.normalized_data_fig = self.dummy_data2["scientific_metadata"]["Figures"]["normalized data"]
-                self.k_fig = self.dummy_data2["scientific_metadata"]["Figures"]["k"]
-                self.R_fig = self.dummy_data2["scientific_metadata"]["Figures"]["R"]
+                self.data_dict["scientific_metadata"]["Figures"]["raw_data"]
+                #pprint(self.raw_data_fig)
+                self.data_dict["scientific_metadata"]["Figures"]["normalized_data"]
+                self.data_dict["scientific_metadata"]["Figures"]["k"]
+                self.data_dict["scientific_metadata"]["Figures"]["R"]
 
-    def upload_raw_data(self):
+    def upload_figure_data(self, figure, caption=""):
         """
         QC attachment -> Upload main data
         """
-        QC_attach_data = {
-            "thumbnail": self.raw_data_fig,
-            "caption": "some caption",
+        QC_attach_figure_data = {
+            "thumbnail": figure,
+            "caption": caption,
             "access_groups": "None",
             "created_by": "string",
             "updated_by": "string",
@@ -281,7 +295,7 @@ class AutoDatasetCreation(object):
         with scicat_py.ApiClient(self.configuration) as api_client:
             api_client.configuration.access_token = self.access_token
             api_instance = scicat_py.DatasetsApi(api_client)
-            create_attachment_dto = scicat_py.CreateAttachmentDto(**QC_attach_data)
+            create_attachment_dto = scicat_py.CreateAttachmentDto(**QC_attach_figure_data)
             api_response = api_instance.datasets_controller_create_attachment(
                 self.datasetId,
                 create_attachment_dto,
@@ -290,79 +304,3 @@ class AutoDatasetCreation(object):
             )
             response = json.loads(api_response.data)
             # pprint(response)
-            
-    def upload_normalized_data(self):
-        """
-        QC attachment -> Upload main data
-        """
-        QC_attach_data = {
-            "thumbnail": self.normalized_data_fig,
-            "caption": "some caption",
-            "access_groups": "None",
-            "created_by": "string",
-            "updated_by": "string",
-            "owner_group": "some group",
-        }
-        with scicat_py.ApiClient(self.configuration) as api_client:
-            api_client.configuration.access_token = self.access_token
-            api_instance = scicat_py.DatasetsApi(api_client)
-            create_attachment_dto = scicat_py.CreateAttachmentDto(**QC_attach_data)
-            api_response = api_instance.datasets_controller_create_attachment(
-                self.datasetId,
-                create_attachment_dto,
-                async_req=False,
-                _preload_content=False,
-            )
-            response = json.loads(api_response.data)
-            # pprint(response)
-
-    def upload_k(self):
-        """
-        QC attachment -> Upload k
-        """
-        QC_attach_k = {
-            "thumbnail": self.k_fig,
-            "caption": "some caption",
-            "access_groups": "None",
-            "created_by": "string",
-            "updated_by": "string",
-            "owner_group": "some group",
-        }
-        with scicat_py.ApiClient(self.configuration) as api_client:
-            api_client.configuration.access_token = self.access_token
-            api_instance = scicat_py.DatasetsApi(api_client)
-            create_attachment_dto = scicat_py.CreateAttachmentDto(**QC_attach_k)
-            api_response = api_instance.datasets_controller_create_attachment(
-                self.datasetId,
-                create_attachment_dto,
-                async_req=False,
-                _preload_content=False,
-            )
-            response = json.loads(api_response.data)
-            # pprint(response)
-
-    def upload_R(self):
-        """
-        QC attachment -> Upload R
-        """
-        QC_attach_R = {
-            "thumbnail": self.R_fig,
-            "caption": "some caption",
-            "access_groups": "None",
-            "created_by": "string",
-            "updated_by": "string",
-            "owner_group": "some group",
-        }
-        with scicat_py.ApiClient(self.configuration) as api_client:
-            api_client.configuration.access_token = self.access_token
-            api_instance = scicat_py.DatasetsApi(api_client)
-            create_attachment_dto = scicat_py.CreateAttachmentDto(**QC_attach_R)
-            api_response = api_instance.datasets_controller_create_attachment(
-                self.datasetId,
-                create_attachment_dto,
-                async_req=False,
-                _preload_content=False,
-            )  #
-            response = json.loads(api_response.data)
-            # pprint(response)
-            print("ALL DONE!")
