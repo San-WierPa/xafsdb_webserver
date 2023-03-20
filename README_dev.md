@@ -48,9 +48,24 @@ docker run -p 8000:8000 <image-id>
 ### 'git fetch' and 'git pull'
 
 Both commands that are used to update the local repository with changes from a remote repository. However, they work in slightly different ways.
-- 'git fetch' retrieves the latest changes from the remote repository and stores them in the local repository, but it does not automatically merge the changes with the local code. This means that 'git fetch'     only updates the local repository's view of the remote repository, but it does not modify your local code or any of your local branches. You can use 'git fetch' to preview changes made by other developers without making any changes to your local code.
+- `git fetch` retrieves the latest changes from the remote repository and stores them in the local repository, but it does not automatically merge the changes with the local code. This means that 'git fetch' only updates the local repository's view of the remote repository, but it does not modify your local code or any of your local branches. You can use 'git fetch' to preview changes made by other developers without making any changes to your local code.
 - 'git pull', on the other hand, does two things: it retrieves the latest changes from the remote repository and automatically merges them with your local code. This means that 'git pull' updates both your local repository's view of the remote repository and your local code or branch. This can be useful if you want to quickly update your code with the latest changes from the remote repository and don't need to preview the changes before merging them.
 - In summary, 'git fetch' updates your local repository's view of the remote repository without modifying your local code or branch, while 'git pull' updates both your local repository's view of the remote repository and your local code or branch by merging the changes automatically.
+
+### 'git stash'
+
+- `git stash` is a Git command that allows you to temporarily save and set aside changes that you have made to your working directory, without committing them to your Git repository. This can be useful if you need to switch to a different branch or work on a different task, but are not ready to commit your current changes yet.
+- When you run 'git stash', Git will take all of the changes in your working directory that have not yet been committed and save them to a special area called the "stash". This area is separate from your Git repository, and allows you to store your changes without creating a new commit. Once your changes have been stashed, your working directory will revert to the state it was in at the last commit.
+- You can then switch to a different branch, or work on a different task, and come back to your stashed changes later. To retrieve your stashed changes, you can use the `git stash apply` command, which will apply the most recent stash to your working directory. You can also use the `git stash pop` command, which will apply the most recent stash and remove it from the stash list.
+
+Here's an example of how to use git stash:
+
+  - Make some changes to your working directory that you don't want to commit yet.
+  - Run `git stash` to stash your changes.
+  - Switch to a different branch or work on a different task.
+  - When you're ready to retrieve your stashed changes, run `git stash apply` or `git stash pop`.
+
+Note that if you have multiple stashes, you can specify which stash you want to apply by using the `git stash apply <stash>` or `git stash pop <stash>` command, where '<stash>' is the name or index of the stash you want to apply. You can also list all of your stashes by running 'git stash list'.
 
 ## Python tests
 
