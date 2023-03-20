@@ -89,7 +89,7 @@ def dataset_upload(request):
             print("Context:", context)
 
             return render(request, "landing/verify.html", context)
-
+    # TODO:
     #except Exception as e:
     #    error_msg = json.dumps({"detail": "Internal Server Error _" + str(e)})
     #    return HttpResponse(error_msg, status=500)
@@ -202,6 +202,7 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
         normalized_data_fig = attachment_response[1].thumbnail
         k_fig = attachment_response[2].thumbnail
         R_fig = attachment_response[3].thumbnail
+        # TODO:
         #except IndexError:
         #    return redirect("error")
 
