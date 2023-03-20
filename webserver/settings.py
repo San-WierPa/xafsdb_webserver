@@ -197,3 +197,22 @@ DEFAULT_FILE_STORAGE = "webserver.backends.PublicMediaStorage"
 STATICFILES_STORAGE = "webserver.backends.StaticsMediaStorage"
 STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_LOCATION}/"
 MEDIA_URL = f"https://{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'logs/debug.log',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
