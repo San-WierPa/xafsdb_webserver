@@ -4,6 +4,7 @@
 import json
 import sys
 from datetime import datetime
+import logging
 
 import scicat_py
 from auto_dataset_create import AutoDatasetCreation
@@ -26,6 +27,8 @@ from .models import Files
 from .serializers import FileCreateUpdateSerializer, FileSerializer
 from .utils import get_access, get_all_datasets, term_checker
 
+from plugins.read_data import read_data
+
 
 # render the file upload view and navigate to the html page
 def dataset_upload_view(request):
@@ -35,7 +38,7 @@ def dataset_upload_view(request):
 # read the uploaded file and send the data to verify view
 @api_view(["POST"])
 def dataset_upload(request):
-    try:
+    #try:
         temporary_uploaded_file = request.FILES.get("file")
 
         if temporary_uploaded_file is None:
@@ -52,11 +55,12 @@ def dataset_upload(request):
 
         if len(decoded_list) > 0:
             data = [
-                str(data).split("\t") for data in decoded_list if data.startswith("#")
+                str(data).split("\t") for data in decoded_list
             ]
-            headers = data[0]
+            reader = read_data(source="SYNCHROTRON")
+            dictionary = reader.extract_header(data_path="temp/" + temporary_uploaded_file.name)
+            #print("I'm here:", dictionary)
             context = {
-                "headers": headers,
                 "decode_file_name": temporary_uploaded_file.name,
                 "description": "{0} uploaded {1}".format(
                     temporary_uploaded_file.name, str(datetime.now())
@@ -64,21 +68,23 @@ def dataset_upload(request):
                 "summary": "Uploaded File: "
                 + str(temporary_uploaded_file.name)
                 + " has "
-                + str(len(headers))
                 + " array columns with "
                 + str(len(data) - 1)
                 + " data rows.",
+                ### pass the dictionary to the template context
+                "dictionary": dictionary
             }
 
             return render(request, "landing/verify.html", context)
 
-    except Exception as e:
-        error_msg = json.dumps({"detail": "Internal Server Error _" + str(e)})
-        return HttpResponse(error_msg, status=500)
+    #except Exception as e:
+    #    error_msg = json.dumps({"detail": "Internal Server Error _" + str(e)})
+    #    return HttpResponse(error_msg, status=500)
 
 
 @api_view(["POST"])
 def verify_upload(request):
+    logger = logging.getLogger(__name__)
     try:
         verify_data = request.POST
         file_path = request.POST.get("dataset_name")
@@ -90,8 +96,12 @@ def verify_upload(request):
         return render(request, "landing/home.html")
 
     except Exception as e:
-        error_msg = json.dumps({"detail": "Internal Server Error _" + str(e)})
-        return HttpResponse(error_msg, status=500)
+        logger.exception("Error occurred while verifying upload: %s", str(e))
+        return HttpResponseServerError("Error occurred while verifying upload")
+
+    #except Exception as e:
+    #    error_msg = json.dumps({"detail": "Internal Server Error _" + str(e)})
+    #    return HttpResponse(error_msg, status=500)
 
 
 async def dataset_list(request):
@@ -136,9 +146,10 @@ def dataset_details(request, dataset_id: str):
         )
 
         try:
-            data_fig = attachment_response[0].thumbnail
-            k_fig = attachment_response[1].thumbnail
-            R_fig = attachment_response[2].thumbnail
+            raw_data_fig = attachment_response[0].thumbnail
+            normalized_data_fig = attachment_response[1].thumbnail
+            k_fig = attachment_response[2].thumbnail
+            R_fig = attachment_response[3].thumbnail
         except IndexError:
             # return HttpResponse("Oops. Looks like you have note uploaded a picture yet.")
             return redirect("error")
@@ -149,7 +160,8 @@ def dataset_details(request, dataset_id: str):
         "landing/base.html",
         {
             "dataset_meta": dataset_meta,
-            "data_fig": data_fig,
+            "raw_data_fig": raw_data_fig,
+            "normalized_data_fig": normalized_data_fig,
             "k_fig": k_fig,
             "R_fig": R_fig,
             "item_list": item_list,
