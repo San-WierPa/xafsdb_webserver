@@ -5,7 +5,6 @@
 # https://djangowaves.com/tips-tricks/gitignore-for-a-django-project/
 
 # Django #
-*.log
 *.pot
 *.pyc
 __pycache__
@@ -80,6 +79,9 @@ wheels/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+
+# logs
+*.log
 
 # Unit test / coverage reports
 htmlcov/
@@ -163,7 +165,7 @@ temp/*
 !/temp/.gitkeep
 auto_dataset_create_old.py
 auto_dataset_create_WORKINGLOCALLY.py
-auto_dataset_create_NEWEDIT.py
 xafsdb_web/_auth_constants.py
 xafsdb_web/templates/landing/upload_simple.html
-xafsdb_web/templates/landing/upload_old.html
+quality_control/example data/FOR_TESTING/*
+!/quality_control/example data/FOR_TESTING/.gitkeep
