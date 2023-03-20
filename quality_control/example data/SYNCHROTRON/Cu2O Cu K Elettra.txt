@@ -1,26 +1,26 @@
 # Sample I1 = col 3  I2= col 4, mu = ln(I1/I2), Reference I3 = col 7  I4 = col 8, mu = ln(I3/I4)
-Project Name:	Gaur20105038_0	
-Folder Name:	S1_0	
-File Name:	S1_000.txt	
-Data and Time:	Saturday, 18 June, 2011  11:55:43	
-Ring energy (GeV) =	2.4	
-Ring current (mA) =	129.9	
-Slits UP (mm) =	1.903	
-Slits DOWN (mm) =	-0.101	
-Slits RIGHT (mm) =	4.497	
-Slits LEFT (mm) =	3.496	
-Table Vertical (mm) =	0.000	
-Table Horizontal (mm) =	-1.196	
-Linear Table x (mm) =	0	
-Linear Table y (mm) =	0	
-Linear Table z (mm) =	0	
-Sample position (mm) =	15	
-Picoam I0 gain = 10^^	7	
-Picoam I1 gain = 10^^	7	
-Picoam I2 gain = 10^^	7	
-Monochromator Crystal:	Si 111	
-Monochromator Energy (eV)=	9100.63	
-	 	
+#Project Name:	Gaur20105038_0	
+#Folder Name:	S1_0	
+#File Name:	S1_000.txt	
+#Data and Time:	Saturday, 18 June, 2011  11:55:43	
+#Ring energy (GeV) =	2.4	
+#Ring current (mA) =	129.9	
+#Slits UP (mm) =	1.903	
+#Slits DOWN (mm) =	-0.101	
+#Slits RIGHT (mm) =	4.497	
+#Slits LEFT (mm) =	3.496	
+#Table Vertical (mm) =	0.000	
+#Table Horizontal (mm) =	-1.196	
+#Linear Table x (mm) =	0	
+#Linear Table y (mm) =	0	
+#Linear Table z (mm) =	0	
+#Sample position (mm) =	15	
+#Picoam I0 gain = 10^^	7	
+#Picoam I1 gain = 10^^	7	
+#Picoam I2 gain = 10^^	7	
+#Monochromator Crystal:	Si 111	
+#Monochromator Energy (eV)=	9100.63	
+#	 	
 8830.001202	8829.949027	443093.000000	384523.000000	0.141776	111179.000000	1.240862	2.000000
 8834.998091	8834.983166	440262.000000	383273.000000	0.138622	111083.000000	1.238470	2.000000
 8840.000787	8839.955961	438532.000000	383008.000000	0.135377	111330.000000	1.235557	2.000000
