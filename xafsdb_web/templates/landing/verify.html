@@ -109,6 +109,8 @@ a {
     text-decoration: none;
     color: white;
 }
+
+
 </style>
 
     {% block title %}
@@ -125,7 +127,7 @@ a {
                 {% csrf_token %}
                 <!--Sample info Section -->
                 <label for="name">
-                    Dataset Title   <input type="text" name="dataset_name" id="name" value={{decode_file_name}} placeholder="Enter your dataset name">
+                    Dataset Title   <input type="text" name="dataset_name" id="name" value="{{decode_file_name}}" placeholder="Enter your dataset name">
                 </label>
                 <hr>
                 <h4> Sample Info </h4>
@@ -185,6 +187,12 @@ a {
                             <p> Facility </p>
                             <input type="text" name="Facility" id="Facility" placeholder="Enter facility">
                         </label>
+                        {% if dictionary.Beamline %}
+                            <label for="Beamline">
+                                <p>Beamline</p>
+                                <input type="text" name="Beamline" id="Beamline" value="{{dictionary.Beamline}}">
+                            </label>
+                        {% else %}
                         <label for="Beamline" >
                             <p> Beamline </p>
                         <select  name='Beamline' id="Beamline">
@@ -385,6 +393,7 @@ a {
                             <option value="SSRL 9-3"  > SSRL 9-3</option>
                         </select>
                         </label>
+                        {% endif %}
                         <label for="Acq. mode">
                             <p> Acquistion mode </p>
                             <input type="text" name="Acq. mode" id="Acq. mode"
@@ -561,17 +570,17 @@ a {
                     <div class="three-details-item">
                         <label for="Owner group">
                             <p> Owner group </p>
-                            <input type="text" name="Owner group" id="Owner group" placeholder="Enter owner group">
+                            <input type="text" name="Owner group" id="Owner group" placeholder="Enter owner group" required>
                         </label>
                         <label for="Owner">
                             <p> Owner </p>
                             <input type="text" name="Owner" id="Owner"
-                                placeholder="Enter owner">
+                                placeholder="Enter owner" required>
                         </label>
                         <label for="Contact email">
                             <p> Contact email </p>
                             <input type="text" name="Contact email" id="Contact email"
-                                placeholder="Enter contact email">
+                                placeholder="Enter contact email" required>
                         </label>
                     </div>
 
