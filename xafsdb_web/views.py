@@ -1,11 +1,9 @@
 """
 @author: Sebastian Paripsa
 """
-import json
-import sys
 from datetime import datetime
 import logging
-from typing import Type, List, Dict
+from typing import Type, List, Dict, Any
 
 import scicat_py
 from auto_dataset_create import AutoDatasetCreation
@@ -14,14 +12,15 @@ from django.core.mail import BadHeaderError, send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseNotFound,
-                         HttpResponseServerError)
+                         HttpResponseServerError, HttpRequest)
 from django.shortcuts import redirect, render
 from django.views.generic.base import TemplateView
+from django.contrib.auth.decorators import user_passes_test
 from rest_framework.decorators import api_view
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
-from webserver.settings import CONTEXT, EMAIL_HOST_USER, URL_REST_API
+from webserver.settings import CONTEXT, EMAIL_HOST_USER
 
 from ._auth_constants import CONFIGURATION
 from .models import Files
@@ -30,8 +29,8 @@ from .utils import get_access, get_all_datasets, term_checker
 
 from plugins.read_data import read_data
 
-
 # render the file upload view and navigate to the html page
+@user_passes_test(lambda u: u.is_superuser)
 def dataset_upload_view(request) -> HttpResponse:
     """
     Renders the "upload.html" template with the provided context.
@@ -48,45 +47,72 @@ def dataset_upload_view(request) -> HttpResponse:
 # read the uploaded file and send the data to verify view
 @api_view(["POST"])
 def dataset_upload(request):
+        '''
+        Handles dataset file uploads from the user and processes the file content for further use.
+
+        Args:
+        request (HttpRequest): An HttpRequest object that contains metadata about the dataset file.
+
+        Returns:
+        context (dict): A dictionary containing decoded file name, description, and dictionary data,
+        which is used for further processing and storage in the reference database.
+
+        Example:
+        The function is typically used within a webserver created using Django framework. It processes
+        uploaded dataset files by decoding and extracting relevant information, preparing it for storage
+        and further analysis.
+        '''
     #try:
         temporary_uploaded_file = request.FILES.get("file")
+        print("I'm the temporary_uploaded_file:", temporary_uploaded_file)
 
         if temporary_uploaded_file is None:
-            error_msg = json.dumps({"detail": "Please add a file before click upload"})
-            return HttpResponse(error_msg, status=500)
+            dataset_name = request.POST.get("dataset_name")
+            with open("temp/" + dataset_name, "r") as f:
+                decoded_list = f.readlines()
+            #if dataset_name is not None:
+            #    temporary_uploaded_file.name = dataset_name
+            #else:
+            #    error_msg = json.dumps({"detail": "Please add a file before click upload"})
+            #    return HttpResponse(error_msg, status=500)
+            #return redirect("landing/error.html")
+        else:
+            dataset_name = temporary_uploaded_file.name
+            decoded_file = temporary_uploaded_file.read().decode("utf-8")
+            decoded_list = str(decoded_file).split("\r\n")
+            #print(decoded_list)
 
-        decoded_file = temporary_uploaded_file.read().decode("utf-8")
-        decoded_list = str(decoded_file).split("\r\n")
-        #print(decoded_list)
-
-        # save file in temp folder
-        file = open("temp/" + temporary_uploaded_file.name, "w")
-        print("File from dataset_upload:", file)
-        file.write(decoded_file)
-        file.close()
+            # save file in temp folder
+            file = open("temp/" + temporary_uploaded_file.name, "w")
+            print("File from dataset_upload:", file)
+            file.write(decoded_file)
+            file.close()
 
         if len(decoded_list) > 0:
             data = [
                 str(data).split("\t") for data in decoded_list
             ]
-            reader = read_data()
-            dictionary = reader.extract_header(data_path="temp/" + temporary_uploaded_file.name)
+
+            update_erange = request.POST
+            #print("dataset_upload:", update_erange)
+            reader = read_data(update_erange=update_erange)
+            dictionary = reader.extract_header(data_path="temp/" + dataset_name)
             #print("I'm here:", dictionary)
             context = {
-                "decode_file_name": temporary_uploaded_file.name,
+                "decode_file_name": dataset_name,
                 "description": "{0} uploaded {1}".format(
-                    temporary_uploaded_file.name, str(datetime.now())
+                    dataset_name, str(datetime.now())
                 ),
                 "summary": "Uploaded File: "
-                + str(temporary_uploaded_file.name)
+                + str(dataset_name)
                 + " has "
                 + " array columns with "
                 + str(len(data) - 1)
                 + " data rows.",
                 ### pass the dictionary to the template context
-                "dictionary": dictionary
-            }
-            print("Context:", context)
+                "dictionary": dictionary,
+                }
+            #print("Context:", context)
 
             return render(request, "landing/verify.html", context)
     # TODO:
@@ -98,27 +124,32 @@ def dataset_upload(request):
 @api_view(["POST"])
 def verify_upload(request) -> HttpResponse:
     """
-    View function that verifies the uploaded file and creates a test dataset.
-    If successful, redirects to the dataset details page for the new dataset.
-    If an error occurs, logs the error and returns a server error response.
+    This function handles the verification process of an uploaded dataset on the webserver.
+    It takes a POST request containing the dataset name and a flag for updating the energy range
+    (update_erange). The function initiates an AutoDatasetCreation instance with the provided
+    information and returns a HttpResponse upon successful verification.
 
     Args:
-        request: HTTP request object containing the uploaded file and other data.
+    request (HttpRequest): The POST request containing the dataset name and the update_erange flag.
 
     Returns:
-        If successful, a redirect response to the dataset details page.
-        If an error occurs, a server error response with an error message.
+    HttpResponse: Returns a HttpResponse rendering the home page if the verification is successful.
+                  If an error occurs during the verification process, it returns a
+                  HttpResponseServerError with an error message.
+
     """
     logger = logging.getLogger(__name__)
     try:
-        verify_data = request.POST
-        print("verify_data:", verify_data)
+        #verify_data = request.POST
+        #print("verify_data:", verify_data)
+        update_erange = request.POST
+        #print("update_erange:", update_erange)
         file_path = request.POST.get("dataset_name")
         print("FILE_path from verify_upload:", str(file_path))
         AutoDatasetCreation(
             s3_data_path="temp/" + str(file_path),
             data_set_name=file_path,
-            verify_data=verify_data,
+            verify_data=update_erange,
         )
         #dataset_id = adc.create_testdata()
         #return redirect("dataset_details", dataset_id=dataset_id)
@@ -129,7 +160,7 @@ def verify_upload(request) -> HttpResponse:
         return HttpResponseServerError("Error occurred while verifying upload")
 
 
-async def dataset_list(request) -> HttpResponse:
+def dataset_list(request) -> HttpResponse:
     """
     View function that retrieves a list of all datasets from the SciCat API
     and displays them in a paginated HTML view.
@@ -151,7 +182,9 @@ async def dataset_list(request) -> HttpResponse:
             filter=filter
         )
 
+        ### Just for development reason:
         debug_data: Dict[str, str] = {"dataset_id": "1"}
+        ###
 
         page = request.GET.get("page", 1)
         paginator = Paginator(dataset_meta_list, 15)
@@ -190,6 +223,7 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
 
         api_instance_dataset = scicat_py.DatasetsApi(api_client)
         dataset_meta = api_instance_dataset.datasets_controller_find_by_id(dataset_id)
+        print("Dataset Meta:" , dataset_meta)
 
         attachment_response = (
             api_instance_dataset.datasets_controller_find_all_attachments(dataset_id)
@@ -197,14 +231,14 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
         print(len(attachment_response))
         print(attachment_response)
 
-        #try:
-        raw_data_fig = attachment_response[0].thumbnail
-        normalized_data_fig = attachment_response[1].thumbnail
-        k_fig = attachment_response[2].thumbnail
-        R_fig = attachment_response[3].thumbnail
+        try:
+            raw_data_fig = attachment_response[0].thumbnail
+            normalized_data_fig = attachment_response[1].thumbnail
+            k_fig = attachment_response[2].thumbnail
+            R_fig = attachment_response[3].thumbnail
         # TODO:
-        #except IndexError:
-        #    return redirect("error")
+        except IndexError:
+            return redirect("error")
 
         item_list: List[Dict[str, str]] = Files.objects.filter(dataset_id=dataset_id)
     return render(
@@ -222,20 +256,38 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
 
 
 class SearchView(TemplateView):
+    """
+    A view for searching datasets by term.
+
+    Attributes:
+        template_name (str): The name of the template to render.
+    """
+
     template_name = "landing/search_datasets.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        term = self.request.GET.get("term")
-        paginated_by = 10
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """
+        Retrieves the context data for rendering the template.
 
-        allDatasets = get_all_datasets()
-        datasetList = []
+        Args:
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            A dictionary of context data for rendering the template.
+        """
+
+        context: Dict[str, Any] = super().get_context_data(**kwargs)
+        request: HttpRequest = self.request
+        term: str = request.GET.get("term")
+        paginated_by: int = 10
+
+        allDatasets: List[Dict[str, Any]] = get_all_datasets()
+        datasetList: List[Dict[str, Any]] = []
         for title in allDatasets:
             term_checker(title, term, datasetList)
 
-        paginator = Paginator(datasetList, paginated_by)
-        page = self.request.GET.get("page")
+        paginator: Paginator = Paginator(datasetList, paginated_by)
+        page: str = self.request.GET.get("page")
         datasetList = paginator.get_page(page)
 
         context["datasetList"] = datasetList
@@ -275,11 +327,30 @@ class FileViewSets(ModelViewSet):
         return serializer
 
 
-def home(request):
+def home(request: HttpRequest) -> HttpResponse:
+    """
+    Renders the home page of the website.
+
+    Type request:
+        HttpRequest
+
+    Returns:
+        The HTTP response object containing the rendered template.
+    """
     return render(request, "landing/home.html", CONTEXT)
 
 
-def page_not_found(request, exception):
+def page_not_found(request: HttpRequest, exception: Exception) -> HttpResponseNotFound:
+    """
+    Handler for page not found (404) errors.
+
+    Args:
+        request (HttpRequest): The request that triggered the error.
+        exception (Exception): The exception that was raised.
+
+    Returns:
+        HttpResponseNotFound: A rendered HTTP response with the error details.
+    """
     return HttpResponseNotFound(
         render(
             request,
@@ -335,7 +406,13 @@ def permission_denied(request, exception):
     )
 
 
-def error(request, exception):
+def error(request: HttpRequest, exception: Exception) -> HttpResponse:
+    """
+    View for rendering an error page when an exception is raised.
+
+    Returns:
+        The HTTP response containing the error page.
+    """
     return render(request, "landing/error.html", CONTEXT)
 
 
@@ -359,13 +436,17 @@ class ContactForm(forms.Form):
         # Render the form with error messages
         ...
     """
-    first_name = forms.CharField(required=False, max_length=50, label="First name")
-    last_name = forms.CharField(required=True, max_length=50, label="Last name")
+    first_name = forms.CharField(required=False, max_length=50, label="First name",
+                                 widget=forms.TextInput(attrs={'style': 'color: black;'}))
+    last_name = forms.CharField(required=True, max_length=50, label="Last name",
+                                widget=forms.TextInput(attrs={'style': 'color: black;'}))
     email_address = forms.EmailField(
-        required=True, max_length=150, label="Email address"
+        required=True, max_length=150, label="Email address",
+        widget=forms.EmailInput(attrs={'style': 'color: black;'})
     )
     message = forms.CharField(
-        widget=forms.Textarea, required=True, max_length=2000, label="Your message"
+        widget=forms.Textarea(attrs={'style': 'color: black;'}),
+        required=True, max_length=2000, label="Your message"
     )
 
 

@@ -253,6 +253,11 @@ python manage.py migrate
   This command will execute the flush command inside the web container. The web container is the container that runs your Django project.
   - The flush command will clear the database and reset all the tables. Once the command finishes executing, you can exit the terminal window.
 
++ Enter the db.sqlite3 via command line:
+```shell
+python manage.py dbshell
+```
+
 ### MongoDB
 
 + Access mongodb-express (browser) via (use admin and password out of `_auth_constants.py`):
@@ -289,4 +294,16 @@ mongo-express_1    | basicAuth credentials are "admin:pass", it is recommended y
 + Start docker-compose with
 ```shell
 docker-compose --env-file .env up -d
+```
+
+### Static
+
++ Locally:
+```shell
+python manage.py collectstatic
+```
+
++ GVM:
+```shell
+docker-compose exec web python manage.py collectstatic
 ```

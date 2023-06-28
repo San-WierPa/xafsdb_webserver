@@ -6,16 +6,22 @@ from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
+from django.contrib.auth.decorators import user_passes_test
+import environ
+env = environ.Env()
+environ.Env.read_env()
 
 from . import views
 from .views import FileViewSets, SearchView
 
+prefix = env("PREFIX")
+
 router = routers.DefaultRouter()
-router.register(r"file", FileViewSets)
+router.register(prefix, FileViewSets)
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Photographery API",
+        title="xafsdb-file API",
         default_version="v1",
         description="Test description",
         terms_of_service="https://www.google.com/policies/terms/",
@@ -36,7 +42,10 @@ urlpatterns = [
     ),
     path("contact", views.contact, name="contact"),
     path("search/", SearchView.as_view(), name="pg_search"),
-    path("file/", include(router.urls)),
+    ## The following two lines manage accessibility of the DRF CRUD operations:
+    ## first line ought to be activated in production!
+    path(f"{prefix}/", user_passes_test(lambda user: user.is_superuser)(include(router.urls))),
+    # path(f"{prefix}/", include(router.urls)),
     re_path(
         r"^api/swagger(?P<format>\.json|\.yaml)$",
         schema_view.without_ui(cache_timeout=0),

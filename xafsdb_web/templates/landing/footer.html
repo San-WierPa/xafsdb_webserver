@@ -17,19 +17,26 @@
  .logo-text-container {
     position: relative;
  }
- .logo-footer {
-    position: absolute;
-    display: inline-block;
-    width: 30%;
-    max-width: 200px;
-    min-width: 50px;
-    height: auto;
-    margin-top: 15px;
-    margin-left: 60px;
- }
+
  .text-footer {
     display: inline-block;
  }
+
+ .logo-footer {
+   position: absolute;
+   display: inline-block;
+   width: 30%;
+   max-width: 200px;
+   min-width: 50px;
+   height: auto;
+   margin-top: 15px;
+   margin-left: 60px;
+}
+@media (max-width: 1440px) {
+  .logo-footer {
+    display: none;
+  }
+}
   </style>
 
 <script src="{% static 'js/app.js' %}" type="text/javascript"></script>

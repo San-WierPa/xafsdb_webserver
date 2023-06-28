@@ -12,8 +12,6 @@
     {% block title %}
         <title>xafsDB - Search results</title>
     {% endblock %}
-
-    <!-- favicon -->
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
 </header>
 
@@ -30,8 +28,6 @@
             </tr>
         </thead>
 
-
-
 {% block datasets_found %}
   <p class="results-found">A total of <b>{{datasetList.paginator.count}}</b> datasets match your search: </p>
 {% endblock %}
@@ -44,7 +40,7 @@
                         {{ dataset_meta.datasetName }}
                         <table>
                             <tr>
-                                <td class="limit-abstract-length"> Abstract: {{ dataset_meta.description }} </td>
+                                <td class="limit-abstract-length"> Description: {{ dataset_meta.description }} </td>
                             </tr>
                         </table>
                     </td>
@@ -55,11 +51,7 @@
                     </td>
                 </tr>
             </tbody>
-
         {% endfor %}
-
-
-
     </table>
 
     {% block pagination %}
@@ -85,7 +77,5 @@
     {% endblock %}
 
 </main>
-
-
 
 {% include "landing/footer.html" %}

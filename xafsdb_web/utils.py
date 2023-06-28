@@ -18,7 +18,7 @@ def get_all_datasets() -> list:
 
 
 def term_checker(dataset: dict, term: str, array_accumulator: list) -> list:
-    if term.lower() in dataset["datasetName"]:
+    if term.lower() in dataset["datasetName"].lower():
         array_accumulator.append(dataset)
 
 

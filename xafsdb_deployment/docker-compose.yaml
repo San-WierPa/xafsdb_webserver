@@ -2,12 +2,35 @@ services:
 
   reverse-proxy:
     image: traefik:2.5
-    command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
+    command:
+      ##  Enable Traefik API: allows to monitor and manages Traefik instance
+      - --api.insecure=true
+      ## instruct Traefkik to use docker as a provider for discovering containers to proxy
+      - --providers.docker=true
+      ## define a http entrypoint for Traefik to listen to
+      - --entrypoints.web.address=:80
+      ## define a https entrypoint for Traefik to listen to
+      # - --entrypoints.web-secure.address=:443
+      ## enable TLS-ALPN-01 challenge method for obtaining SSL/TLS certificates from 'Let's Encrypt'
+      # - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      ## specify email to use when obtaining SSL/TLS ceritificates from 'Let's Encrypt'
+      # - --certificatesresolvers.myresolver.acme.email=youremail@example.com
+      ## specify path where 'Let's Encrypt' account information and certificates will be stored
+      # - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+      ## specify 'Let's Encrypt' staging server to use for testing purposes. Remove this line to use the production 'Let's Encrypt' server
+      # - --certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      ## specify HTTP entrypoint to use when performing HTTP-01 challenge method for obtaining SSL/TLS certificates from 'Let's Encrypt'
     ports:
+      ## http port in the container to the corresponding ports on the host
       - "80:80"
+      ## https port
+      # -"443:443"
     volumes:
+      ## Bind the docker socket and a local directory to the container
       - /var/run/docker.sock:/var/run/docker.sock
-      
+      ## letsencrypt directory used to store 'Let's Encrypt' account information and certificates
+      # - ./letsencrypt:/letsencrypt
+
   mongodb:
     image: bitnami/mongodb:4.2
     #environment:
@@ -15,8 +38,8 @@ services:
     #  - MONGODB_PASSWORD=${MONGODB_PASSWORD}
     #  - MONGODB_DATABASE=${MONGODB_DATABASE}
     ### Atm: for local development, comment volumes | uncomment for production!
-    #volumes:
-    #  - "/srv/mongodb:/bitnami/mongodb"     # check that is mount exists on local filesystem
+    volumes:
+      - "/srv/mongodb:/bitnami/mongodb"     # check that is mount exists on local filesystem
 
   db:
     image: postgres:14.1-alpine
@@ -42,7 +65,6 @@ services:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api`, `/auth`, `/explorer`)"
       - "traefik.http.routers.backend.entrypoints=web"
 
-  
   xafsdb:
     #build:
     #  context: ..
@@ -61,7 +83,7 @@ services:
       - DB_NAME=xafsdb_pg
     volumes:
       - ./config/xafsdb/_auth_constants.py:/app/xafsdb_web/_auth_constants.py
-     
+
   mongo-express:
     image: mongo-express
     environment:

@@ -11,26 +11,26 @@
 
         <body>
             <div>
-              <div class="mySlides ">
-                <br>
-                <center><img src="{{ raw_data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
-                <div class="text">Raw XAFS</div>
-              </div>
-              <div class="mySlides ">
-                <br>
-                <center><img src="{{ normalized_data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
-                <div class="text">Normalized XAFS</div>
-              </div>
-              <div class="mySlides ">
-                <br>
-                <center><img src="{{ k_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
-                <div class="text">Chi(k)</div>
-              </div>
-              <div class="mySlides ">
-                <br>
-                <center><img src="{{ R_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
-                <div class="text">Chi(R)</div>
-              </div>
+                <div class="mySlides">
+                  <br>
+                  <center><img src="{{ raw_data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                  <div class="text">Raw XAFS</div>
+                </div>
+                <div class="mySlides">
+                  <br>
+                  <center><img src="{{ normalized_data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                  <div class="text">Normalized XAFS</div>
+                </div>
+                <div class="mySlides">
+                  <br>
+                  <center><img src="{{ k_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                  <div class="text">Chi(k)</div>
+                </div>
+                <div class="mySlides">
+                  <br>
+                  <center><img src="{{ R_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                  <div class="text">Chi(R)</div>
+                </div>
 
             </div>
             <br>
@@ -45,11 +45,7 @@
         <div>
             <table id="table_detail" >
                 <caption class="table-title">Sample Info </caption>
-                <!--<caption onclick="showHideRow('hidden_row1');"  class="table-title">Sample Info
-                    <button><i class="arrow down"></i> </button>
-                </caption>-->
                 <thead>
-                    <!--<tr id="hidden_row1" onclick="showHideRow('hidden_row2');" class="hidden_row">-->
                         <tr>
                         <th>Id</th>
                         <th>Title</th>
@@ -62,7 +58,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!--<tr id="hidden_row2" class="hidden_row">-->
                         <tr>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= {{ dataset_meta.id }} > {{ dataset_meta.id }} </abbr></td>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= {{ dataset_meta.datasetName }} > {{ dataset_meta.datasetName }} </abbr></td>
@@ -74,7 +69,7 @@
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.sample_info.sample_environment }}" > {{ dataset_meta.scientificMetadata.sample_info.sample_environment }} </abbr></td>
                         <table id="table_detail" >
                             <tr>
-                                <td> Abstract: {{ dataset_meta.scientificMetadata.Abstract }}</td>
+                                <td> Description: {{ dataset_meta.scientificMetadata.Description }}</td>
                             </tr>
                         </table>
                         <table id="table_detail" >
@@ -92,11 +87,7 @@
             </table>
             <table id="table_detail">
                 <caption class="table-title">Instrument </caption>
-                <!--<caption onclick="showHideRow('hidden_row4');" class="table-title">Instrument
-                    <button><i class="arrow down"></i> </button>
-                </caption>-->
                 <thead>
-                    <!--<tr id="hidden_row1" onclick="showHideRow('hidden_row2');" class="hidden_row">-->
                         <tr>
                         <th class="longTextHover" style="max-width: 80px;"><abbr title= "Facility" </abbr> Facility</th>
                         <th class="longTextHover" style="max-width: 80px;"><abbr title= "Beamline" </abbr> Beamline</th>
@@ -110,7 +101,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!--<tr id="hidden_row2" class="hidden_row">-->
                     <tr>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.facility }}" > {{ dataset_meta.scientificMetadata.instrument.facility }} </abbr></td>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.beamline }}" > {{ dataset_meta.scientificMetadata.instrument.beamline }} </abbr></td>
@@ -125,12 +115,8 @@
                 </tbody>
             </table>
             <table id="table_detail">
-                <!--<caption onclick="showHideRow('hidden_row6');" class="table-title">Bibliography
-                    <button><i class="arrow down"></i> </button>
-                </caption>-->
                 <caption class="table-title">Bibliography </caption>
                 <thead>
-                    <!--<tr id="hidden_row6" onclick="showHideRow('hidden_row7');" class="hidden_row">-->
                         <tr>
                         <th>DOI</th>
                         <th>Owner</th>
@@ -140,7 +126,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!--<tr id="hidden_row7" class="hidden_row">-->
                     <tr>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.bibliography.doi }}" > {{ dataset_meta.scientificMetadata.bibliography.doi }} </abbr></td>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.owner }}" > {{ dataset_meta.owner }} </abbr></td>
@@ -152,13 +137,10 @@
             </table>
 
             <table id="datatablesSimple">
-                <!--<caption onClick="toggle('nameit');" class="table-title">Scientific metadata
-                    <button><i class="arrow down"></i> </button>
-                </caption>-->
                 <caption class="table-title">Scientific metadata </caption>
                 <thead>
-                    <tr><th>SOURCE: {{ dataset_meta.scientificMetadata.Source }} </th></tr>
-                    <tr> <th class="subh">MODE: {{ dataset_meta.scientificMetadata.Mode }}</th></tr>
+                    <tr><th>SOURCE: {{ dataset_meta.scientificMetadata.Data.Source }} </th></tr>
+                    <tr> <th class="subh">MODE: {{ dataset_meta.scientificMetadata.Data.Mode }}</th></tr>
                     <tr> <th class="subsubh">RAW:</th></tr>
                 </thead>
                 <tbody>

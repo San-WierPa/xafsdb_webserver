@@ -24,9 +24,7 @@
     <main class="page">
 
       <body>
-      
       <div>
-
         <form method="post" action="/dataset/upload" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="banner">
@@ -36,9 +34,12 @@
             <p class="top-info" style="font-size: 20px;font-family:Sen,sans-serif;font-weight: 700;">Please check all the below instructions before uploading the file.</p>
             <ul type="square" style="font-size: 15px;font-family:Sen,sans-serif;">
               <br>
-              <li>Important: mandatory fields are <b>Owner group</b>, <b>Owner</b> and <b>Contact email</b>. </li>
+              <li><b>Keep in mind</b> that the site and the underlying project are under constant development. It is currently a <b>pre-alpha</b> version. 
+                If you notice any bugs, please don't hesitate to send a mail to one of the developers (screenshot with bug is enough) or use the contact form.</li>
               <br>
-              <li>Please note that the dataset-title in the following mask is automatically extracted and should not be manually edited. It is solely for verification.</li>
+              <li><b>Important:</b> mandatory fields are <b>Owner group</b>, <b>Owner</b> and <b>Contact email</b>. </li>
+              <br>
+              <li><b>Please note</b> that the dataset-title in the following mask is automatically extracted and should not be manually edited. It is solely for verification.</li>
               <br>
               <li>Data that is not verified by quality control will be flagged and, if deemed entirely unqualified, will eventually be removed.</li>
               <br>

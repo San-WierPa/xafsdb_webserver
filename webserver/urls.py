@@ -7,7 +7,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path("", include("xafsdb_web.urls")),
-    # path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
 
 handler400 = "xafsdb_web.views.bad_request"

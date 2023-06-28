@@ -53,8 +53,14 @@ body {
     flex-wrap: wrap;
 }
 
+.red-border {
+    border: 2px solid red;
+    border-radius: 10px;
+    width: 72%;
+}
+
 hr {
-    width: 70%;
+    width: 95%;
     height: 1px;
     background-color: #d2d2d2;
     margin: 1rem 0;
@@ -80,6 +86,8 @@ hr {
     border: 1px solid rgb(113, 101, 101);
     padding: .1rem;
     background-color: transparent;
+    resize: both;
+    overflow: auto;
 }
 
 .submit-btn {
@@ -110,6 +118,23 @@ a {
     color: white;
 }
 
+ .resize_img {
+    border: 3px solid;
+    padding: 10px;
+    width: 50%;
+    resize: both;
+    overflow: auto;
+ }
+
+  img {
+    width: 100%;
+    height: auto; /* Allow height to be resized automatically */
+  }
+
+.resizable {
+    resize: both;
+    overflow: auto;
+}
 
 </style>
 
@@ -123,12 +148,70 @@ a {
     <section class="registration-container">
         <h2> Verify Data </h2>
         <section class="details-section">
-            <form action="/dataset/verify_upload" method=post id="verify_form" class="registration-form">
+            <form method="post" action="" enctype="multipart/form-data">
                 {% csrf_token %}
                 <!--Sample info Section -->
                 <label for="name">
                     Dataset Title   <input type="text" name="dataset_name" id="name" value="{{decode_file_name}}" placeholder="Enter your dataset name">
                 </label>
+                <hr>
+                Raw preview <div class="resize_img">
+                        <img src={{ dictionary.PreviewRawData }} alt="Raw preview" />
+                </div>
+                <div class="three-details-item">
+                    {% if dictionary.E_range_min %}
+                    <label for="E_range_min">
+                        <p> E-range min </p>
+                        <input type="text" name="E_range_min" id="E_range_min" value="{{dictionary.E_range_min}}" placeholder="298.15">
+                    </label>
+                    {% else %}
+                    <label for="E_range_min">
+                        <p> E-range min </p>
+                        <input type="text" name="E_range_min" id="E_range_min" placeholder="No E-range min extracted!">
+                    </label>
+                    {% endif %}
+                    {% if dictionary.E_range_max %}
+                    <label for="E_range_max">
+                        <p> E-range max </p>
+                        <input type="text" name="E_range_max" id="E_range_max" value="{{dictionary.E_range_max}}" placeholder="298.15">
+                    </label>
+                    {% else %}
+                    <label for="E_range_max">
+                        <p> E-range max </p>
+                        <input type="text" name="E_range_max" id="E_range_max" placeholder="No E-range max extracted!">
+                    </label>
+                    {% endif %}
+                </div>
+                <button type="submit" href="/">Update E-range</button>
+          </form>
+
+
+            <form action="/dataset/verify_upload" method=post id="verify_form" class="registration-form">
+                {% csrf_token %}
+                    <label for="name" style="display:none">
+                        <input type="text" name="dataset_name" id="name" value="{{decode_file_name}}" placeholder="Enter your dataset name">
+                    </label>
+                    <div class="resize_img" style="display:none">
+                            <img src={{ dictionary.PreviewRawData }} alt="Raw preview" />
+                    </div>
+                    <label for="E_range_min" style="display:none">
+                        <input type="text" name="E_range_min" id="E_range_min" value="{{dictionary.E_range_min}}" placeholder="298.15">
+                    </label>
+                    <label for="E_range_max" style="display:none">
+                        <input type="text" name="E_range_max" id="E_range_max" value="{{dictionary.E_range_max}}" placeholder="298.15">
+                    </label>
+                <hr>
+                    {% if dictionary.Header_str %}
+                    <label for="Header info">
+                        <h4> Header Info </h4>
+                        <textarea type="text" name="Header info" id="Header info">{{ dictionary.Header_str }}</textarea>
+                    </label>
+                    {% else %}
+                    <label for="Header info">
+                        <h4> Header Info </h4>
+                        <textarea type="text" name="Header info" id="Header info" placeholder="No header extracted!" ></textarea>
+                    </label>
+                    {% endif %}
                 <hr>
                 <h4> Sample Info </h4>
                 <section class="identity-details">
@@ -148,7 +231,7 @@ a {
                                 placeholder="Miller indices">
                         </label>
                     </div>
-                    
+
                     <div class="three-details-item">
                         <label for="Temperature">
                             <p> Temperature in <b>K</b> </p>
@@ -165,9 +248,9 @@ a {
                     </div>
 
                     <div class="three-details-item">
-                        <label for="Abstract">
-                            <p> Abstract</p>
-                            <textarea type="text" name="Abstract" id="Abstract" placeholder="Enter abstract"></textarea>
+                        <label for="Description">
+                            <p> Description</p>
+                            <textarea type="text" name="Description" id="Description" placeholder="Enter small description"></textarea>
                         </label>
                         <label for="General remarks">
                             <p> General remarks </p>
@@ -197,7 +280,6 @@ a {
                             <p> Beamline </p>
                         <select  name='Beamline' id="Beamline">
                             <option value="&lt;Select Beamline&gt;"  selected=1  > &lt;Select Beamline&gt;</option>
-
                             <option value="AichiSR"  > AichiSR</option>
                             <option value="ALBA CLAESS"  > ALBA CLAESS</option>
                             <option value="ALS 10.3.2"  > ALS 10.3.2</option>
@@ -267,107 +349,52 @@ a {
                             <option value="NSLS-II 8-BM"  > NSLS-II 8-BM</option>
                             <option value="NSLS-II 8-ID"  > NSLS-II 8-ID</option>
                             <option value="NSLS X10C"  > NSLS X10C</option>
-                                                
                             <option value="NSLS X11A"  > NSLS X11A</option>
-                                                
                             <option value="NSLS X11B"  > NSLS X11B</option>
-                                                
                             <option value="NSLS X15B"  > NSLS X15B</option>
-                                                
                             <option value="NSLS X18B"  > NSLS X18B</option>
-                                                
                             <option value="NSLS X19A"  > NSLS X19A</option>
-                                                
                             <option value="NSLS X23A2"  > NSLS X23A2</option>
-                                                
                             <option value="NSLS X24A"  > NSLS X24A</option>
-                                                
                             <option value="NSLS X3B"  > NSLS X3B</option>
-                                                
                             <option value="NSRL U19"  > NSRL U19</option>
-                                                
                             <option value="NSRL U7C"  > NSRL U7C</option>
-                                                
                             <option value="NSRRC BL01C1"  > NSRRC BL01C1</option>
-                                                
                             <option value="NSRRC BL16A1"  > NSRRC BL16A1</option>
-                                                
                             <option value="NSRRC BL17C1"  > NSRRC BL17C1</option>
-                                                
                             <option value="P65"  > P65</option>
-                                                
-                            <option value="P65 (1)"  > P65 (1)</option>
-                                                
-                            <option value="P65 (2)"  > P65 (2)</option>
-                                                
-                            <option value="P65 (3)"  > P65 (3)</option>
-                                                
-                            <option value="P65 (4)"  > P65 (4)</option>
-                                                
-                            <option value="P65 (5)"  > P65 (5)</option>
-                                                
+                            <option value="CATACT (KIT)" > CATACT (KIT)</option>
                             <option value="PETRA III P04"  > PETRA III P04</option>
-                                                
                             <option value="PETRA III P06"  > PETRA III P06</option>
-                                                
                             <option value="PF AR-NW10A"  > PF AR-NW10A</option>
-                                                
                             <option value="PF AR-NW14A"  > PF AR-NW14A</option>
-                                                
                             <option value="PF AR-NW2A"  > PF AR-NW2A</option>
-                                                
                             <option value="PF BL-11A"  > PF BL-11A</option>
-                                                
                             <option value="PF BL-11B"  > PF BL-11B</option>
-                                                
                             <option value="PF BL-12C"  > PF BL-12C</option>
-                                                
                             <option value="PF BL-27B"  > PF BL-27B</option>
-                                                
                             <option value="PF BL-2A"  > PF BL-2A</option>
-                                                
                             <option value="PF BL-2C"  > PF BL-2C</option>
-                                                
                             <option value="PF BL-4A"  > PF BL-4A</option>
-                                                
                             <option value="PF BL-7A"  > PF BL-7A</option>
-                                                
                             <option value="PF BL-7C"  > PF BL-7C</option>
-                                                
                             <option value="PF BL-9A"  > PF BL-9A</option>
-                                                
                             <option value="PF BL-9C"  > PF BL-9C</option>
-                                                
                             <option value="PLS 10B"  > PLS 10B</option>
-                                                
                             <option value="PLS 3C1"  > PLS 3C1</option>
-                                                
                             <option value="PLS 7C1"  > PLS 7C1</option>
-                                                
                             <option value="PLS 8C1"  > PLS 8C1</option>
-                                                
                             <option value="SESAME A1"  > SESAME A1</option>
-                                                
                             <option value="SLRI BL4"  > SLRI BL4</option>
-                                                
                             <option value="SLRI BL8"  > SLRI BL8</option>
-                                                
                             <option value="SLS MicroXAS"  > SLS MicroXAS</option>
-                                                
                             <option value="SLS SuperXAS"  > SLS SuperXAS</option>
-                                                
                             <option value="SOLEIL DIFFABS"  > SOLEIL DIFFABS</option>
-                                                
                             <option value="SOLEIL LUCIA"  > SOLEIL LUCIA</option>
-                                                
                             <option value="SOLEIL ODE"  > SOLEIL ODE</option>
-                                                
                             <option value="SOLEIL PROXIMA 1"  > SOLEIL PROXIMA 1</option>
-                                                
                             <option value="SOLEIL SAMBA"  > SOLEIL SAMBA</option>
-                                                
                             <option value="SPring-8 BL01B1"  > SPring-8 BL01B1</option>
-                                                
                             <option value="SPring-8 BL14B2"  > SPring-8 BL14B2</option>
                             <option value="SPring-8 BL28B2"  > SPring-8 BL28B2</option>
                             <option value="SPring-8 BL37XU"  > SPring-8 BL37XU</option>
@@ -389,7 +416,6 @@ a {
                             <option value="SSRL 6-2a"  > SSRL 6-2a</option>
                             <option value="SSRL 7-3"  > SSRL 7-3</option>
                             <option value="SSRL 8-2"  > SSRL 8-2</option>
-
                             <option value="SSRL 9-3"  > SSRL 9-3</option>
                         </select>
                         </label>
@@ -416,7 +442,6 @@ a {
                         </label>
                     </div>
 
-                    
                     <div class="three-details-item">
                         <label for="Element" >
                             <p> Element </p>
@@ -546,7 +571,7 @@ a {
                         </select>
                         </label>
                         <label for="Max k-range">
-                            <p> Max k-range in <b>1/Angstrom</b> </p>
+                            <p> Max k-range in <b>&#x212B;<sup>-1</sup></b> </p>
                             <input type="text" name="Max k-range" id="Max k-range" placeholder="Enter max k-range">
                         </label>
                     </div>
@@ -567,7 +592,7 @@ a {
                         </label>
                     </div>
 
-                    <div class="three-details-item">
+                    <div class="three-details-item red-border">
                         <label for="Owner group">
                             <p> Owner group </p>
                             <input type="text" name="Owner group" id="Owner group" placeholder="Enter owner group" required>
@@ -613,39 +638,6 @@ a {
                         </select>
                         </label>
 
-                        <label for="Energy Column" >
-                            <p> Energy Column </p>
-                        <select  name='Energy Column' id="Energy Column">
-                            <option value=eV  > eV</option>
-                            <option value=None  > None</option>
-                            <option value=energy  selected=1  > energy</option>
-                            <option value=i0  > i0</option>
-                            <option value=itrans  > itrans</option>
-                            <option value=irefer  > irefer</option>
-                        </select>
-                        </label>
-
-                        <label for="I0 Column" >
-                            <p> I0 Column </p>
-                        <select  name='I0 Column' id="I0 Column">
-                            <option value=None  > None</option>
-                            <option value=energy  > energy</option>
-                            <option value=i0  selected=1  > i0</option>
-                            <option value=itrans  > itrans</option>
-                            <option value=irefer  > irefer</option>
-                        </select>
-                        </label>
-
-                        <label for="Transmission Column" >
-                            <p> Transmission Column </p>
-                        <select  name='Transmission Column' id="Transmission Column">
-                            <option value=None  >None</option>
-                            <option value=energy  >energy</option>
-                            <option value=i0  >i0</option>
-                            <option value=itrans  selected=1  >itrans</option>
-                            <option value=irefer  >irefer</option>
-                        </select>
-                        </label>
 
                     </div>
                 </section>
@@ -654,7 +646,7 @@ a {
             </form>
         </section>
     </section>
-    
+
 </body>
 
 </html>

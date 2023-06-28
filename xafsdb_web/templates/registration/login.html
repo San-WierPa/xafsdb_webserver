@@ -1,0 +1,51 @@
+{% load static %}
+
+<header>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
+
+    {% block title %}
+        <title>xafsDB - Login</title>
+    {% endblock %}
+
+    <style>
+        .form-control {
+          color: black;
+        }
+      </style>
+
+</header>
+
+<body>
+    {% include "landing/navbar.html" %}
+
+    <main class="page">
+
+        <h2>Log In</h2>
+        <br>
+        <p>"Hmm, access to the upload page, you do not have!<br>
+            To upload content, logged in, you must be. If an account, you do not have, fear not!<br>
+            Through the contact form or directly, reach out to us, you can.<br>
+            Help you, we will, to gain access to the upload page, hmmm!"</p>
+        <br>
+        <form method="post" class="form-control">
+          {% csrf_token %}
+          {{ form.username.label_tag }}
+        <input type="text" name="{{ form.username.name }}" class="form-control" required>
+        <br>
+        {{ form.password.label_tag }}
+        <input type="password" name="{{ form.password.name }}" class="form-control" required>
+          <br>
+          <br>
+          <button type="submit">Log In</button>
+        </form>
+    </main>
+
+{% include "landing/footer.html" %}
+
+</body>

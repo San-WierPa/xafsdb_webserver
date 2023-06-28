@@ -1,6 +1,102 @@
 {% load static %}
 
-<div class="navbar">
+<style>
+    .navbar_new {
+    width: 100%;
+    height: 50px;
+    background-color: var(--black);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    }
+    #menu__toggle {
+        opacity: 0;
+      }
+      #menu__toggle:checked + .menu__btn > span {
+        transform: rotate(45deg);
+      }
+      #menu__toggle:checked + .menu__btn > span::before {
+        top: 0;
+        transform: rotate(0deg);
+      }
+      #menu__toggle:checked + .menu__btn > span::after {
+        top: 0;
+        transform: rotate(90deg);
+      }
+      #menu__toggle:checked ~ .menu__box {
+        left: 0 !important;
+      }
+      .menu__btn {
+        position: fixed;
+        top: 26px;
+        left: 12px;
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        z-index: 1;
+      }
+      .menu__btn > span,
+      .menu__btn > span::before,
+      .menu__btn > span::after {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: #4dbf00;
+        transition-duration: .25s;
+      }
+      .menu__btn > span::before {
+        content: '';
+        top: -8px;
+      }
+      .menu__btn > span::after {
+        content: '';
+        top: 8px;
+      }
+      .menu__box {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 300px;
+        height: 100%;
+        margin: 0;
+        padding: 80px 0;
+        list-style: none;
+        background-color: #ECEFF1;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, .4);
+        transition-duration: .25s;
+      }
+      .menu__item {
+        display: block;
+        padding: 12px 24px;
+        color: #4dbf00;
+        font-family: 'Roboto', sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        text-decoration: none;
+        transition-duration: .25s;
+      }
+      .menu__item:hover {
+        background-color: #CFD8DC;
+      }
+
+    @media (max-width: 960px) {
+        .responsive_coll {
+          display: none;
+        }
+        .responsive_daph {
+          display: none;
+        }
+      }
+    @media (max-width: 800px) {
+      .menu-container {
+        display: none;
+      }
+    }
+</style>
+
+<div class="navbar_new">
     <div class="navbar-container">
         <div class="logo-container">
             <a href="{% url 'home' %}">
@@ -9,20 +105,50 @@
         </div>
 
         <div class="menu-container">
-            <ul class="menu-list">
-              <li class="menu-list-item active_nav"><a href="{% url 'home' %}">Home</a></li>
-              <li class="menu-list-item active_nav"><a href="{% url 'dataset_upload_view' %}">Upload</a></li>
-              <li class="menu-list-item active_nav"><a href="{% url 'dataset_list' %}">DataSets</a></li>
-              <li class="menu-list-item active_nav"><a href="{% url 'contact' %}">Contact</a></li>
+          <ul class="menu-list">
+            <li class="menu-list-item active_nav"><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+            <li class="menu-list-item active_nav"><a href="{% url 'dataset_upload_view' %}">Upload</a></li>
+            {% endif %}
+            <li class="menu-list-item active_nav"><a href="{% url 'dataset_list' %}">DataSets</a></li>
+            <li class="menu-list-item active_nav"><a href="{% url 'contact' %}">Contact</a></li>
+          </ul>
+      </div>
+
+      <!-- hamburger menu -->
+      <div class="hamburger-menu">
+          <input id="menu__toggle" type="checkbox" />
+          <label class="menu__btn" for="menu__toggle">
+            <span></span>
+          </label>
+
+          <ul class="menu__box">
+              <li><a class="menu__item" href="{% url 'home' %}">Home</a></li>
+              {% if user.is_authenticated %}
+            <li><a class="menu__item"  href="{% url 'dataset_upload_view' %}">Upload</a></li>
+            {% endif %}
+            <li><a class="menu__item"  href="{% url 'dataset_list' %}">DataSets</a></li>
+            <li><a class="menu__item"  href="{% url 'contact' %}">Contact</a></li>
+            {% block content %}
+            {% if user.is_authenticated %}
+              Hi {{ user.username }}!
+              <p><a href="{% url 'logout' %}">Log Out</a></p>
+            {% else %}
+              <p>You are not logged in</p>
+              <a href="{% url 'login' %}">Log In</a>
+            {% endif %}
+            {% endblock %}
             </ul>
+          </div>
+
+        <div>
+            <a href="https://github.com/SciCatProject" target="_blank">
+                <img class="responsive_coll" src="{% static 'img/SciCatLogo.png' %}" alt="scicat" style="object-fit:contain; background-color: white;" ></a>
         </div>
 
         <div>
-            <a href="https://github.com/SciCatProject" target="_blank"><img class="responsive_coll" src="{% static 'img/SciCatLogo.png' %}" alt="scicat" style="object-fit:contain;" ></a>
-        </div>
-
-        <div>
-            <a href="https://www.daphne4nfdi.de/english/index.php" target="_blank"><img class="responsive_daph" src="{% static 'img/daphne.png' %}" alt="daphne" style="object-fit:contain;" ></a>
+            <a href="https://www.daphne4nfdi.de/english/index.php" target="_blank">
+                <img class="responsive_daph" src="{% static 'img/daphne.png' %}" alt="daphne" style="object-fit:contain; background-color: white;" ></a>
         </div>
 
         <!-- searchbar -->

@@ -16,27 +16,28 @@ import requests
 import scicat_py
 # from pprint import pprint
 from quality_control.quality_check import check_quality
+from plugins.read_data import read_data
+from typing import Dict, Any
+import logging
 
 env = environ.Env()
 environ.Env.read_env()
 
+prefix = env("PREFIX")
 
 class AutoDatasetCreation(object):
     """
-    This class automatically creates a dataset, does the quality_control
-    and serves all to the webserver
+    This class automatically creates, respectively updates a dataset,
+    does the quality_control and serves all to the webserver
     """
     def __init__(self, s3_data_path, data_set_name, verify_data):
         self.data_set_name = data_set_name
-        print("data_set_name:", data_set_name)
+        #print("data_set_name:", data_set_name)
         self.s3_data_path = s3_data_path
-        print("s3_data_path:", s3_data_path)
+        #print("s3_data_path:", s3_data_path)
         self.verify_data = verify_data
 
-        print("Dataset creation initialized...how exciting!")
-        print(
-            "While you are waiting; why dont you go ahead and check out this awesome artist: https://open.spotify.com/artist/358PxMTt58AnnMo4tEFOVQ?si=qW1Oyl1LQzyfkFWvAVXEEA"
-        )
+        #print("Dataset creation initialized...how exciting!")
         self.configuration = scicat_py.Configuration(
             host="http://35.233.84.253",
         )
@@ -98,9 +99,19 @@ class AutoDatasetCreation(object):
             "owner": self.verify_data.get("Owner"),
             "contact_email": self.verify_data.get("Contact email"),
             "scientific_metadata": {
-                "Abstract": self.verify_data.get("Abstract"),
-                "Source": self.verify_data.get("Source"),
-                "Mode": self.verify_data.get("Measurement Mode"),
+                "Description": self.verify_data.get("Description"),
+                "Data": {
+                    "Source": self.verify_data.get("Source"),
+                    "Mode": self.verify_data.get("Measurement Mode"),
+                    #"Energy": "None", # actual value
+                    #"EnergyColumn": self.verify_data.get("Energy Column"), # description
+                    #"Mu": "None", # actual value
+                    #"MuColumn": self.verify_data.get("Mu Column"), # description
+                    #"I_zero": "None", # actual value
+                    #"I_zeroColumn": self.verify_data.get("I0 Column"), # description
+                    #"Transmission": "None", # actual value
+                    #"TransmissionColumn": self.verify_data.get("Transmission Column"), # description
+                },
                 "RAW": {
                     "edge_step": {
                         "value": 0.0,
@@ -109,7 +120,7 @@ class AutoDatasetCreation(object):
                     },
                     "k_max": {
                         "value": 0.0,
-                        "unit": "1/angstrom",
+                        "unit": "\u212B\u207B\u00B9",
                         "documentation": "Considered angular wavenumber.",
                     },
                     "energy_resolution": {
@@ -184,24 +195,40 @@ class AutoDatasetCreation(object):
             # print(self.datasetId)
             return self.datasetId
 
-    def post_sthree(self):
+    def post_sthree(self) -> requests.Response:
         """
-        Post to S3 amazon object storage
-        """
-        files = {"file": open(self.s3_data_path, "rb")}
-        print("I'm self.s3_data_path in post_sthree:", self.s3_data_path)
-        values = {"dataset_id": self.datasetId}
-        self.responds = requests.post(
-            "http://35.233.84.253/file/file/", files=files, data=values
-        )
-        # print(self.responds.json())
-        return self.responds
+        Uploads a file to the S3 bucket and returns the response.
 
-    def short_url(self):
-        """
-        Helper function to shorten the s3 amazon url
+        Returns:
+            requests.Response: The response from the server.
 
-        TODO: creates folder and downloads the file -> should not do it
+        Raises:
+            FileNotFoundError: If the file specified by `self.s3_data_path` is not found.
+        """
+        try:
+            files = {"file": open(self.s3_data_path, "rb")}
+            values: Dict[str, Any] = {"dataset_id": self.datasetId}
+            self.responds = requests.post(
+                f"http://35.233.84.253/{prefix}/{prefix}/", files=files, data=values
+            )
+            # print(self.responds.json())
+            return self.responds
+        except FileNotFoundError as e:
+            logging.exception(f"Could not upload file: {e}")
+            raise
+
+    def short_url(self) -> str:
+        """
+        Generate a short URL for the current file.
+
+        Note: creates folder and downloads the file.
+        Param:
+            cache_ttl=0
+            Disables caching and prevents the creation of any cache directory.
+            May affect the performance of the application.
+
+        Returns:
+            The generated short URL as a string.
         """
         #self.short_url = self.responds.json()["file"].split("?")[0]
         type_tiny = pyshorteners.Shortener()
@@ -224,11 +251,13 @@ class AutoDatasetCreation(object):
             cq = check_quality(quality_criteria_json=cq_json)
             qc_list = [] ### this list will contain the quality criteria
             ### here the measurement data has to be forwarded, where will the data be stored in SciCat?
-            meas_data = np.loadtxt(self.short_url, skiprows=1)
+            #meas_data = np.loadtxt(self.short_url, skiprows=1)
+            rd = read_data(update_erange=self.verify_data)
+            rd.process_data(self.s3_data_path)
             #print("Meas_data from qc_and_update:", meas_data)
             cq.load_data(
-                meas_data,
-                source=self.data_dict["scientific_metadata"]["Source"],
+                rd.data,
+                source=self.data_dict["scientific_metadata"]["Data"]["Source"],
                 name=self.data_dict["dataset_name"],
             )
             ### perform preprocessing on the data
@@ -244,15 +273,15 @@ class AutoDatasetCreation(object):
             self.data_dict["scientific_metadata"]["Figures"]["R"] = cq.encode_base64_figure(fig_R)
             ### check for the edge step
             qc_list.append(cq.check_edge_step())
-            ### add to dummy data
+            ### add to data_dict
             self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"] = qc_list[0][1]
             ### check for the energy resolution
             qc_list.append(cq.check_energy_resolution())
-            ### add to dummy data
+            ### add to data_dict
             self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"] = qc_list[1][1]
             ### check for k
             qc_list.append(cq.check_k())
-            ### add to dummy data
+            ### add to data_dict
             self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"] = qc_list[2][1]
             ### Hand over quality criteria to webserver
             self.edge_step = self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"]
@@ -275,14 +304,20 @@ class AutoDatasetCreation(object):
                 response = json.loads(api_response.data)
                 # pprint(response)
                 self.data_dict["scientific_metadata"]["Figures"]["raw_data"]
-                #pprint(self.raw_data_fig)
                 self.data_dict["scientific_metadata"]["Figures"]["normalized_data"]
                 self.data_dict["scientific_metadata"]["Figures"]["k"]
                 self.data_dict["scientific_metadata"]["Figures"]["R"]
 
-    def upload_figure_data(self, figure, caption=""):
+    def upload_figure_data(self, figure: str, caption: Optional[str]="") -> None:
         """
-        QC attachment -> Upload main data
+        Uploads a figure to the SciCat API as an attachment for a specific dataset.
+
+        Args:
+            figure (str): The figure data as a base64-encoded string.
+            caption (str, optional): An optional caption for the figure attachment.
+
+        Raises:
+            ApiException: If there was an error while uploading the figure data.
         """
         QC_attach_figure_data = {
             "thumbnail": figure,
