@@ -9,7 +9,16 @@ ffoerste@physik.tu-berlin.de
 
 ##############################################################################
 import numpy as np
-
+from larch.io import read_ascii
+import matplotlib.pyplot as plt
+plt.ioff()
+plt.rcParams["xtick.direction"] = "in"
+plt.rcParams["xtick.top"] = True
+plt.rcParams["ytick.direction"] = "in"
+plt.rcParams["ytick.right"] = True
+plt.rcParams["axes.grid.which"] = "both"
+import base64
+import io
 ##############################################################################
 ### define ###
 ##############################################################################
@@ -23,32 +32,38 @@ class read_data(object):
         print('read_data class initialized')
         self.source = source
         self.supported_beamlines = {"SYNCHROTRON" : ["CATACT KIT", 
-                                                      "PETRA III Extension Beamline P65",
-                                                      "ELETTTRA XAFS", "SLRI", "ESRF BM 23", 
-                                                      "SOLEIL ROCK", "SOLEIL SAMBA",
-                                                      "SLS", "DELTA",
+                                                     "PETRA III Extension Beamline P65",
+                                                     "ELETTRA XAFS", "SLRI", "ESRF BM 23", 
+                                                     "SOLEIL ROCK", "SOLEIL SAMBA",
+                                                     "SLS", "DELTA",
                                                       ],
                                      "LABORATORY" : ["TU Berlin",
                                                      ]
                                      }
-        self.key_words = {"SYNCHROTRON" : {"CATACT KIT" : ["catexp",],
-                                           "PETRA III Extension Beamline P65" : ["PETRA III Extension Beamline P65",],
-                                           "ELETTTRA XAFS" : ["Project Name:"],
-                                           "SLRI" : ["BL8: X-ray Absorption Spectroscopy"],
-                                           "ESRF BM 23" : ["#ZapEnergy"],
-                                           "SOLEIL ROCK" : ["Synchrotron SOLEIL"],
-                                           "SOLEIL SAMBA" : ["# Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
-                                           "SLS" : ["#posX	SAI01-MEAN	SAI02-MEAN"],
-                                           "DELTA" : ["# created:"]
+        self.beamline_key_words = {"SYNCHROTRON" : {"CATACT KIT" : ["catexp",],
+                                                    "PETRA III Extension Beamline P65" : ["PETRA III Extension Beamline P65",],
+                                                    "ELETTRA XAFS" : ["Project Name:"],
+                                                    "SLRI" : ["BL8: X-ray Absorption Spectroscopy"],
+                                                    "ESRF BM 23" : ["#ZapEnergy"],
+                                                    "SOLEIL ROCK" : ["Synchrotron SOLEIL"],
+                                                    "SOLEIL SAMBA" : ["# Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
+                                                    "SLS" : ["#posX	SAI01-MEAN	SAI02-MEAN"],
+                                                    "DELTA" : ["# created:"]
                                            },
                           "LABORATORY" : {"TU Berlin" : ["# Energies_eV"],
                                           }
                           }
-        self.beamline = None ### variable to determine if a beamline was matched
-        self.header_extraction = False ### variable set True if header of file should be extracted
-        self.meta_data_dict = {}
+        # self.energy_key_words = ["0", ]
+        self.reset_2_default()
+        
     
-    def extract_header(self, data_path):
+    def reset_2_default(self,):
+        self.beamline = None ### variable to determine if a beamline was matched
+        self.meta_data_dict = {}
+        self.source = 'SYNCHROTRON'
+        
+    
+    def extract_header(self, data_path = None):
         """
         Function to exctract data from the header
 
@@ -64,25 +79,25 @@ class read_data(object):
 
         """
         ### enable header extraction mode
-        self.header_extraction = True
         ### determine beamline
-        self.process_data(data_path = data_path)
+        if data_path:
+            self.process_data(data_path = data_path)
         ### fill all the meta data contained in the files provided by the facilities
         ### into the dictionary
         self.meta_data_dict = {}
+        self.meta_data_dict['Header'] = self.header
         self.meta_data_dict['Beamline'] = self.beamline
         coll_code = ''
         if self.beamline == "CATACT KIT":
             self.meta_data_dict['Facility'] = 'KIT Light Source'
-            with open(data_path, 'r') as f:
-                for line in f:
-                    line = line.replace('\n','')
-                    if '#F' in line: coll_code += line.split()[-1] + ' '
-                    elif '#E' in line: coll_code += line.split()[-1]
-                    elif '#D' in line: 
-                        coll_code += line.replace('#D ','')
-                        self.meta_data_dict['Coll.code'] = coll_code
-                    elif '#C' in line: self.meta_data_dict['Owner'] = line.split()[-1]
+            for line in self.header:
+                line = line.replace('\n','')
+                if '#F' in line: coll_code += line.split()[-1] + ' '
+                elif '#E' in line: coll_code += line.split()[-1]
+                elif '#D' in line: 
+                    coll_code += line.replace('#D ','')
+                    self.meta_data_dict['Coll.code'] = coll_code
+                elif '#C' in line: self.meta_data_dict['Owner'] = line.split()[-1]
             ### no further needed (as for 20230314) meta data in file
         elif self.beamline == "PETRA III Extension Beamline P65":
             self.meta_data_dict['Facility'] = "DESY"
@@ -91,31 +106,28 @@ class read_data(object):
         elif self.beamline == "ELETTRA XAFS":
             self.meta_data_dict['Facility'] = "ELETTRA XAFS"
             self.meta_data_dict['Beamline'] = "XAFS"
-            with open(data_path, 'r') as f:
-                for line in f:
-                    line = line.replace('\n','')
-                    if 'Project Name' in line: self.meta_data_dict["Coll.code"] = line.split()[-1]
+            for line in self.header:
+                line = line.replace('\n','')
+                if 'Project Name' in line: self.meta_data_dict["Coll.code"] = line.split()[-1]
             ### no further needed (as for 20230314) meta data in file
         elif self.beamline == "SLRI":
             self.meta_data_dict['Facility'] = "SLRI"
-            with open(data_path, 'r') as f:
-                for line in f:
-                    line = line.replace('\n','')
-                    if '#B' in line: self.meta_data_dict["Beamline"] = line.split(':')[0].replace('#','')
-                    elif '#Transmission' in line: 
-                        self.meta_data_dict["Acq. mode"] = "Transmission"
+            for line in self.header:
+                line = line.replace('\n','')
+                if '#B' in line: self.meta_data_dict["Beamline"] = line.split(':')[0].replace('#','')
+                elif '#Transmission' in line: 
+                    self.meta_data_dict["Acq. mode"] = "Transmission"
             ### no further needed (as for 20230314) meta data in file
         elif self.beamline == "ESRF BM 23":
             self.meta_data_dict['Facility'] = "ESRF"
             ### no further needed (as for 20230314) meta data in file
         elif self.beamline == "SOLEIL ROCK":
             self.meta_data_dict['Facility'] = "SOLEIL"
-            with open(data_path, 'r') as f:
-                for line in f:
-                    line = line.replace('\n','')
-                    if '#Sample temperature' in line:
-                        try: self.meta_data_dict["Temperature"] = int(line.split('=')[-1])
-                        except: pass
+            for line in self.header:
+                line = line.replace('\n','')
+                if '#Sample temperature' in line:
+                    try: self.meta_data_dict["Temperature"] = int(line.split('=')[-1])
+                    except: pass
             ### no further needed (as for 20230314) meta data in file
         elif self.beamline == "SOLEIL SAMBA":
             self.meta_data_dict['Facility'] = "SOLEIL"
@@ -151,10 +163,11 @@ class read_data(object):
                       "edge_input": "Edge",
                       "max_k_range": "Max k-range",
                       "doi": "DOI",
+                      "EnergyColumn": "Energy Column",
+                      "I_zeroColumn": "I0 Column",
+                      "TransmissionColumn": "Transmission Column",
+                      "MuColumn": "Mu Column",
                       "reference": "Reference",}
-        ### disable header extraction mode
-        self.header_extraction = False
-        print(self.meta_data_dict)
         return self.meta_data_dict
         
         
@@ -175,9 +188,7 @@ class read_data(object):
 
         """
         self.data_path = data_path
-        print("data_path from process_data:", data_path)
         self.data_type = self.data_path.split('.')[-1]
-        #print("self.data_type from process_data:", self.data_type)
         if self.data_type in ['h5', 'hdf', 'hdf5']:
             self.load_hdf(self)
         else:
@@ -195,22 +206,31 @@ class read_data(object):
         None.
 
         """
-        with open(self.data_path, 'r') as f:
-            for line in f:
-                for beamline in self.supported_beamlines[self.source]:
-                    for keyword in self.key_words[self.source][beamline]:
-                        if keyword in line:
-                            # print('line with key word: ', line)
-                            self.beamline = beamline
-                            break
+        ### resetting to default, clear all data
+        self.reset_2_default()
+        ### use larch to read out data and the header of the file
+        self.larch_data = read_ascii(self.data_path)
+        self.header = self.larch_data.header
+        ### now check the header for keywords for the specific beamlines
+        for line in self.header:
+            for beamline in self.supported_beamlines[self.source]:
+                for keyword in self.beamline_key_words[self.source][beamline]:
+                    if keyword in line:
+                        self.beamline = beamline
+                        break
+        ### if a beamline was found, e
         if self.beamline:
-            # print('beamline found:\t', self.beamline)
-            if not self.header_extraction:
-                self.load_data()
+            print('beamline found:\t', self.beamline)
+            self.extract_header()
+            self.load_data()
         else:
             print('no beamline found, going to numpy extraction mode')
-            self.data = np.loadtxt(self.data_path)
-                
+            self.data = read_ascii(self.data_path).data[:2]
+            ### check unit of energy, if value below 100 it is most likely keV
+            ### --> change it to eV by multipying it with 1000
+            if self.data[0,0] < 100:
+                self.data[0] *= 1000
+            
     
     def load_data(self,):
         """
@@ -223,34 +243,90 @@ class read_data(object):
             array([energy, mu])
 
         """
+        data = self.larch_data.data
         if self.beamline == "CATACT KIT":
-            data = np.loadtxt(self.data_path, skiprows = 35)
-            self.data = np.array([data[:, 0]*1000, np.log(data[:, 5] / data[:, 6])]).T
+            self.larch_data.energy = data[0, :]*1000
+            self.larch_data.I0 = data[6, :]
+            self.larch_data.transmission = data[5, :]
+            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "PETRA III Extension Beamline P65":
-            data = np.loadtxt(self.data_path, skiprows=45)
-            self.data = np.array([data[:, 1], np.log(data[:, 11] / data[:, 12])]).T
-        elif self.beamline == "Elettra":
-            data = np.loadtxt(self.data_path, skiprows=25)
-            self.data = np.array([data[:, 0], np.log(data[:, 2] / data[:, 3])]).T
+            self.larch_data.energy = data[1, :]
+            self.larch_data.I0 = data[12, :]
+            self.larch_data.transmission = data[11, :]
+            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
+        elif self.beamline == "ELETTRA XAFS":
+            self.larch_data.energy = data[0, :]
+            self.larch_data.I0 = data[3, :]
+            self.larch_data.transmission = data[2, :]
+            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "SLRI":
-            data = np.loadtxt(self.data_path, skiprows=20)
-            self.data = np.array([data[:, 0], np.log(data[:, 3] / data[:, 4])]).T
+            self.larch_data.energy = data[0, :]
+            self.larch_data.I0 = data[4, :]
+            self.larch_data.transmission = data[3, :]
+            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "ESRF BM 23":
-            data = np.loadtxt(self.data_path, skiprows=20)
-            self.data = np.array([data[:, 0]*1000, np.log(data[:, 1] / data[:, 2])]).T
+            self.larch_data.energy = data[0, :]*1000
+            self.larch_data.I0 = data[2, :]
+            self.larch_data.transmission = data[1, :]
+            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "SOLEIL ROCK":
-            data = np.loadtxt(self.data_path, skiprows=20)
-            self.data = np.array([data[:, 0], data[:,1]]).T
+            self.larch_data.energy = data[0, :]
+            self.larch_data.mu = data[1, :]
         elif self.beamline == "SOLEIL SAMBA":
-            data = np.loadtxt(self.data_path, skiprows=5)
-            self.data = np.array([data[:, 0], np.log(data[:, 6] / data[:, 8])]).T
+            self.larch_data.energy = data[0, :]
+            self.larch_data.I0 = data[8, :]
+            self.larch_data.transmission = data[6, :]
+            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "SLS":
-            data = np.loadtxt(self.data_path, skiprows=5)
-            self.data = np.array([data[:, 0]*1000, np.log(data[:, 2] / data[:, 3])]).T
+            self.larch_data.energy = data[0, :]*1000
+            self.larch_data.I0 = data[3, :]
+            self.larch_data.transmission = data[2, :]
+            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "TU Berlin":
-            data = np.loadtxt(self.data_path, skiprows=3)
-            self.data = np.array([data[:, 0], data[:, 1]]).T
+            self.larch_data.energy = data[0, :]
+            self.larch_data.mu = data[1, :]
+        elif self.beamline == "DELTA":
+            self.larch_data.energy = data[0, :]
+            self.larch_data.mu = data[1, :]
         
+        ### check unit of energy, if value below 100 it is most likely keV
+        ### --> change it to eV by multipying it with 1000
+        if self.larch_data.energy[0] < 100:
+            self.larch_data.energy *= 1000
+        ### convert data to numpy array with [energy, mu]
+        self.data = np.array([self.larch_data.energy, self.larch_data.mu])
+        ### create raw plot
+        self.create_raw_plot_base64()
+    
     
     def load_hdf(self,):
-        print("Will be implemented soon. Stay tuned you awesome dude!")
+        print("Will be implemented.")
+        
+        
+    def create_raw_plot_base64(self, plot_data = False):
+        ### define figures
+        self.fig_raw_data = plt.figure("Preview Raw Data", figsize=(10, 6.25))
+        self.fig_raw_data.clf()
+        self.ax_raw_data = self.fig_raw_data.subplots()
+        self.ax_raw_data.grid()
+        major_ticks = np.arange(self.data[0,0], self.data[0,-1], 100)
+        minor_ticks = np.arange(self.data[0,0], self.data[0,-1], 20)
+
+        ### plot raw data
+        self.ax_raw_data.plot(self.data[0], self.data[1],
+                              label="Measurement",
+                              color = "#003161")
+        
+        self.ax_raw_data.set_xlabel(r" Energy | eV")
+        self.ax_raw_data.set_ylabel(r"$\mu (E)$ | a.u.")
+        self.ax_raw_data.set_xlim(self.data[0,0], self.data[0,-1])
+        self.ax_raw_data.legend(loc = 'best')
+        self.ax_raw_data.set_xticks(major_ticks)
+        self.ax_raw_data.set_xticks(minor_ticks, minor=True)
+        if plot_data:
+            self.fig_raw_data.canvas.draw()
+            self.fig_raw_data.canvas.flush_events()
+        buffer = io.BytesIO()
+        self.fig_raw_data.savefig(buffer, format="jpeg")
+        data = base64.b64encode(buffer.getbuffer()).decode("ascii")
+        self.meta_data_dict["PreviewRawData"] = "data:image/jpeg;base64,{}".format(data)

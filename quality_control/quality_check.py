@@ -33,7 +33,7 @@ from sys import path, platform
 ##############################################################################
 ### import custom packages ###
 ##############################################################################
-path.append("/".join(os.path.abspath(os.curdir).split("/")[:-1]) + "/plugins")
+path.append("/".join(os.path.abspath(os.curdir).split("/")[:-1]))
 from plugins.read_data import read_data
 
 
@@ -89,8 +89,8 @@ class check_quality(object):
             self.processed
         ]
         self.data = Group()
-        self.data.energy = measurement_data[:, 0]
-        self.data.mu = measurement_data[:, 1]
+        self.data.energy = measurement_data[0, :]
+        self.data.mu = measurement_data[1, :]
 
     def preprocess_data(self, ):
         """
@@ -454,7 +454,7 @@ class check_quality_control(object):
         # files = glob(folder+'*')
         cq = check_quality(quality_criteria_json=cq_json)
         for file in files:
-            print("file:\t", file)
+            print("file:\t", file.split('/')[-1])
             if "win" in platform:
                 name = file.split("\\")[-1].split(".")[0]
             else:
