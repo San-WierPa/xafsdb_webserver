@@ -21,7 +21,7 @@ $ Successfully tagged registry.hzdr.de/daphne4nfdi/xafsdb:latest
 
 ### Testing
 
-+ Testing via docker registry:
++ Testing via docker registry (via gitlab):
 ```shell
 docker run registry.hzdr.de/daphne4nfdi/xafsdb
 ```
@@ -29,6 +29,19 @@ docker run registry.hzdr.de/daphne4nfdi/xafsdb
 + Purely locally (mainly for debugging after local changes):
 ```shell
 docker run -p 8000:8000 <image-id>
+```
+
++ Testing via `uvicorn` (in root -> `manage.py`) (`reload` only under linux):
+```shell
+uvicorn webserver.asgi:application --port 8001 --reload
+```
+**NOTE**: First do(!!!)
+```shell
+pip install -r requirements.txt
+```
+and
+```shell
+pip install -r requirements_create.txt
 ```
 
 ## Testing via feature- and dev-branch

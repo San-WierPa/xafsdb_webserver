@@ -263,10 +263,10 @@ class AutoDatasetCreation(object):
             ### perform preprocessing on the data
             data = cq.preprocess_data()
             ### plot the data and return the figure object
-            fig_raw_data = cq.plot_raw_data()
-            fig_normalized_data = cq.plot_normalized_data()
-            fig_k = cq.plot_k()  ### plot data in k and return the figure object
-            fig_R = cq.plot_R()  ### plot data in R and return the figure object
+            fig_raw_data = cq.plot_data(data_type = "RAW")
+            fig_normalized_data = cq.plot_data(data_type = "NORMALIZED")
+            fig_k = cq.plot_data(data_type = "k")  ### plot data in k and return the figure object
+            fig_R = cq.plot_data(data_type = "R")  ### plot data in R and return the figure object
             self.data_dict["scientific_metadata"]["Figures"]["raw_data"] = cq.encode_base64_figure(fig_raw_data)
             self.data_dict["scientific_metadata"]["Figures"]["normalized_data"] = cq.encode_base64_figure(fig_normalized_data)
             self.data_dict["scientific_metadata"]["Figures"]["k"] = cq.encode_base64_figure(fig_k)
@@ -274,15 +274,15 @@ class AutoDatasetCreation(object):
             ### check for the edge step
             qc_list.append(cq.check_edge_step())
             ### add to data_dict
-            self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"] = qc_list[0][1]
+            self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"] = np.round(qc_list[0][1], decimals = 3)
             ### check for the energy resolution
             qc_list.append(cq.check_energy_resolution())
             ### add to data_dict
-            self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"] = qc_list[1][1]
+            self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"] = np.round(qc_list[1][1], decimals = 1)
             ### check for k
             qc_list.append(cq.check_k())
             ### add to data_dict
-            self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"] = qc_list[2][1]
+            self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"] = np.round(qc_list[2][1], decimals = 1)
             ### Hand over quality criteria to webserver
             self.edge_step = self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"]
             self.energy_res = self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"]
