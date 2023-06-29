@@ -68,7 +68,11 @@ def dataset_upload(request):
 
         if temporary_uploaded_file is None:
             dataset_name = request.POST.get("dataset_name")
-            with open("temp/" + dataset_name, "r") as f:
+            if str(dataset_name).split("/")[-1].split(".")[-1] != "h5":
+                readout_type = "r"
+            else:
+                readout_type = "rb"
+            with open("temp/" + dataset_name, readout_type) as f:
                 decoded_list = f.readlines()
             #if dataset_name is not None:
             #    temporary_uploaded_file.name = dataset_name
@@ -77,13 +81,18 @@ def dataset_upload(request):
             #    return HttpResponse(error_msg, status=500)
             #return redirect("landing/error.html")
         else:
+            if str(temporary_uploaded_file).split("/")[-1].split(".")[-1] != "h5":
+                write_type = "w"
+                decoded_file = temporary_uploaded_file.read().decode("utf-8")
+            else:
+                write_type = "wb"
+                decoded_file = temporary_uploaded_file.read()
             dataset_name = temporary_uploaded_file.name
-            decoded_file = temporary_uploaded_file.read().decode("utf-8")
             decoded_list = str(decoded_file).split("\r\n")
             #print(decoded_list)
 
             # save file in temp folder
-            file = open("temp/" + temporary_uploaded_file.name, "w")
+            file = open("temp/" + temporary_uploaded_file.name, write_type)
             print("File from dataset_upload:", file)
             file.write(decoded_file)
             file.close()
@@ -94,21 +103,21 @@ def dataset_upload(request):
             ]
 
             update_erange = request.POST
-            #print("dataset_upload:", update_erange)
+            print("dataset_upload:", update_erange)
             reader = read_data(update_erange=update_erange)
             dictionary = reader.extract_header(data_path="temp/" + dataset_name)
             #print("I'm here:", dictionary)
             context = {
                 "decode_file_name": dataset_name,
-                "description": "{0} uploaded {1}".format(
-                    dataset_name, str(datetime.now())
-                ),
-                "summary": "Uploaded File: "
-                + str(dataset_name)
-                + " has "
-                + " array columns with "
-                + str(len(data) - 1)
-                + " data rows.",
+                #"description": "{0} uploaded {1}".format(
+                #    dataset_name, str(datetime.now())
+                #),
+                #"summary": "Uploaded File: "
+                #+ str(dataset_name)
+                #+ " has "
+                #+ " array columns with "
+                #+ str(len(data) - 1)
+                #+ " data rows.",
                 ### pass the dictionary to the template context
                 "dictionary": dictionary,
                 }
@@ -139,25 +148,25 @@ def verify_upload(request) -> HttpResponse:
 
     """
     logger = logging.getLogger(__name__)
-    try:
-        #verify_data = request.POST
-        #print("verify_data:", verify_data)
-        update_erange = request.POST
-        #print("update_erange:", update_erange)
-        file_path = request.POST.get("dataset_name")
-        print("FILE_path from verify_upload:", str(file_path))
-        AutoDatasetCreation(
-            s3_data_path="temp/" + str(file_path),
-            data_set_name=file_path,
-            verify_data=update_erange,
-        )
-        #dataset_id = adc.create_testdata()
-        #return redirect("dataset_details", dataset_id=dataset_id)
-        return render(request, "landing/home.html")
+    #try:
+    #verify_data = request.POST
+    #print("verify_data:", verify_data)
+    update_erange = request.POST
+    #print("update_erange:", update_erange)
+    file_path = request.POST.get("dataset_name")
+    print("FILE_path from verify_upload:", str(file_path))
+    AutoDatasetCreation(
+        s3_data_path="temp/" + str(file_path),
+        data_set_name=file_path,
+        verify_data=update_erange,
+    )
+    #dataset_id = adc.create_testdata()
+    #return redirect("dataset_details", dataset_id=dataset_id)
+    return render(request, "landing/home.html")
 
-    except Exception as e:
-        logger.exception("Error occurred while verifying upload: %s", str(e))
-        return HttpResponseServerError("Error occurred while verifying upload")
+    #except Exception as e:
+    #    logger.exception("Error occurred while verifying upload: %s", str(e))
+    #    return HttpResponseServerError("Error occurred while verifying upload")
 
 
 def dataset_list(request) -> HttpResponse:

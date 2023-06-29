@@ -30,7 +30,7 @@ class read_data(object):
     implemented.
     """
 
-    def __init__(self, source = "SYNCHROTRON", 
+    def __init__(self, source = "SYNCHROTRON", update_erange="",
                  scan_number = 0, verbose = False):
         """
         Initializing the read_data class. This class helps to read in different 
@@ -43,6 +43,8 @@ class read_data(object):
         source : str, optional
             Type of source. Either SYNCHROTRON or LABORATORY. 
             The default is "SYNCHROTRON".
+	update_erange: dict, optional
+	    Updated energy range.
         scan_number : int, str, optional
             Number or name of the scan to check. Important for .mca, .spec and
             .h5 (from ESRF) For other file types this parameter is ignored.
@@ -87,8 +89,8 @@ class read_data(object):
                           }
         ### initialize the class to default
         self.reset_2_default()
-        
-    
+        self.update_erange=update_erange
+
     def reset_2_default(self,):
         """
         Function to set all relevant data to default.
@@ -99,12 +101,11 @@ class read_data(object):
         ### the default source type is SYNCHROTRON. This is changed, when data
         ### is read
         self.source = 'SYNCHROTRON'
-        
-        
+
     def process_data(self, data_path):
         """
         This function determines the datafile. If it is .hdf it will open
-        the hdf-file with h5py, else it will open the datafile and read out 
+        the hdf-file with h5py, else it will open the datafile and read out
         the lines and checking for distinct keywords and starting the readout.
 
         Parameters
@@ -120,7 +121,6 @@ class read_data(object):
             self.load_specfile()
         else:
             self.read_out_file()
-        
 
     def read_out_file(self,):
         """
@@ -152,12 +152,15 @@ class read_data(object):
             ### --> change it to eV by multipying it with 1000
             if self.data[0,0] < 100:
                 self.data[0] *= 1000
-                
-                
+            self.meta_data_dict["E_range_min"] = self.data[0,0]
+            self.meta_data_dict["E_range_max"] = self.data[0,-1]
+            self.create_raw_plot_base64()
+
+
     def extract_header(self, data_path = None):
         """
-        Function to exctract data from the header of the given datafile. This 
-        is of course specific for each beamline and has to be adapted and 
+        Function to exctract data from the header of the given datafile. This
+        is of course specific for each beamline and has to be adapted and
         extended if changes in the beamline data occurs or new beamlines to be
         supported. Also until now only a limited set of metadata is read out.
         Namely: ['Facility', 'Beamline', 'Owner', 'Coll.code', 'Acq. mode',
@@ -180,8 +183,9 @@ class read_data(object):
             self.process_data(data_path = data_path)
         ### fill all the meta data contained in the files provided by the facilities
         ### into the dictionary
-        self.meta_data_dict = {}
+        #self.meta_data_dict = {}
         self.meta_data_dict['Header'] = self.header
+        self.meta_data_dict['Header_str'] = '\n'.join(self.header)
         self.meta_data_dict['Beamline'] = self.beamline
         coll_code = ''
         
@@ -349,10 +353,12 @@ class read_data(object):
         self.larch_data.energy = self.keV2eV(self.larch_data.energy)
         ### convert data to numpy array with [energy, mu]
         self.data = np.array([self.larch_data.energy, self.larch_data.mu])
+        ### set e-range
+        self.meta_data_dict['E_range_min'] = np.round(self.data[0,0], decimals=1)
+        self.meta_data_dict['E_range_max'] = np.round(self.data[0,-1], decimals=1)
         ### create raw plot
         self.create_raw_plot_base64()
-    
-    
+
     def load_hdf(self,):
         """
         This function reads out h5 files. At the moment (20230614) only ESRF is
@@ -363,6 +369,8 @@ class read_data(object):
         """
         ### first check if a scan number is provided. If not set it to default
         ### '1.1'
+        self.header = ""
+
         if type(self.scan_number) == int:
             self.scan_number = '1.1'
             if self.verbose:
@@ -375,10 +383,13 @@ class read_data(object):
         self.h5_energy = self.keV2eV(self.h5_energy)
         ### convert data to numpy array with [energy, mu]
         self.data = np.array([self.h5_energy, self.h5_mu])
+        ### set e-range
+        self.meta_data_dict['E_range_min'] = np.round(self.data[0,0], decimals=1)
+        self.meta_data_dict['E_range_max'] = np.round(self.data[0,-1], decimals=1)
         ### create raw plot
         self.create_raw_plot_base64()
-        
-        
+
+
     def load_specfile(self,):
         """
         This function reads out spec files using the larch function 
@@ -392,6 +403,9 @@ class read_data(object):
         self.larch_data.energy = self.keV2eV(self.larch_data.energy)
         ### convert data to numpy array with [energy, mu]
         self.data = np.array([self.larch_data.energy, self.larch_data.mu])
+        ### set e-range
+        self.meta_data_dict['E_range_min'] = np.round(self.data[0,0], decimals=1)
+        self.meta_data_dict['E_range_max'] = np.round(self.data[0,-1], decimals=1)
         ### create raw plot
         self.create_raw_plot_base64()
         
@@ -407,7 +421,24 @@ class read_data(object):
             To plot or not to plot the data, that is the question. The default 
             is False.
         """
-        ### define figures and axes
+        ### cut out e_min and e_max
+        print("I'm update_erange brah:", self.update_erange)
+        if self.update_erange:
+            try:
+                self.E_range_min = float(self.update_erange.get("E_range_min").replace(",", "."))
+                self.E_range_max = float(self.update_erange.get("E_range_max").replace(",", "."))
+                self.meta_data_dict["E_range_min"] = self.E_range_min
+                self.meta_data_dict["E_range_max"] = self.E_range_max
+                energy = self.data[0]
+                mu = self.data[1]
+                mu = mu[self.E_range_min <= energy]
+                energy = energy[self.E_range_min <= energy]
+                mu = mu[self.E_range_max >= energy]
+                energy = energy[self.E_range_max >= energy]
+                self.data = np.array([energy, mu])
+            except (TypeError,AttributeError):
+                print("Update of e-range not possible!")
+        ### define figures
         self.fig_raw_data = plt.figure("Preview Raw Data", figsize=(10, 6.25))
         self.fig_raw_data.clf()
         self.ax_raw_data = self.fig_raw_data.subplots()
