@@ -7,6 +7,7 @@
 ```shell
 docker login registry.hzdr.de
 ```
+**NOTE**: `username`: paripsa, `password`: (see gitlab.hzdr.de credentials)
 
 + Build the image:
 ```shell
@@ -109,7 +110,7 @@ docker push registry.hzdr.de/daphne4nfdi/xafsdb
 
 + Connect to google-vm:
 ```shell
-ssh -i /home/sepa/.ssh/google_cloud_ssh_key paripsa_uni_wuppertal_de@35.233.84.253
+ssh -i /home/sepa/.ssh/google_cloud_ssh_key paripsa_uni_wuppertal_de@35.233.73.213
 ```
 + Out: `paripsa_uni_wuppertal_de@wupp-1:~$`
 
@@ -235,7 +236,7 @@ USERNAME = env("USERNAME_AUTH")
 PASSWORD = env("PASSWORD_AUTH")
 
 CONFIGURATION = scicat_py.Configuration(
-    host="http://35.233.84.253",
+    host="http://35.233.73.213",
 )
 ```
 
@@ -275,7 +276,7 @@ python manage.py dbshell
 
 + Access mongodb-express (browser) via (use admin and password out of `_auth_constants.py`):
 ```
-http://35.233.84.253/mongodb/db/scicat/
+http://35.233.73.213/mongodb/db/scicat/
 ```
 
 + For deleting (flush) datasets, do not forget to delete ALL relational entries in the database (e.g. attachment with the same datasetId)

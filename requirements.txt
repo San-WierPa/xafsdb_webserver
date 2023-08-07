@@ -62,7 +62,7 @@ pybtex==0.24.0
 PyCifRW==4.4.5
 pydantic==1.10.5
 pyfai==2023.1.0
-pymatgen==2023.1.30
+pymatgen>=2023.1.30
 pyparsing==3.0.9
 pyshortcuts==1.8.3
 pyshorteners==1.0.1

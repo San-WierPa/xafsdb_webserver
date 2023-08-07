@@ -39,7 +39,7 @@ class AutoDatasetCreation(object):
 
         #print("Dataset creation initialized...how exciting!")
         self.configuration = scicat_py.Configuration(
-            host="http://35.233.84.253",
+            host="http://35.233.73.213",
         )
         self.qc_path = "quality_control/"
         path.append(self.qc_path)
@@ -209,7 +209,7 @@ class AutoDatasetCreation(object):
             files = {"file": open(self.s3_data_path, "rb")}
             values: Dict[str, Any] = {"dataset_id": self.datasetId}
             self.responds = requests.post(
-                f"http://35.233.84.253/{prefix}/{prefix}/", files=files, data=values
+                f"http://35.233.73.213/{prefix}/{prefix}/", files=files, data=values
             )
             # print(self.responds.json())
             return self.responds

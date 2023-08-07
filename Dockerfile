@@ -26,6 +26,8 @@ COPY requirements.txt /app/
 
 WORKDIR /app
 
+RUN pip install --upgrade pip
+
 RUN pip install -r requirements.txt --cache-dir /app/pip_cache --ignore-installed
 
 EXPOSE 8000
