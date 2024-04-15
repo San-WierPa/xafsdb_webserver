@@ -1,6 +1,6 @@
 {% load static %}
 
-<header>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,10 +9,10 @@
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-    <title>xafsDB - All Datasets</title>
+    <title>RefXAS - All Datasets</title>
     <!-- favicon -->
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
-</header>
+</head>
 
 {% include "landing/navbar.html" %}
 
@@ -28,6 +28,7 @@
         </thead>
 
         {% for dataset_meta in dataset_meta_list %}
+        {% if dataset_meta.scientificMetadata.is_approved or dataset_meta.isPublished %}
         <tbody>
             <tr>
                 <td class="limit-id-length"> {{ dataset_meta.id }} </td>
@@ -48,7 +49,7 @@
                 </td>
             </tr>
         </tbody>
-
+          {% endif %}
         {% endfor %}
 
     </table>
