@@ -11,7 +11,23 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 """
+settings.py
+-----------------------
 @author: Sebastian Paripsa
+@email: paripsa@uni-wuppertal.de (or: sebastian.paripsa@gmail.com)
+@linkedin: https://www.linkedin.com/in/sebastian-paripsa/
+@git: https://github.com/San-WierPa
+@orcid: https://orcid.org/0009-0000-3487-5399
+
+SEO Tags:
+---------
+#SciCat #DatasetAutomation #Python #DataScience
+
+Requirements:
+-------------
+- Python 3.10
+- SciCat API access
+
 """
 
 import os
@@ -37,9 +53,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# while giving remote access to the localhost via "pagekite.py 8001 xafsdb.pagekite.me"
 # uncomment following and change "test/" in urls.py to "" and "" to "test/":
-# ALLOWED_HOSTS = ["xafsdb.pagekite.me"]
 ALLOWED_HOSTS = ["*"]
 
 URL_REST_API = "http://127.0.0.1:8000"
@@ -220,3 +234,5 @@ LOGGING = {
 ## Login
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+# Session settings for auto logout
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
