@@ -1,20 +1,46 @@
 """
+auto_dataset_create.py
+-----------------------
 @author: Sebastian Paripsa
+@email: paripsa@uni-wuppertal.de (or: sebastian.paripsa@gmail.com)
+@linkedin: https://www.linkedin.com/in/sebastian-paripsa/
+@git: https://github.com/San-WierPa
+
+Description:
+------------
+This script automates the process of dataset creation by using the SciCat API.
+It performs tasks such as data reading, quality control checks, and finally,
+uploads the dataset to the designated repository.
+
+SEO Tags:
+---------
+#SciCat #DatasetAutomation #Python #DataScience
+
+Modules:
+--------
+- read_data: Reads the raw data files
+- check_quality: Performs quality control on the dataset
+- scicat_py: SciCat's Python API
+
+Requirements:
+-------------
+- Python 3.10
+- SciCat API access
+
 """
 
 from __future__ import print_function
-from pprint import pprint
 import json
-import os
 from datetime import datetime
+from django.core.mail import send_mail
 from sys import path
-from typing import Optional
+from typing import Optional, NoReturn
 import environ
 import numpy as np
 import pyshorteners
 import requests
 import scicat_py
-# from pprint import pprint
+from webserver.settings import EMAIL_HOST_USER
 from quality_control.quality_check import check_quality
 from plugins.read_data import read_data
 from typing import Dict, Any
@@ -39,7 +65,10 @@ class AutoDatasetCreation(object):
 
         #print("Dataset creation initialized...how exciting!")
         self.configuration = scicat_py.Configuration(
+            # production
             host="http://34.29.91.220",
+            # dev (varies due to shut-down/restart of vm - every restart changes ip)
+            #host="http://34.29.27.51",
         )
         self.qc_path = "quality_control/"
         path.append(self.qc_path)
@@ -73,7 +102,7 @@ class AutoDatasetCreation(object):
             )
             api_response = api_instance.auth_controller_login(credentials_dto)
             self.access_token = api_response["access_token"]
-            # print(self.access_token)
+            print("ME ACCESS TOKEN:", self.access_token)
             return self.access_token
 
     def create_testdata(self) -> Optional[str]:
@@ -163,6 +192,7 @@ class AutoDatasetCreation(object):
                     "sample_environment": self.verify_data.get("Sample environment"),
                     "general_remarks": self.verify_data.get("General remarks"),
                     "sample_prep": self.verify_data.get("Sample preparation"),
+                    "sample_id": self.verify_data.get("Sample ID"),
                 },
                 "instrument": {
                     "facility": self.verify_data.get("Facility"),
@@ -178,7 +208,9 @@ class AutoDatasetCreation(object):
                 "bibliography": {
                     "doi": self.verify_data.get("DOI"),
                     "reference": self.verify_data.get("Reference"),
+                    "disclaimer": self.verify_data.get("DisclaimerVerification"),
                 },
+                "is_approved": False,
             },
             "keywords": "None",
         }
@@ -190,9 +222,10 @@ class AutoDatasetCreation(object):
             api_response = api_instance.datasets_controller_create(
                 create_dataset_dto, async_req=False, _preload_content=False
             )
-            resp = json.loads(api_response.data)
-            self.datasetId = resp["id"]
-            # print(self.datasetId)
+            self.resp = json.loads(api_response.data)
+            print('ME RAW DATA:', self.resp)
+            self.datasetId = self.resp["id"]
+            print("ME DATASET ID:", self.datasetId)
             return self.datasetId
 
     def post_sthree(self) -> requests.Response:
@@ -208,10 +241,15 @@ class AutoDatasetCreation(object):
         try:
             files = {"file": open(self.s3_data_path, "rb")}
             values: Dict[str, Any] = {"dataset_id": self.datasetId}
+            # production:
             self.responds = requests.post(
                 f"http://34.29.91.220/{prefix}/{prefix}/", files=files, data=values
             )
-            # print(self.responds.json())
+            # dev:
+            #self.responds = requests.post(
+            #    f"http://34.29.27.51/{prefix}/{prefix}/", files=files, data=values
+            #)
+            #print("I'm in sthree:", self.responds.json)
             return self.responds
         except FileNotFoundError as e:
             logging.exception(f"Could not upload file: {e}")
@@ -232,13 +270,42 @@ class AutoDatasetCreation(object):
         """
         #self.short_url = self.responds.json()["file"].split("?")[0]
         type_tiny = pyshorteners.Shortener()
+        #print("I'm in short_url:", self.responds.status_code, self.responds.text)
         self.short_url = type_tiny.tinyurl.short(self.responds.json()["file"])
-        #print(self.short_url)
+
         return self.short_url
 
-    def qc_and_update(self):
+    def qc_and_update(self) -> NoReturn:
         """
-        Main function for quality_control
+        Performs quality control checks on newly uploaded dataset measurements, updates
+        the dataset's scientific metadata with quality control results, and communicates
+        these updates to the SciCat database. Additionally, it generates and stores plots
+        for the dataset and notifies the curator about the new dataset via email.
+
+        Attributes:
+            configuration: Configuration settings for the SciCat API client.
+            access_token: Auth token used for API requests.
+            qc_path: Path to the directory containing the quality control criteria JSON.
+            verify_data: Dictionary containing data verification details used in quality checks.
+            s3_data_path: Path where the dataset's files are stored, used for processing.
+            data_dict: Dictionary where processed data and metadata are stored and updated.
+
+        Uses:
+            This method processes the dataset using predefined quality criteria stored in a
+            JSON file, updates the dataset's metadata based on the analysis results, and uploads
+            the updated information along with generated plots to the SciCat database. If all
+            quality checks are passed, it sends an email to notify the curator and updates the
+            dataset entry in the database with quality metrics and plot data.
+
+        Raises:
+            Various exceptions related to file handling, data processing, or API communication
+            failures could be raised implicitly within the method.
+
+        Side effects:
+            - Modifies `self.data_dict` with new scientific metadata.
+            - Generates plot images and encodes them in base64 for storage.
+            - Sends an email to the curator.
+            - Updates the dataset in the SciCat database with new information.
         """
         with scicat_py.ApiClient(self.configuration) as api_client:
             api_client.configuration.access_token = self.access_token
@@ -287,8 +354,14 @@ class AutoDatasetCreation(object):
             self.edge_step = self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"]
             self.energy_res = self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"]
             self.k_max = self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"]
+            #self.noise = self.data_dict["scientific_metadata"]["RAW"]["noise"]["value"]
             if all(qc_list):
                 print("DO SERVER COMMUNICATION -> CREATE DATASET")
+                print("SENDING MESSAGE TO CURATOR...")
+                send_mail('RefXAS: NEW DATASET CREATED',
+                          'HEY MATE! \n\nSOMETHING EXCITING HAS HAPPENED: A NEW DATASET HAS BEEN CREATED! \nGO AND CURATE IT ASAP! \n\nSTAY HANDSOME :D'
+                          + "\n\nPayload-preview:" + "\n\nDATASET NAME:" + str(self.data_set_name) + "\n\nOWNER:" + str(self.resp["owner"]),
+                          EMAIL_HOST_USER, [EMAIL_HOST_USER, 'abhijeet.gaur@kit.edu'])
                 update_dataset_dto = scicat_py.UpdateDatasetDto(
                     source_folder=self.short_url,
                     keywords=[self.edge_step, self.k_max, self.energy_res],
@@ -302,7 +375,6 @@ class AutoDatasetCreation(object):
                     )
                 )
                 response = json.loads(api_response.data)
-                # pprint(response)
                 self.data_dict["scientific_metadata"]["Figures"]["raw_data"]
                 self.data_dict["scientific_metadata"]["Figures"]["normalized_data"]
                 self.data_dict["scientific_metadata"]["Figures"]["k"]
@@ -338,4 +410,3 @@ class AutoDatasetCreation(object):
                 _preload_content=False,
             )
             response = json.loads(api_response.data)
-            # pprint(response)
