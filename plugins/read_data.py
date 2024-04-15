@@ -3,8 +3,8 @@
 """
 Created on Mon Mar 23 14:33:49 2020
 
-@author: Frank Foerste
-ffoerste@physik.tu-berlin.de
+@authors: Frank Foerste and Sebastian Paripsa
+ffoerste@physik.tu-berlin.de, paripsa@uni-wuppertal.de
 """
 
 ##############################################################################
@@ -422,7 +422,7 @@ class read_data(object):
             is False.
         """
         ### cut out e_min and e_max
-        print("I'm update_erange brah:", self.update_erange)
+        #print("I'm update_erange brah:", self.update_erange)
         if self.update_erange:
             try:
                 self.E_range_min = float(self.update_erange.get("E_range_min").replace(",", "."))

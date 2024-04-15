@@ -3,8 +3,8 @@
 """
 Created on Mon Mar 23 14:33:49 2020
 
-@author: Frank Foerste
-ffoerste@physik.tu-berlin.de
+@authors: Frank Foerste and Sebastian Paripsa
+ffoerste@physik.tu-berlin.de, paripsa@uni-wuppertal.de
 """
 
 ##############################################################################
@@ -48,7 +48,7 @@ class check_quality(object):
     """
 
     def __init__(self, quality_criteria_json, verbose = False):
-        
+
         self.verbose = verbose
         if self.verbose:
             print("+++++++++++++++++++++++++++++++++++++++++")
@@ -580,11 +580,27 @@ class check_quality_control(object):
 
     def check_data(self, ):
         """
-        This function reads out the quality criteria from the Criteria.json,
-        search for all files in the specific examples data folder and checks
-        the quality for each sample iterative. If verbose mode is activated
-        the results are printed.
+        Reads quality criteria from 'Criteria.json', iterates through data samples in a specified directory,
+        and assesses each sample against these criteria using the 'check_quality' class. Supports verbose
+        output, plotting of data in various forms (raw, normalized, k-space, R-space, and background), and
+        saving plots to specified paths. Quality assessments include checking edge step, energy resolution,
+        k-value distribution, and noise estimation. The method updates the 'qc_list' with the quality check
+        results for each file and returns the processed data object from the last file checked.
 
+        Parameters:
+            None
+
+        Returns:
+            cq.data: The processed data object from the last file checked.
+
+        Side effects:
+            - Populates 'qc_list' with quality check results for each file.
+            - May print verbose logs, plot data, and save plots depending on the object's attributes.
+            - Alters 'self.data' with the preprocessed data of the last file.
+
+        Note:
+            Requires 'Criteria.json' for quality criteria and a directory structure matching 'example data/{facility_type}'.
+            The method assumes '.h5' file extensions for data samples.
         """
         ### read out quality criteria
         cq_json = os.path.abspath(os.curdir) + "/Criteria.json"
@@ -681,7 +697,7 @@ if __name__ == '__main__':
                           plot_R = True,
                           plot_k = True,
                           plot_background = True,
-                          save_figure_path = os.environ['HOME']+'/Doktorarbeit/DAPHNE/Quality Criteria/evaluated',
+                          #save_figure_path = os.environ['HOME']+'/Doktorarbeit/DAPHNE/Quality Criteria/evaluated',
                           verbose = True,
                           )
     pass
