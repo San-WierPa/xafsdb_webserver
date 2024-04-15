@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 {% load static %}
 
      <head>
@@ -7,7 +8,11 @@
 
 <div class="container">
     <div class="content-container">
-        <h2> {{ dataset_meta.datasetName }} </h2>
+        <h2> {{ dataset_meta.datasetName }}
+            {% if dataset_meta.scientificMetadata.is_approved or dataset_meta.isPublished %}
+                <span style="color:green; font-size: 3em; vertical-align: middle;" title="This dataset is approved!">&#10004;</span>
+            {% endif %}
+        </h2>
 
         <body>
             <div>
@@ -82,6 +87,11 @@
                                 <td> Sample preparation: {{ dataset_meta.scientificMetadata.sample_info.sample_prep }}</td>
                             </tr>
                         </table>
+                        <table id="table_detail" >
+                            <tr>
+                                <td> Sample ID: {{ dataset_meta.scientificMetadata.sample_info.sample_id }}</td>
+                            </tr>
+                        </table>
                     </tr>
                 </tbody>
             </table>
@@ -103,7 +113,15 @@
                 <tbody>
                     <tr>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.facility }}" > {{ dataset_meta.scientificMetadata.instrument.facility }} </abbr></td>
-                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.beamline }}" > {{ dataset_meta.scientificMetadata.instrument.beamline }} </abbr></td>
+                        {% for bl in all_beamline_data %}
+                            {% if dataset_meta.scientificMetadata.instrument.beamline == bl.name %}
+                                <td class="longTextHover" style="max-width: 80px;">
+                                    <abbr title="{{ bl.name }}">
+                                        <a href="{% url 'beamline_details' beamline_id=bl.id %}">{{ bl.name }}</a>
+                                    </abbr>
+                                </td>
+                            {% endif %}
+                        {% endfor %}
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.aquisition_mode }}" > {{ dataset_meta.scientificMetadata.instrument.aquisition_mode }} </abbr></td>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.crystals }}" > {{ dataset_meta.scientificMetadata.instrument.crystals }} </abbr></td>
                         <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.mirrors }}" > {{ dataset_meta.scientificMetadata.instrument.mirrors }} </abbr></td>
@@ -120,7 +138,7 @@
                         <tr>
                         <th>DOI</th>
                         <th>Owner</th>
-                        <th>Owner Group</th>
+                        <th>Institute</th>
                         <th>Contact Mail</th>
                         <th>Reference</th>
                     </tr>
@@ -137,7 +155,7 @@
             </table>
 
             <table id="datatablesSimple">
-                <caption class="table-title">Scientific metadata </caption>
+                <caption class="table-title">Scientific metadata* </caption>
                 <thead>
                     <tr><th>SOURCE: {{ dataset_meta.scientificMetadata.Data.Source }} </th></tr>
                     <tr> <th class="subh">MODE: {{ dataset_meta.scientificMetadata.Data.Mode }}</th></tr>
@@ -145,7 +163,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th class="subsubsubh">EDGE STEP:</th>
+                        <th class="subsubsubh">EDGE STEP (Transmission mode):</th>
                     </tr>
                     <tr> <td class="subd">
                         VALUE: {{ dataset_meta.keywords.0 }}
@@ -155,7 +173,7 @@
                         DOCUMENTATION: {{ dataset_meta.scientificMetadata.RAW.edge_step.documentation }}
                     </td></tr>
                     <tr>
-                        <th class="subsubsubh"> K MAX:</th>
+                        <th class="subsubsubh"> K-MAX (Maximum usable):</th>
                     </tr>
                     <tr> <td class="subd">
                         VALUE: {{ dataset_meta.keywords.1 }}
@@ -165,7 +183,7 @@
                         DOCUMENTATION: {{ dataset_meta.scientificMetadata.RAW.k_max.documentation }}
                     </td></tr>
                     <tr>
-                        <th class="subsubsubh">ENERGY RESOLUTION:</th>
+                        <th class="subsubsubh">ENERGY RESOLUTION (Point density as calculated from spectral points):</th>
                     </tr>
                     <tr> <td class="subd">
                         VALUE: {{ dataset_meta.keywords.2 }}
@@ -175,7 +193,7 @@
                         DOCUMENTATION: {{ dataset_meta.scientificMetadata.RAW.energy_resolution.documentation }}
                     </td></tr>
                     <tr>
-                        <th class="subsubsubh">NOISE:</th>
+                        <th class="subsubsubh">SNR (Signal to noise ratio):</th>
                     </tr>
                     <tr> <td class="subd">
                         VALUE: {{ dataset_meta.keywords.3 }}
@@ -186,26 +204,47 @@
                     </td></tr>
                 </tbody>
             </table>
+            *For further explanation, please consult our <a href="https://san-wierpa.github.io/xafsdb4daphne/" target="_blank">documentation</a>
 
         </div>
 
     <table id="datatablesSimple">
-        <caption class="table-title">Item List</caption>
-    <thead>
-        <tr>
-            <th>File name:</th>
-            <th>Download the file:</th>
-        </tr>
-    </thead>
-    {% for item in item_list %}
-    <tbody>
-        <tr>
-            <td> {{ item.file_name }} </td>
-            <td> <a href="{{ item.file.url }}">Download</a> </td>
-        </tr>
+        <caption class="table-title">Download(s)</caption>
+        <thead>
+            <tr>
+                <th>Download the file:</th>
+                <th>File content:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="?download_zip=true">Download this work (ZIP)</a></td>
+                <td>Description, metadata (json, yaml, hdf5), data and 4 plots.</td>
+            </tr>
+            <!--<tr>
+                <td> {{ dataset_meta.datasetName|slice:":15" }}_metadata.json </td>
+                <td> <a href="?download_metadata=true">Download as JSON</a> </td>
+            </tr>
+            <tr>
+                <td> {{ dataset_meta.datasetName|slice:":15" }}_metadata.yaml </td>
+                <td> <a href="?download_metadata_yaml=true">Download as YAML</a> </td>
+            </tr>
+            <tr>
+                <td> {{ dataset_meta.datasetName|slice:":15" }}_metadata.hdf5 </td>
+                <td> <a href="?download_metadata_hdf5=true">Download as HDF5</a> </td>
+            </tr>
+            <tr>
+                <td> {{ dataset_meta.datasetName|slice:":15" }}_meta.txt </td>
+                <td> <a href="?download_text=true">Download (meta)data</a> </td>
+            </tr>
+            {% for item in item_list %}
+            <tr>
+                <td> {{ item.file_name }} </td>
+                <td> <a href="{{ item.file.url }}">Download original file</a> </td>
+            </tr>
+            {% endfor %}-->
+        </tbody>
 
-    </tbody>
-    {% endfor %}
     </table>
 
 </div>

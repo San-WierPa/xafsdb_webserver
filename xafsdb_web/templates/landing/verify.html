@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 {% load static %}
 
 <html lang="en">
@@ -21,6 +22,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.disclaimer {
+    border: 2px solid red;
+    font-weight: bold;
+    color: black;
+    padding: .3rem 1rem;
+    display: block;
+    width: 60%;
+    margin: .6rem auto;
+    border-radius: 2rem;
+    font-size: 1.1rem;
 }
 
 .registration-container {
@@ -96,7 +109,7 @@ hr {
     color: white;
     padding: .3rem 1rem;
     display: block;
-    width: 50%;
+    width: 30%;
     margin: .6rem auto;
     border-radius: 2rem;
     font-size: 1.1rem;
@@ -108,7 +121,7 @@ hr {
     color: white;
     padding: .3rem 1rem;
     display: block;
-    width: 50%;
+    width: 30%;
     margin: .6rem auto;
     border-radius: 2rem;
     font-size: 1.1rem;
@@ -139,7 +152,7 @@ a {
 </style>
 
     {% block title %}
-        <title>xafsDB - Verify and submit</title>
+        <title>RefXAS - Verify and submit</title>
     {% endblock %}
 </head>
 
@@ -216,34 +229,36 @@ a {
                 <h4> Sample Info </h4>
                 <section class="identity-details">
                     <div class="three-details-item">
+                        <label for="Sample ID">
+                            <p> Sample ID </p>
+                            <input type="text" name="Sample ID" id="Sample ID" placeholder="e.g.: 20210308-PtO2-XAS-01">
+                        </label>
                         <label for="Coll.code">
                             <p> Collection code </p>
-                            <input type="text" name="Coll.code" id="Coll.code" placeholder="20210308-PtO2-XAS-01">
+                            <input type="text" name="Coll.code" id="Coll.code" placeholder="e.g.: 20210308-PtO2-XAS-01">
                         </label>
                         <label for="Phys.state">
                             <p> Physical state </p>
-                            <input type="text" name="Phys.state" id="Phys.state"
-                                placeholder="Solid">
+                            <input type="text" name="Phys.state" id="Phys.state" placeholder="e.g.: Solid">
                         </label>
                         <label for="Crystal orientation">
                             <p> Crystal orientation </p>
-                            <input type="text" name="Crystal orientation" id="Crystal orientation"
-                                placeholder="Miller indices">
+                            <input type="text" name="Crystal orientation" id="Enter crystal orientation" placeholder="e.g.: Miller indices">
                         </label>
                     </div>
 
                     <div class="three-details-item">
                         <label for="Temperature">
                             <p> Temperature in <b>K</b> </p>
-                            <input type="text" name="Temperature" id="Temperature" placeholder="298.15">
+                            <input type="text" name="Temperature" id="Temperature" placeholder="e.g.: 298.15">
                         </label>
                         <label for="Pressure">
                             <p> Pressure in <b>bar</b>  </p>
-                            <input type="text" name="Pressure" id="Pressure" placeholder="1">
+                            <input type="text" name="Pressure" id="Pressure" placeholder="e.g.: 1">
                         </label>
                         <label for="Sample environment">
                             <p> Sample environment </p>
-                            <input type="text" name="Sample environment" id="Sample environment" placeholder="Vacuum chamber">
+                            <input type="text" name="Sample environment" id="Sample environment" placeholder="e.g.: Vacuum chamber">
                         </label>
                     </div>
 
@@ -258,7 +273,7 @@ a {
                         </label>
                         <label for="Sample preparation">
                             <p> Sample preparation </p>
-                            <textarea type="text" name="Sample preparation" id="Sample preparation" placeholder="Technique of sample preparation..."></textarea>
+                            <textarea type="text" name="Sample preparation" id="Sample preparation" placeholder="Enter technique of sample preparation..."></textarea>
                         </label>
                     </div>
                 </section>
@@ -422,23 +437,22 @@ a {
                         {% endif %}
                         <label for="Acq. mode">
                             <p> Acquistion mode </p>
-                            <input type="text" name="Acq. mode" id="Acq. mode"
-                                placeholder="Continuous scan">
+                            <input type="text" name="Acq. mode" id="Acq. mode" placeholder="e.g.: Continuous scan">
                         </label>
                     </div>
 
                     <div class="three-details-item">
                         <label for="Crystals">
                             <p> Crystals </p>
-                            <input type="text" name="Crystals" id="Crystals" placeholder="Fe2O3 (hematite)">
+                            <input type="text" name="Crystals" id="Crystals" placeholder="e.g.: DCM">
                         </label>
                         <label for="Mirrors">
                             <p> Mirrors </p>
-                            <input type="text" name="Mirrors" id="Mirrors" placeholder="Kirkpatrick-Baez (KB)">
+                            <input type="text" name="Mirrors" id="Mirrors" placeholder="e.g.: Kirkpatrick-Baez (KB)">
                         </label>
                         <label for="Detectors">
                             <p> Detectors  </p>
-                            <input type="text" name="Detectors" id="Detectors" placeholder="Silicon drift detector (SDD)">
+                            <input type="text" name="Detectors" id="Detectors" placeholder="e.g.: Silicon drift detector (SDD)">
                         </label>
                     </div>
 
@@ -583,7 +597,7 @@ a {
                     <div class="three-details-item">
                         <label for="DOI">
                             <p> DOI </p>
-                            <input type="text" name="DOI" id="DOI" placeholder="10.123/456789abcdef">
+                            <input type="text" name="DOI" id="DOI" placeholder="e.g.: 10.123/456789abcdef">
                         </label>
                         <label for="Reference">
                             <p> Reference </p>
@@ -594,8 +608,8 @@ a {
 
                     <div class="three-details-item red-border">
                         <label for="Owner group">
-                            <p> Owner group </p>
-                            <input type="text" name="Owner group" id="Owner group" placeholder="Enter owner group" required>
+                            <p> Institute </p>
+                            <input type="text" name="Owner group" id="Owner group" placeholder="Enter institute" required>
                         </label>
                         <label for="Owner">
                             <p> Owner </p>
@@ -641,6 +655,21 @@ a {
 
                     </div>
                 </section>
+                    <div class="disclaimer" id="disclaimer">
+                        <p>
+                            By uploading your datafiles to this platform, you agree to release them under the
+                            Creative Commons Attribution 4.0 International License<br>(CC BY 4.0).
+                            This means that others are free to share and adapt your datafiles for any purpose,
+                            even commercially, as long as they give appropriate credit, provide a link to the license,
+                            and indicate if changes were made.
+                        </p>
+                        <br>
+                        <label class="three-details-item" for="DisclaimerVerification" >
+                            <p> Please confirm that you have read and understood this disclaimer: </p>
+                            <input type="text" name="DisclaimerVerification" id="DisclaimerVerification"
+                                placeholder="Please only write - Yes - " required>
+                        </label>
+                    </div>
                 <button class="cancel-btn" ><a href="{% url 'dataset_list' %}">Cancel</a></button>
                 <button class="submit-btn" value="Verify Data"> Submit </button>
             </form>
