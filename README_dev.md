@@ -1,3 +1,19 @@
+## Regarding scicat testing / production!
++ Production: only use `host="http://34.29.91.220"`, i.e. this and only this VM-instance
+  is consistenly running, hence the webserver -and website are accessible.
++ Development: In order to work locally, i.e. on `http://127.0.0.1:8001/`, please:
+  + Turn on dev-google VM-instance,
+  + Copy / paste the dev-host-url into: `auto_bl_create.py`, `auto_dataset_create.py`
+    and (IMPORTANT) in `_auth_constants.py`!
+    (and optional: `README_dev.md`) and comment out the production-host-url.
+  + Now, datasets that are uploaded should appear locally (but are not stored in production),
+    BLs as well.
+  + When testing finished: uncomment production-host-url
+    (not that the webserver-docker-image would by mistake have the dev-host-url)
++ Most amazingly, now possible to upload a dataset locally and it is visible locally as well,
+  but not in production.
+  **NOTE**: Dataset can only be visible after setting `is_published` to `true`.
+
 ## Docker
 
 + Check requirements (imports) and add them if necessary to
@@ -137,10 +153,11 @@ docker run registry.hzdr.de/daphne4nfdi/xafsdb
 docker ps -aq | xargs docker stop | xargs docker rm
 ```
 
-+ To clean up, that is to remove all unused containers, volumes, networks and images (both dangling and unreferenced):
++ To clean up, that is, to remove all unused containers, volumes, networks and images (both dangling and unreferenced):
 ```shell
 docker system prune
 ```
+**WARNING**: Never ever do `system prune`. Only in an apocalyptic scenario maybe (deletes also scicat image and stuff)!
 And
 ```shell
 docker image prune -a
@@ -232,13 +249,16 @@ docker-compose up -d
 import scicat_py
 
 USERNAME = env("USERNAME_AUTH")
-# OLD -> PASSWORD = "2jf70TPNZsS"
 PASSWORD = env("PASSWORD_AUTH")
 
 CONFIGURATION = scicat_py.Configuration(
-    host="http://35.233.73.213",
+    # production
+    host="http://34.29.91.220",
+    # dev (varies due to shut-down/restart of vm - every restart changes ip)
+    # host="http://35.232.106.48",
 )
 ```
+**NOTE**: AFTER TESTING ON DEV-HOST ON GOOGLE VM, BUT BEFORE DOCKER-COMPOSE ON PRODUCTION-HOST, FIRST TEST LOCAL WITH PRODUCTION-HOST URL!!!
 
 **TODO**
 + `USERNAME` and `PASSWORD` must be used in .env (as it is already on branch `master`) and overwritten by `docker-compose.yml`
@@ -276,7 +296,7 @@ python manage.py dbshell
 
 + Access mongodb-express (browser) via (use admin and password out of `_auth_constants.py`):
 ```
-http://35.233.73.213/mongodb/db/scicat/
+http://34.29.91.220/mongodb/db/scicat/
 ```
 
 + For deleting (flush) datasets, do not forget to delete ALL relational entries in the database (e.g. attachment with the same datasetId)
@@ -289,6 +309,26 @@ mongo-express_1    | Server is open to allow connections from anyone (0.0.0.0)
 mongo-express_1    | basicAuth credentials are "admin:pass", it is recommended you change this in your config.js!
 ```
 
+### Google & mongodb
+
+In order to have `auto_bl_create.py` working, i.e. no 500 appearing while trying to upload $>1$ beamline, the `Instrument` entry in mongodb needs to be adjusted this way:
+
++ Access to the mongodb shell via ssh only via docker (since its all about images):
+  + Check the image via `docker ps`
+  + Log "into" docker: `sudo docker exec -it 074b69e456cc bash`
+  + Log into the mongodb shell: `mongo`
+  + Now you're good to go and mess things up (be careful!)!
++ A few steps:
+  + `show dbs`, `use scicat`
+  + For example, if some nasty identifier is not doing what it "supposed" to do:
+    `db.Instrument.dropIndex("datasets.pid_1")` and then
+    `db.Instrument.createIndex({"datasets.pid": 1}, {unique: false, background: true})`
+
+### Google & pip
+
+If already have a running container and just want to execute a single command without starting a Bash session, use the `docker exec` command.
++ Check installed python packages inside container:
+  `docker exec -it my_container pip list`
 
 ## PIPELINE
 
@@ -300,6 +340,8 @@ mongo-express_1    | basicAuth credentials are "admin:pass", it is recommended y
   - `docker build` AND `docker push registry.hzdr.de/daphne4nfdi/xafsdb`
 + Google-vm -> in `paripsa_uni_wuppertal_de@wupp-1:/sebastian/xafsdb/`:
   - `git pull` AND `docker pull registry.hzdr.de/daphne4nfdi/xafsdb`
+    (for dev: `docker pull registry.hzdr.de/daphne4nfdi/xafsdb/xafsdb_devenv:latest`)
+    (or `docker pull registry.hzdr.de/daphne4nfdi/xafsdb/refxas_beta_test:latest`)
   - Then `cd xafsdb_deployment` AND `docker-compose up -d`
 
 
@@ -321,3 +363,69 @@ python manage.py collectstatic
 ```shell
 docker-compose exec web python manage.py collectstatic
 ```
+
+## Misc
+
++ Footer: Either `<span id="date"></span>` or simply `start-year to end-year`?
++ Automatic email: at the moment via `gmail`. Please see<hr>
+  `https://dev.to/abderrahmanemustapha/how-to-send-email-with-django-and-gmail-in-production-the-right-way-24ab`<hr>
+  for more info (and for resetting).
+
+## Benchmarking
+
++ Use siege (command-line-tool) in order to execute test on websites via
+`siege -c200 -d10 -t30s http://xafsdb.ddns.net/`
+This command simulates 200 concurrent users, each delayed by up to 10 seconds between requests,
+for a total test time of 30 seconds.
+Output:
+```shell
+Transactions:                   7884 hits
+Availability:                 100.00 %
+Elapsed time:                  30.04 secs
+Data transferred:             132.40 MB
+Response time:                  0.28 secs
+Transaction rate:             262.45 trans/sec
+Throughput:                     4.41 MB/sec
+Concurrency:                   74.60
+Successful transactions:        7132
+Failed transactions:               0
+Longest transaction:            5.56
+Shortest transaction:           0.06
+```
+
+## Docs
+
+### Sphinx
+
++ First, start the venv with
+```shell
+source /home/sepa/Desktop/xafs-db/xafsdb/webserver/docs/venv/bin/activate
+```
+and Sphinx can be used inside the `cd/venv` only with the full path:
+```shell
+/home/sepa/Desktop/xafs-db/xafsdb/webserver/docs/venv/bin/sphinx-quickstart
+```
+
++ Start Documenting:<br>
+  Begin creating or editing your .rst (reStructuredText) or .md (Markdown, if configured) files.<br>
+  The index.rst file is your documentation's root, from which you can link to other documentation files.
+
++ Build Your Documentation:<br>
+  To generate your documentation, run the following command from the directory containing the Makefile<br>
+  (typically the root of your docs directory):
+```shell
+make html
+```
+
++ View Your Documentation:<br>
+  Open the generated HTML files in your web browser. For example, you can open `build/html/index.html`<br>
+  to view the root page of your documentation.
+<!--<div>
+            <a href="https://github.com/SciCatProject" target="_blank">
+                <img class="responsive_coll" src="{% static 'img/SciCatLogo.png' %}" alt="scicat" style="object-fit:contain; background-color: white;" ></a>
+        </div>
+
+        <div>
+            <a href="https://www.daphne4nfdi.de/english/index.php" target="_blank">
+                <img class="responsive_daph" src="{% static 'img/daphne.png' %}" alt="daphne" style="object-fit:contain; background-color: white;" ></a>
+        </div>-->
