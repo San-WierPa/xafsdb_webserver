@@ -68,7 +68,7 @@ services:
   xafsdb:
     #build:
     #  context: ..
-    image: registry.hzdr.de/daphne4nfdi/xafsdb/xafsdb_qctesting:latest
+    image: registry.hzdr.de/daphne4nfdi/xafsdb/refxas_beta_test:latest
     #image: registry.hzdr.de/daphne4nfdi/xafsdb/xafsdb_dev:latest
     command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && uvicorn --host 0.0.0.0 webserver.asgi:application"
     depends_on:
@@ -101,6 +101,8 @@ services:
        - "traefik.http.routers.mongo-express.middlewares=auth"
        - "traefik.http.middlewares.auth.basicauth.users=admin:$$2a$$12$$vyTh8.zQ85OygVq1q4cX4u50QJXfW1tSJn/dr2zuQFzAW6F31VUtq"
 
+volumes:
+  PG_DATA:
   # https://github.com/tiredofit/docker-db-backup#configuration
   #db-backup-pg:
   #  container_name: db-backup-pg
@@ -122,6 +124,3 @@ services:
   #    - SPLIT_DB=FALSE
   #    - CONTAINER_ENABLE_MONITORING=FALSE
   #  restart: always
-
-volumes:
-  PG_DATA:
