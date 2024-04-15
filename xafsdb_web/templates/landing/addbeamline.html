@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    width: 75%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.registration-container {
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.registration-container h2 {
+    font-weight: bold;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.registration-container h2::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    height: 3px;
+    width: 20%;
+    border-radius: 2px;
+    background-color: #e65b00;
+}
+
+.three-details-item {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.red-border {
+    border: 2px solid red;
+    border-radius: 10px;
+    width: 72%;
+}
+
+hr {
+    width: 90%;
+    height: 1px;
+    background-color: #d2d2d2;
+    margin: 1rem 0;
+    border: none;
+}
+
+.personal-details,
+.identity-details {
+    margin: .2rem 0;
+}
+
+.personal-details label,
+.identity-details label {
+    margin: .5rem 1rem;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.three-details-item input {
+    outline: none;
+    font-size: .8rem;
+    border-radius: .2rem;
+    border: 1px solid rgb(113, 101, 101);
+    padding: .1rem;
+    background-color: transparent;
+    resize: both;
+    overflow: auto;
+}
+
+.submit-btn {
+    border: none;
+    background-color: #e65b00;
+    color: white;
+    padding: .3rem 1rem;
+    display: block;
+    width: 30%;
+    margin: .6rem auto;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+}
+
+.cancel-btn {
+    border: none;
+    background-color: #e65b00;
+    color: white;
+    padding: .3rem 1rem;
+    display: block;
+    width: 30%;
+    margin: .6rem auto;
+    border-radius: 2rem;
+    font-size: 1.1rem;
+}
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.resizable {
+    resize: both;
+    overflow: auto;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .flex-item {
+    flex-basis: 50%;
+  }
+.container {
+  width: 80%;
+  margin: auto;
+}
+
+</style>
+
+    {% block title %}
+        <title>RefXAS - Add BeamLine</title>
+    {% endblock %}
+</head>
+
+<body>
+<div class="container">
+    <section class="registration-container">
+        <h2> Add Beamline manually </h2>
+        <section class="details-section">
+            <form action="/instruments/add_beamline" method=post id="addBL_form" class="registration-form">
+                {% csrf_token %}
+
+            <hr>
+                <section class="identity-details">
+                    <div class="three-details-item">
+
+                        <label for="Source" >
+                            <p> Choose:</p>
+                            <select name='Source' id="Source" onchange="toggleFields()">
+                                <option value="">--Select--</option>
+                                <option value="SYNCHROTRON"  > SYNCHROTRON</option>
+                                <option value="LABORATORY"  > LABORATORY</option>
+                            </select>
+                        </label>
+
+                        <!-- Fields for Synchrotron -->
+                        <div id="synchrotronFields" style="display:none;">
+                            <h4> Facility: </h4>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="synchrotronName">
+                                        Synchrotron Name:
+                                        <input type="text" name="synchrotronName" id="synchrotronName" placeholder="DESY">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="beamline">
+                                        Beamline:
+                                        <input type="text" name="beamline" id="beamline" placeholder="P64">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4> Storage ring: </h4>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="elektronEnergy">
+                                        Energy:
+                                        <input type="text" name="elektronEnergy" id="elektronEnergy" placeholder="0 GeV">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="elektronBeamEmittance">
+                                        Beam Emittance:
+                                        <input type="text" name="elektronBeamEmittance" id="elektronBeamEmittance" placeholder="0 nmrad">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="fillingMode">
+                                        Filling mode:
+                                        <input type="text" name="fillingMode" id="fillingMode" placeholder="bunches">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4> Mirrors: </h4>
+                            <!-- Dropdown for Yes/No -->
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="use_mirror">Use Mirror:</label>
+                                    <select name='use_mirror' id="use_mirror" onchange="toggleMirrorTypeField()">
+                                        <option value="">--Select--</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="flex-item">
+                                    <!-- Hidden input field for Mirror Types -->
+                                    <div id="mirrorTypeFields" style="display:none;">
+                                        <label for="mirrortype">
+                                            Type of mirror:
+                                            <input type="text" name="mirrortype" id="mirrortype" placeholder="">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="mirrorposition">
+                                        Position:
+                                        <select name='mirrorposition' id="mirrorposition">
+                                            <option value="">--Select--</option>
+                                            <option value="BEFORE"> Before Mono </option>
+                                            <option value="BEHIND"> Behind Mono </option>
+                                            <option value="BOTH"> Both </option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="reflectingmaterial">
+                                        Reflecting surface material:
+                                        <input type="text" name="reflectingmaterial" id="reflectingmaterial" placeholder="">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="angleofincidence">
+                                        Angle of incidence:
+                                        <input type="text" name="angleofincidence" id="angleofincidence" placeholder="mrad">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4> Filters/Windows: </h4>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="filter">
+                                        Filter:
+                                        <input type="text" name="filter" list="filter" placeholder="">
+                                        <datalist id="filter">
+                                            <option value="Material">
+                                            <option value="Thickness">
+                                            <option value="Position">
+                                        </datalist>
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="windows">
+                                        Windows:
+                                        <input type="text" name="windows" list="windows" placeholder="">
+                                        <datalist id="windows">
+                                            <option value="Material">
+                                            <option value="Thickness">
+                                            <option value="Position">
+                                        </datalist>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4> Detectors: </h4>
+                            <p>If IC used gases and pressure:</p>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="detectorsI0">
+                                        I0:
+                                        <input type="text" name="detectorsI0" id="detectorsI0" placeholder="">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="detectorsI1">
+                                        I1:
+                                        <input type="text" name="detectorsI1" id="detectorsI1" placeholder="">
+                                    </label>
+                                </div>
+                            </div>
+                            <p>If fluorescence detection:</p>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="detectorsfluo">
+                                        Type of detection:
+                                        <input type="text" name="detectorsfluo" id="detectorsfluo" placeholder="">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4> Scan parameter: </h4>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="detectionmode">
+                                        Detection Mode:
+                                        <input type="text" name="detectionmode" id="detectionmode" placeholder="Fluorescence/Transmission">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="scanmode">
+                                        Scanmode:
+                                        <input type="text" name="scanmode" id="scanmode" placeholder="Continuous/Steps">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="monochromatic">
+                                        Monochromatic flux on sample:
+                                        <input type="text" name="monochromatic" id="monochromatic" placeholder="">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="beamsize">
+                                        Beamsize on sample:
+                                        <input type="text" name="beamsize" id="beamsize" placeholder="">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="higherharmonic">
+                                        Higher harmonic content of beam:
+                                        <input type="text" name="higherharmonic" id="higherharmonic" placeholder="actual/measured">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4> Source-Type: </h4>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="sourcetype">
+                                        Type:
+                                        <select name='sourcetype' id="sourcetype">
+                                            <option value="">--Select--</option>
+                                            <option value="UNDULATOR"  > Undulator</option>
+                                            <option value="WIGGLER"  > Wiggler</option>
+                                            <option value="BENDING_MAGNET"  > Bending magnet</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="criticalEnergy">
+                                        Critical Energy:
+                                        <input type="text" name="criticalEnergy" id="criticalEnergy" placeholder="eV">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="maximumKvalue">
+                                        Maximum K value:
+                                        <input type="text" name="maximumKvalue" id="maximumKvalue" placeholder="">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4> Monochromator: </h4>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="type">
+                                        Type:
+                                        <input type="text" name="type" id="type" placeholder="DCM, 4 X-tal, ...">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="channelcut" >
+                                         Crystals:
+                                        <select name='channelcut' id="channelcut">
+                                            <option value="">--Select:--</option>
+                                            <option value="CHANNELCUT_yes"  > Channcel cut: Yes</option>
+                                            <option value="CHANNELCUT_no"  > Channcel cut: No</option>
+                                        </select>
+                                    </label>
+                                    <label for="fixedexit" >
+                                        <select name='fixedexit' id="fixedexit">
+                                            <option value="">--Select:--</option>
+                                            <option value="FIXEDEXIT_yes"  > Fixed exit: Yes</option>
+                                            <option value="FIXEDEXIT_no"  > Fixed exit: No</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="latticespacing">
+                                        Lattice spacing:
+                                        <input type="text" name="latticespacing" id="latticespacing" placeholder="... used to calculate E-axis">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="temperature_of_crystals">
+                                        Temperature of crystals:
+                                        <input type="text" name="temperature_of_crystals" id="temperature_of_crystals" placeholder="[K]">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="sourceDCM">
+                                        Distances: Source to DCM:
+                                        <input type="text" name="sourceDCM" id="sourceDCM" placeholder="">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="DCMsample">
+                                        Distances: DCM to sample:
+                                        <input type="text" name="DCMsample" id="DCMsample" placeholder="">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="encoder_theta" >
+                                        Encoder on theta axis:
+                                        <input type="text" name="encoder_theta" id="encoder_theta" placeholder="No/Yes? -> Resolution (angle units)">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="position_slits">
+                                        Position of slits:
+                                        <input type="text" name="position_slits" id="position_slits" placeholder="Distance from source/sample">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="opening_slits">
+                                        Opening of slits:
+                                        <input type="text" name="opening_slits" id="opening_slits" placeholder="">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="energyresolution_edge">
+                                        Energy resolution:
+                                        <input type="text" name="energyresolution_edge" id="energyresolution_edge" placeholder="at this edge">
+                                    </label>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="detuning">
+                                        Detuning:
+                                        <input type="text" name="detuning" id="detuning" placeholder="Percent of max. intesity">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <!-- Dropdown for Yes/No -->
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="use_beamdamage">Beamdamage:</label>
+                                    <select name='use_beamdamage' id="use_beamdamage" onchange="toggleBeamdamageTypeField()">
+                                        <option value="">--Select--</option>
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </div>
+                                <div class="flex-item">
+                                    <!-- Hidden input field for Beamdamage Types -->
+                                    <div id="beamdamageTypeFields" style="display:none;">
+                                        <label for="beamdamagetype">
+                                            Beamdamage type:
+                                            <input type="text" name="beamdamagetype" id="beamdamagetype" placeholder="">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <h4> Contact: </h4>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="bl_author">Author:</label>
+                                    <input type="text" name="bl_author" id="bl_author" placeholder="Enter author" required>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="bl_institute">Institute:</label>
+                                    <input type="text" name="bl_institute" id="bl_institute" placeholder="Enter institute" required>
+                                </div>
+                                <div class="flex-item">
+                                    <label for="bl_author_mail">Author e-mail:</label>
+                                    <input type="text" name="bl_author_mail" id="bl_author_mail" placeholder="Enter e-mail" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fields for Laboratory -->
+                        <div id="labFields" style="display:none;">
+                            <label for="labName">
+                                <p>Laboratory Name</p>
+                                <input type="text" name="labName" id="labName" placeholder="Lab" >
+                            </label>
+                            <!-- Add more fields specific to Laboratory here -->
+                            <hr>
+                            <h4> Contact: </h4>
+                            <div class="flex-container">
+                                <div class="flex-item">
+                                    <label for="BL_author">Author:</label>
+                                    <input type="text" name="BL_author" id="BL_author" placeholder="Enter author">
+                                </div>
+                                <div class="flex-item">
+                                    <label for="BL_institute">Institute:</label>
+                                    <input type="text" name="BL_institute" id="BL_institute" placeholder="Enter institute">
+                                </div>
+                                <div class="flex-item">
+                                    <label for="BL_author_mail">Author e-mail:</label>
+                                    <input type="text" name="BL_author_mail" id="BL_author_mail" placeholder="Enter e-mail">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </section>
+
+
+                <button class="cancel-btn" ><a href="{% url 'dataset_list' %}">Cancel</a></button>
+                <button class="submit-btn" value="Add Beamline"> Submit </button>
+            </form>
+        </section>
+    </section>
+</div>
+</body>
+
+</html>
+<script>
+    function toggleFields() {
+        const source = document.getElementById("Source").value;
+        const synchrotronFields = document.getElementById("synchrotronFields");
+        const labFields = document.getElementById("labFields");
+
+        if (source === "SYNCHROTRON") {
+            synchrotronFields.style.display = "block";
+            labFields.style.display = "none";
+        } else if (source === "LABORATORY") {
+            synchrotronFields.style.display = "none";
+            labFields.style.display = "flex";
+        } else {
+            synchrotronFields.style.display = "none";
+            labFields.style.display = "none";
+        }
+    }
+// JavaScript to toggle visibility of the mirror type field
+    function toggleMirrorTypeField() {
+        var dropdownValue = document.getElementById("use_mirror").value;
+        if (dropdownValue === "yes") {
+            document.getElementById("mirrorTypeFields").style.display = "block";
+        } else {
+            document.getElementById("mirrorTypeFields").style.display = "none";
+        }
+    }
+// JavaScript to toggle visibility of the beamdamage type field
+function toggleBeamdamageTypeField() {
+    var dropdownValue = document.getElementById("use_beamdamage").value;
+    if (dropdownValue === "yes") {
+        document.getElementById("beamdamageTypeFields").style.display = "block";
+    } else {
+        document.getElementById("beamdamageTypeFields").style.display = "none";
+    }
+}
+</script>

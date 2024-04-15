@@ -1,0 +1,54 @@
+{% load static %}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <title>RefXAS - All Beamlines</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
+</head>
+
+{% include "landing/navbar.html" %}
+
+<main class="page">
+
+    {% block content %}
+    <br>
+        <b><h1>Coming soon!</h1>
+            <p>This feature is still under construction. Thank you for your interest!</p></b>
+    {% endblock %}
+
+    <table id="datatablesSimple">
+        <thead>
+            <tr>
+                <th>Synchrotron Name, Beamline</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bl_meta in beamline_meta_list %}
+            <tr>
+                <td class="limit-id-length"> {{ bl_meta.custom_metadata.FACILITY.synchrotronName }}, {{ bl_meta.custom_metadata.FACILITY.beamline }}
+                </td>
+                <!-- Include other fields here as needed -->
+                <td>
+                    <form action="{% url 'beamline_details' beamline_id=bl_meta.pid %}">
+                      {% csrf_token %}
+                        <button class="button-more button4" type="submit" />More</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+</main>
+
+
+{% include "landing/footer.html" %}

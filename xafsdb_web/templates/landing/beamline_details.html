@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-container">
+            <h2 >Beamline Metadata</h2>
+            <div>
+                <table id="table_detail" >
+                    <p class="table-title"> PID:</p>{{ beamline_metadata.pid }}
+                    <p class="table-title"> Source:</p>{{ beamline_metadata.customMetadata.SOURCE }}
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Contact: </caption>
+                    <thead>
+                        <tr> <th class="subh">EDITING AUTHOR: {{ beamline_metadata.customMetadata.CONTACT.bl_author }} </th></tr>
+                        <tr> <th class="subh">INSTITUTE: {{ beamline_metadata.customMetadata.CONTACT.bl_institute }} </th></tr>
+                        <tr> <th class="subh">AUTHOR EMAIL: {{ beamline_metadata.customMetadata.CONTACT.bl_author_mail }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Facility: </caption>
+                    <thead>
+                        <tr> <th class="subh">SYNCHROTRON NAME: {{ beamline_metadata.customMetadata.FACILITY.synchrotronName }} </th></tr>
+                        <tr> <th class="subh">BEAMLINE: {{ beamline_metadata.customMetadata.FACILITY.beamline }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Storage Ring: </caption>
+                    <thead>
+                        <tr> <th class="subh">ELECTRON ENERGY: {{ beamline_metadata.customMetadata.STORAGE_RING.elektronEnergy }} </th></tr>
+                        <tr> <th class="subh">ELECTRON BEAM EMITTANCE: {{ beamline_metadata.customMetadata.STORAGE_RING.elektronBeamEmittance }} </th></tr>
+                        <tr> <th class="subh">FILLING MODE: {{ beamline_metadata.customMetadata.STORAGE_RING.fillingMode }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Mirrors: </caption>
+                    <thead>
+                        <tr> <th class="subh">USE MIRROR: {{ beamline_metadata.customMetadata.MIRRORS.use_mirror }} </th></tr>
+                        <tr> <th class="subh">MIRROR TYPE: {{ beamline_metadata.customMetadata.MIRRORS.mirrortype }} </th></tr>
+                        <tr> <th class="subh">MIRROR POSITION: {{ beamline_metadata.customMetadata.MIRRORS.mirrorposition }} </th></tr>
+                        <tr> <th class="subh">REFLECTING MATERIAL: {{ beamline_metadata.customMetadata.MIRRORS.reflectingmaterial }} </th></tr>
+                        <tr> <th class="subh">ANGLE OF INCIDENCE: {{ beamline_metadata.customMetadata.MIRRORS.angleofincidence }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Filters / Windows: </caption>
+                    <thead>
+                        <tr> <th class="subh">FILTER: {{ beamline_metadata.customMetadata.FILTERS_WINDOWS.filter }} </th></tr>
+                        <tr> <th class="subh">WINDOWS: {{ beamline_metadata.customMetadata.FILTERS_WINDOWS.windows }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Detectors: </caption>
+                    <thead>
+                        <tr> <th class="subh">DETECTORS I0: {{ beamline_metadata.customMetadata.DETECTORS.detectorsI0 }} </th></tr>
+                        <tr> <th class="subh">DETECTORS I1: {{ beamline_metadata.customMetadata.DETECTORS.detectorsI1 }} </th></tr>
+                        <tr> <th class="subh">DETECTORS FLUORESCENCE: {{ beamline_metadata.customMetadata.DETECTORS.detectorsfluo }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Scan parameters: </caption>
+                    <thead>
+                        <tr> <th class="subh">DETECTION MODE: {{ beamline_metadata.customMetadata.SCANPARAM.detectionmode }} </th></tr>
+                        <tr> <th class="subh">SCAN MODE: {{ beamline_metadata.customMetadata.SCANPARAM.scanmode }} </th></tr>
+                        <tr> <th class="subh">MONOCHROMATIC: {{ beamline_metadata.customMetadata.SCANPARAM.monochromatic }} </th></tr>
+                        <tr> <th class="subh">BEAM SIZE: {{ beamline_metadata.customMetadata.SCANPARAM.beamsize }} </th></tr>
+                        <tr> <th class="subh">HIGHER HARMONIC: {{ beamline_metadata.customMetadata.SCANPARAM.higherharmonic }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Source type: </caption>
+                    <thead>
+                        <tr> <th class="subh">SOURCE TYPE: {{ beamline_metadata.customMetadata.SOURCETYPE.sourcetype }} </th></tr>
+                        <tr> <th class="subh">CRITICAL ENERGY: {{ beamline_metadata.customMetadata.SOURCETYPE.criticalEnergy }} </th></tr>
+                        <tr> <th class="subh">MAXIMUM K VALUE: {{ beamline_metadata.customMetadata.SOURCETYPE.maximumKvalue }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Monochromator: </caption>
+                    <thead>
+                        <tr> <th class="subh">TYPE: {{ beamline_metadata.customMetadata.MONOCHROMATOR.type }} </th></tr>
+                        <tr> <th class="subh">CRYSTALS CHANNELCUT: {{ beamline_metadata.customMetadata.MONOCHROMATOR.CRYSTALS.channelcut }} </th></tr>
+                        <tr> <th class="subh">CRYSTALS FIXED EXIT: {{ beamline_metadata.customMetadata.MONOCHROMATOR.CRYSTALS.fixedexit }} </th></tr>
+                        <tr> <th class="subh">LATTICE SPACING: {{ beamline_metadata.customMetadata.MONOCHROMATOR.latticespacing }} </th></tr>
+                        <tr> <th class="subh">TEMPERATURE OF CRYSTALS: {{ beamline_metadata.customMetadata.MONOCHROMATOR.temperature_of_crystals }} </th></tr>
+                        <tr> <th class="subh">SOURCE DCM: {{ beamline_metadata.customMetadata.MONOCHROMATOR.sourceDCM }} </th></tr>
+                        <tr> <th class="subh">DCM SAMPLE: {{ beamline_metadata.customMetadata.MONOCHROMATOR.DCMsample }} </th></tr>
+                        <tr> <th class="subh">ENCODER THETA: {{ beamline_metadata.customMetadata.MONOCHROMATOR.encoder_theta }} </th></tr>
+                        <tr> <th class="subh">POSITION SLITS: {{ beamline_metadata.customMetadata.MONOCHROMATOR.position_slits }} </th></tr>
+                        <tr> <th class="subh">OPENING SLITS: {{ beamline_metadata.customMetadata.MONOCHROMATOR.opening_slits }} </th></tr>
+                        <tr> <th class="subh">ENERGY RESOLUTION EDGE: {{ beamline_metadata.customMetadata.MONOCHROMATOR.energyresolution_edge }} </th></tr>
+                        <tr> <th class="subh">DETUNING: {{ beamline_metadata.customMetadata.MONOCHROMATOR.detuning }} </th></tr>
+                    </thead>
+                </table>
+                <table id="datatablesSimple">
+                    <caption class="table-title">Beam damage: </caption>
+                    <thead>
+                        {% if beamline_metadata.customMetadata.BEAMDAMAGE.use_beamdamage %}
+                        <tr> <th class="subh">BEAM DAMAGE TYPE: {{ beamline_metadata.customMetadata.BEAMDAMAGE.beamdamagetype }} </th></tr>
+                        {% endif %}
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
