@@ -21,6 +21,7 @@ COPY .env /app
 COPY auto_dataset_create.py /app
 COPY plugins /app/plugins
 COPY quality_control /app/quality_control
+COPY auto_bl_create.py /app
 
 COPY requirements.txt /app/
 
