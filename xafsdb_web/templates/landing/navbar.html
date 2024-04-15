@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 {% load static %}
 
 <style>
     .navbar_new {
     width: 100%;
-    height: 50px;
+    height: 75px;
     background-color: var(--black);
     position: sticky;
     top: 0;
@@ -28,7 +29,7 @@
       }
       .menu__btn {
         position: fixed;
-        top: 26px;
+        top: 39px;
         left: 12px;
         width: 26px;
         height: 26px;
@@ -94,24 +95,57 @@
         display: none;
       }
     }
+    .search-containerNEW {
+      padding: 10px;
+      background-color: white; /* White background for the container */
+      border-radius: 25px; /* Rounded corners */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+    .searchTerm {
+      border: none;
+      outline: none;
+      border-radius: 25px 0 0 25px; /* Rounded left corners */
+      color: #2f3640; /* Text color */
+      background-color: #f9f9f9; /* Light background for the input */
+  }
+    .search-form {
+    display: flex;
+    align-items: center;
+  }
+  .search-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 0 25px 25px 0; /* Rounded right corners */
+    background: #2f3640;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Change cursor on hover */
+    transition: 0.4s;
+}
+.search-button:hover {
+  background-color: #575f6d; /* Darker shade on hover */
+}
 </style>
 
 <div class="navbar_new">
     <div class="navbar-container">
         <div class="logo-container">
             <a href="{% url 'home' %}">
-                <h1 class="logo">xafsdb</h1>
+                <h1 class="logo">RefXAS</h1>
             </a>
         </div>
 
         <div class="menu-container">
           <ul class="menu-list">
             <li class="menu-list-item active_nav"><a href="{% url 'home' %}">Home</a></li>
-            {% if user.is_authenticated %}
+            <!--{% if user.is_authenticated %}{% endif %}-->
             <li class="menu-list-item active_nav"><a href="{% url 'dataset_upload_view' %}">Upload</a></li>
-            {% endif %}
+            
             <li class="menu-list-item active_nav"><a href="{% url 'dataset_list' %}">DataSets</a></li>
-            <li class="menu-list-item active_nav"><a href="{% url 'contact' %}">Contact</a></li>
+            <li class="menu-list-item active_nav"><a href="{% url 'team_contact' %}">Team/Contact</a></li>
           </ul>
       </div>
 
@@ -123,12 +157,16 @@
           </label>
 
           <ul class="menu__box">
-              <li><a class="menu__item" href="{% url 'home' %}">Home</a></li>
-              {% if user.is_authenticated %}
-            <li><a class="menu__item"  href="{% url 'dataset_upload_view' %}">Upload</a></li>
+            <li><a class="menu__item" href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+                <li><a class="menu__item"  href="{% url 'dataset_list_curator' %}">Curator access</a></li>
+                
+                <li><a class="menu__item"  href="{% url 'beamline_upload' %}">Add Beamline</a></li>
             {% endif %}
+            <li><a class="menu__item"  href="{% url 'dataset_upload_view' %}">Upload</a></li>
             <li><a class="menu__item"  href="{% url 'dataset_list' %}">DataSets</a></li>
-            <li><a class="menu__item"  href="{% url 'contact' %}">Contact</a></li>
+            <li><a class="menu__item"  href="{% url 'beamline_list' %}">Added Beamlines</a></li>
+            <li><a class="menu__item"  href="{% url 'team_contact' %}">Team/Contact</a></li>
             {% block content %}
             {% if user.is_authenticated %}
               Hi {{ user.username }}!
@@ -141,19 +179,9 @@
             </ul>
           </div>
 
-        <div>
-            <a href="https://github.com/SciCatProject" target="_blank">
-                <img class="responsive_coll" src="{% static 'img/SciCatLogo.png' %}" alt="scicat" style="object-fit:contain; background-color: white;" ></a>
-        </div>
-
-        <div>
-            <a href="https://www.daphne4nfdi.de/english/index.php" target="_blank">
-                <img class="responsive_daph" src="{% static 'img/daphne.png' %}" alt="daphne" style="object-fit:contain; background-color: white;" ></a>
-        </div>
-
         <!-- searchbar -->
-        <div class="search-container">
-            <form action="{% url 'pg_search' %}" method="GET">
+        <div class="search-containerNEW">
+            <form action="{% url 'pg_search' %}" method="GET" class="search-form">
                 {% csrf_token %}
                 <input
                 type="search"
@@ -161,9 +189,9 @@
                 id="form-busca"
                 name="term"
                 value="{{ request.GET.term }}"
-                placeholder="Try to find a title..."
+                placeholder="Try to find a spectrum..."
                 autocomplete="off">
-                <button type="submit"><i class="fa fa-search"></i></button>
+                <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
             </form>
         </div>
         <!-- end of searchbar -->
