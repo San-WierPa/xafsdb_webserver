@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+{% load static %}
+
+     <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <style>
+            .logo_curator {
+                font-size: 30px;
+                color: #0000FF;
+            }
+            .download_curator {
+                font-size: 15px;
+                color: #0000FF;
+            }
+            .table-title_curator {
+                font-size: 20px;
+                font: bold;
+                color: #0000FF;
+            }
+            .approve-btn {
+                border: none;
+                background-color: var(--black);
+                color: #00BFFF;
+                padding: .3rem 1rem;
+                display: block;
+                width: 30%;
+                margin: .6rem auto;
+                border-radius: 2rem;
+                font-size: 1.1rem;
+            }
+            .cancel-btn_curator {
+                border: none;
+                background-color: var(--black);
+                color: #00BFFF;
+                padding: .3rem 1rem;
+                display: block;
+                width: 30%;
+                margin: .6rem auto;
+                border-radius: 2rem;
+                font-size: 1.1rem;
+            }
+            .three-details-item {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .three-details-item input {
+                outline: none;
+                font-size: .8rem;
+                border-radius: .2rem;
+                border: 1px solid rgb(113, 101, 101);
+                padding: .1rem;
+                background-color: transparent;
+                resize: both;
+                overflow: auto;
+            }
+            personal-details,
+            .identity-details {
+                margin: .2rem 0;
+            }
+            .personal-details label,
+            .identity-details label {
+                margin: .5rem 1rem;
+                font-size: .9rem;
+                font-weight: 600;
+            }
+            input#curator_updated_by {
+                color: black;
+                width: 200%;
+            }
+            input#curator_updated_by::placeholder {
+                color: black;
+            }
+        </style>
+    </head>
+
+    <div class="logo-container">
+        <a href="{% url 'home' %}">
+            <h1 class="logo_curator">Back to RefXAS</h1>
+        </a>
+      </div>
+
+    {% block content %}
+    <br>
+                <b><h1>FOR CURATOR ONLY!</h1>
+                    <p>Please verify / deny at the very end at this page!</p></b>
+            {% endblock %}
+
+<div class="container">
+    <div class="content-container">
+
+        <body>
+            <div>
+                <div class="mySlides">
+                  <br>
+                  <center><img src="{{ raw_data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                </div>
+                <div class="mySlides">
+                  <br>
+                  <center><img src="{{ normalized_data_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                </div>
+                <div class="mySlides">
+                  <br>
+                  <center><img src="{{ k_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                </div>
+                <div class="mySlides">
+                  <br>
+                  <center><img src="{{ R_fig }}" alt="Preview" height="500" width="750" style="object-fit:contain; border: 3px solid #555;"></center>
+                </div>
+
+            </div>
+            <br>
+            <div style="text-align:center">
+              <span class="dot" onclick="currentSlide(1)"></span>
+              <span class="dot" onclick="currentSlide(2)"></span>
+              <span class="dot" onclick="currentSlide(3)"></span>
+              <span class="dot" onclick="currentSlide(4)"></span>
+            </div>
+          </body>
+
+        <div>
+            <table id="table_detail" >
+                <caption class="table-title_curator">Sample Info </caption>
+                <thead>
+                        <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Collection code" </abbr> Collection code</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Physical state" </abbr> Physical state</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Crystal orientation" </abbr> Crystal orient.</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Temperature" </abbr> Temperature</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Pressure" </abbr> Pressure</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Sample environment" </abbr> Sample environment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= {{ dataset_meta.id }} > {{ dataset_meta.id }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= {{ dataset_meta.datasetName }} > {{ dataset_meta.datasetName }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.sample_info.coll_code }}" > {{ dataset_meta.scientificMetadata.sample_info.coll_code }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.sample_info.physical_state }}" > {{ dataset_meta.scientificMetadata.sample_info.physical_state }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.sample_info.crystal_orientation }}" > {{ dataset_meta.scientificMetadata.sample_info.crystal_orientation }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.sample_info.temperature }}" > {{ dataset_meta.scientificMetadata.sample_info.temperature }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.sample_info.pressure }}" > {{ dataset_meta.scientificMetadata.sample_info.pressure }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.sample_info.sample_environment }}" > {{ dataset_meta.scientificMetadata.sample_info.sample_environment }} </abbr></td>
+                        <table id="table_detail" >
+                            <tr>
+                                <td> Description: {{ dataset_meta.scientificMetadata.Description }}</td>
+                            </tr>
+                        </table>
+                        <table id="table_detail" >
+                            <tr>
+                                <td> General remarks: {{ dataset_meta.scientificMetadata.sample_info.general_remarks }}</td>
+                            </tr>
+                        </table>
+                        <table id="table_detail" >
+                            <tr>
+                                <td> Sample preparation: {{ dataset_meta.scientificMetadata.sample_info.sample_prep }}</td>
+                            </tr>
+                        </table>
+                        <table id="table_detail" >
+                            <tr>
+                                <td> Sample ID: {{ dataset_meta.scientificMetadata.sample_info.sample_id }}</td>
+                            </tr>
+                        </table>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="table_detail">
+                <caption class="table-title_curator">Instrument </caption>
+                <thead>
+                        <tr>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Facility" </abbr> Facility</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Beamline" </abbr> Beamline</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Acquisition mode" </abbr> Acquisition mode</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Crystals" </abbr> Crystals</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Mirrors" </abbr> Mirrors</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Detectors" </abbr> Detectors</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Element" </abbr> Element</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Edge" </abbr> Edge</th>
+                        <th class="longTextHover" style="max-width: 80px;"><abbr title= "Maximum k-range (EXAFS)" </abbr> Max k-range</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.facility }}" > {{ dataset_meta.scientificMetadata.instrument.facility }} </abbr></td>
+                        {% for bl in all_beamline_data %}
+                            {% if dataset_meta.scientificMetadata.instrument.beamline == bl.name %}
+                                <td class="longTextHover" style="max-width: 80px;">
+                                    <abbr title="{{ bl.name }}">
+                                        <a href="{% url 'beamline_details' beamline_id=bl.id %}">{{ bl.name }}</a>
+                                    </abbr>
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.aquisition_mode }}" > {{ dataset_meta.scientificMetadata.instrument.aquisition_mode }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.crystals }}" > {{ dataset_meta.scientificMetadata.instrument.crystals }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.mirrors }}" > {{ dataset_meta.scientificMetadata.instrument.mirrors }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.detectors }}" > {{ dataset_meta.scientificMetadata.instrument.detectors }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.element_input }}" > {{ dataset_meta.scientificMetadata.instrument.element_input }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.edge_input }}" > {{ dataset_meta.scientificMetadata.instrument.edge_input }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.instrument.max_k_range }}" > {{ dataset_meta.scientificMetadata.instrument.max_k_range }} </abbr></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="table_detail">
+                <caption class="table-title_curator">Bibliography </caption>
+                <thead>
+                        <tr>
+                        <th>DOI</th>
+                        <th>Owner</th>
+                        <th>Institute</th>
+                        <th>Contact Mail</th>
+                        <th>Reference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.bibliography.doi }}" > {{ dataset_meta.scientificMetadata.bibliography.doi }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.owner }}" > {{ dataset_meta.owner }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.ownerGroup }}" > {{ dataset_meta.ownerGroup }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.contactEmail }}" > {{ dataset_meta.contactEmail }} </abbr></td>
+                        <td class="longTextHover" style="max-width: 80px;"><abbr title= "{{ dataset_meta.scientificMetadata.bibliography.reference }}" > {{ dataset_meta.scientificMetadata.bibliography.reference }} </abbr></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table id="datatablesSimple">
+                <caption class="table-title_curator">Scientific metadata </caption>
+                <thead>
+                    <tr><th>SOURCE: {{ dataset_meta.scientificMetadata.Data.Source }} </th></tr>
+                    <tr> <th>MODE: {{ dataset_meta.scientificMetadata.Data.Mode }}</th></tr>
+                    <tr> <th>RAW:</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>EDGE STEP:</th>
+                    </tr>
+                    <tr> <td>
+                        VALUE: {{ dataset_meta.keywords.0 }}
+                        <br>
+                        UNIT: {{ dataset_meta.scientificMetadata.RAW.edge_step.unit }}
+                        <br>
+                        DOCUMENTATION: {{ dataset_meta.scientificMetadata.RAW.edge_step.documentation }}
+                    </td></tr>
+                    <tr>
+                        <th> K MAX:</th>
+                    </tr>
+                    <tr> <td>
+                        VALUE: {{ dataset_meta.keywords.1 }}
+                        <br>
+                        UNIT: {{ dataset_meta.scientificMetadata.RAW.k_max.unit }}
+                        <br>
+                        DOCUMENTATION: {{ dataset_meta.scientificMetadata.RAW.k_max.documentation }}
+                    </td></tr>
+                    <tr>
+                        <th>ENERGY RESOLUTION:</th>
+                    </tr>
+                    <tr> <td>
+                        VALUE: {{ dataset_meta.keywords.2 }}
+                        <br>
+                        UNIT: {{ dataset_meta.scientificMetadata.RAW.energy_resolution.unit }}
+                        <br>
+                        DOCUMENTATION: {{ dataset_meta.scientificMetadata.RAW.energy_resolution.documentation }}
+                    </td></tr>
+                    <tr>
+                        <th >NOISE:</th>
+                    </tr>
+                    <tr> <td>
+                        VALUE: {{ dataset_meta.keywords.3 }}
+                        <br>
+                        UNIT: {{ dataset_meta.scientificMetadata.RAW.noise.unit }}
+                        <br>
+                        DOCUMENTATION: {{ dataset_meta.scientificMetadata.RAW.noise.documentation }}
+                    </td></tr>
+                </tbody>
+            </table>
+
+            <table id="datatablesSimple">
+                <caption class="table-title_curator">Download(s)</caption>
+                <thead>
+                    <tr>
+                        <th>Download the file:</th>
+                        <th>File content:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a class="download_curator" href="?download_zip=true">Download this work (ZIP)</a></td>
+                        <td>Description, metadata (json, yaml, hdf5), data and 4 plots.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <form action="{% url 'approval_by_curator' dataset_id=dataset_meta.id %}"  method="post" id="curator_form" class="registration-form">
+            {% csrf_token %}
+            <section class="identity-details">
+                <div class="three-details-item">
+                    <label for="curator_approval" >
+                        <p> Curator (dis)approval:<br>
+                        (Clicking "Cancel" is equal to choice "DISAPPROVAL") </p>
+                        <select  name='approval_status' id="curator_approval">
+                            <option value=DISAPPROVAL  > DISAPPROVAL</option>
+                            <option value=APPROVAL  > APPROVAL</option>
+                        </select>
+                    </label>
+                    <label for="curator_updated_by">
+                        <p> Curated by: </p>
+                        <input type="text" name="curator_updated_by" id="curator_updated_by" placeholder="State your NAME, MAIL and MM/DD/YYYY" required>
+                    </label>
+                </div>
+            </section>
+            <button class="cancel-btn_curator" ><a href="{% url 'dataset_list_curator' %}">Cancel</a></button>
+            <button type="submit" class="approve-btn"> Submit </button>
+        </form>
+
+    </div>
+</div>
+<script src="{% static 'js/app.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/content_imgslider.js' %}" type="text/javascript"></script>

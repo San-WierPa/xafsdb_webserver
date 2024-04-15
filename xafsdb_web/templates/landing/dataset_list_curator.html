@@ -1,0 +1,129 @@
+{% load static %}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <title>RefXAS - Curator only</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
+
+</head>
+
+<div class="logo-container">
+  <a href="{% url 'home' %}">
+      <h1 class="logo_curator">Back to RefXAS</h1>
+  </a>
+</div>
+
+<main class="page">
+    {% block content %}
+    <br>
+                <b><h1>FOR CURATOR ONLY!</h1>
+                    <p>The following datasets require attention:</p></b>
+            {% endblock %}
+
+    <table id="datatablesSimple">
+
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Title</th>
+            </tr>
+        </thead>
+
+        {% for dataset_meta in dataset_meta_list %}
+          {% if not dataset_meta.isPublished %}
+        <tbody>
+            <tr>
+                <td class="limit-id-length"> {{ dataset_meta.id }} </td>
+                <td class="table-title_curator limit-title-length">
+                    {{ dataset_meta.datasetName }}
+                </td>
+                <td>
+                    <form action="{% url 'dataset_details_curator' dataset_id=dataset_meta.id %}">
+                      {% csrf_token %}
+                        <button class="button-more_curator button4" type="submit" />Please verify</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+          {% endif %}
+        {% endfor %}
+
+    </table>
+
+    <center><div class="pag">
+        {% if dataset_meta_list.has_other_pages %}
+
+        {% if dataset_meta_list.has_previous %}
+          <a href="?page={{ dataset_meta_list.previous_page_number }}">&laquo;</a>
+        {% else %}
+          <li><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in dataset_meta_list.paginator.page_range %}
+          {% if dataset_meta_list.number == i %}
+            <li{{ i }}(current)</li>
+          {% else %}
+            <a href="?page={{ i }}">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if dataset_meta_list.has_next %}
+          <a href="?page={{ dataset_meta_list.next_page_number }}">&raquo;</a>
+        {% else %}
+          <li&raquo;</li>
+        {% endif %}
+        {% endif %}
+    </div></center>
+
+</main>
+
+<style>
+    .logo_curator {
+      font-size: 30px;
+      color: #0000FF;
+  }
+  .table-title_curator {
+    font-size: 20px;
+    font: bold;
+    color: #0000FF;
+}
+.button-more_curator {
+  font-family: "Sen", sans-serif;
+  background-color: var(--black);
+  border: none;
+  color: #00BFFF;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 6px 2px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  border-radius: 12px;
+}
+    .pag {
+      display: flex !important;
+    }
+    .pag a {
+      color: black;
+      float: left;
+      padding: 12px 18px;
+      text-decoration: none;
+    }
+    .pag a.active {
+      background-color: #060185;
+      color: white;
+      border-radius: 50%;
+    }
+    .pag a:hover:not(.active) {
+      background-color: #cbcadb;
+      border-radius: 50%;
+    }
+  </style>
