@@ -97,6 +97,7 @@ coverage.xml
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
 
 # pyenv
 .python-version
@@ -169,3 +170,5 @@ xafsdb_web/_auth_constants.py
 xafsdb_web/templates/landing/upload_simple.html
 quality_control/example data/FOR_TESTING/*
 !/quality_control/example data/FOR_TESTING/.gitkeep
+quality_control/quality_check_LOCAL.py
+plugins/read_data_LOCAL.py
