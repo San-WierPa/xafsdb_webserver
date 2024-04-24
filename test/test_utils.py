@@ -1,76 +1,69 @@
 import unittest
-from xafsdb_web.utils import term_checker
+
+from ..xafsdb_web.utils import term_checker
+
 
 class TestTermChecker(unittest.TestCase):
-
-    def setUp(self):
-        self.dataset_sample = {
-            "_id": 'PID.SAMPLE.PREFIX787acf5e-974f-4302-8bd6-861d939c2939',
-            "principalInvestigator": 'someone',
-            "creationLocation": 'wuppertal',
+    def test_term_checker(self):
+        # Setup
+        datasetList = []
+        dataset = {
+            "datasetName": "Sample Dataset",
+            "ownerGroup": "Group1",
+            "owner": "OwnerName",
+            "contactEmail": "contact@example.com",
+            "updatedBy": "UpdaterName",
             "scientificMetadata": {
-                "Description": '',
-                "Data": {
-                    "Source": 'SYNCHROTRON',
-                    "Mode": 'Absorption'
-                },
-                "RAW": {
-                    "edge_step": {
-                        "value": 0,
-                        "unit": 'a.u.',
-                        "documentation": 'Height of the detected edge step.',
-                        "valueSI": 0,
-                        "unitSI": 'a.u.'
-                    },
-                    "k_max": {
-                        "value": 0,
-                        "unit": 'Å⁻¹',
-                        "documentation": 'Considered angular wavenumber.',
-                        "valueSI": 0,
-                        "unitSI": 'Å⁻¹'
-                    }
-                },
-                "PROCESSED": {
-                    "amplitude_reduction_factor": {
-                        "Z_ranges": {
-                            "tentoforty": {
-                                "value": 0
-                            },
-                            "fortytoeighty": {
-                                "value": 0
-                            }
-                        },
-                        "unit": 'a.u.',
-                        "documentation": 'amplitude factor from the processed spectrum'
+                "Description": "A detailed description",
+                "Data": {"Source": "Synchrotron", "Measurement": "X-ray"},
+                "instrument": {"facility": "LHC", "beamline": "ATLAS"},
+            },
+            "history": [
+                {
+                    "updatedscientificMetadata": {
+                        "Description": "Updated description",
+                        "Data": {"Source": "Lab", "Measurement": "Neutron"},
                     }
                 }
-            },
-            "ownerGroup": 'ResearchGroup1',
-            "owner": 'ResearchOwner1',
-            "contactEmail": 'research_owner1@example.com',
-            "datasetName": 'Ni_foil_Ni_K_300_1.xdi 2023-09-06-17_37_43',
-            "isPublished": False
+            ],
         }
 
-    def test_term_checker(self):
-        datasetList = []
+        # Test with term present in updated history metadata
+        term_checker(dataset, "neutron", datasetList)
+        self.assertEqual(
+            len(datasetList),
+            1,
+            "The dataset should be found when term is in updated history metadata",
+        )
 
-        # Test case 1: Search term found in datasetName
-        term_checker(self.dataset_sample, '300_1.xdi', datasetList)
-        self.assertEqual(len(datasetList), 1)
-
+        # Test with term present in current scientific metadata
         datasetList.clear()
+        term_checker(dataset, "x-ray", datasetList)
+        self.assertEqual(
+            len(datasetList),
+            1,
+            "The dataset should be found when term is in current scientific metadata",
+        )
 
-        # Test case 2: Search term found in ownerGroup
-        term_checker(self.dataset_sample, 'ResearchGroup1', datasetList)
-        self.assertEqual(len(datasetList), 1)
-
+        # Test with term present in top-level attributes
         datasetList.clear()
+        term_checker(dataset, "sample", datasetList)
+        self.assertEqual(
+            len(datasetList),
+            1,
+            "The dataset should be found when term is in datasetName",
+        )
 
-        # Test case 3: Search term not found
-        term_checker(self.dataset_sample, 'nonexistent', datasetList)
-        self.assertEqual(len(datasetList), 0)
+        # Test with term not present
+        datasetList.clear()
+        term_checker(dataset, "unrelated", datasetList)
+        self.assertEqual(
+            len(datasetList),
+            0,
+            "The dataset should not be found when term is unrelated",
+        )
 
 
-if __name__ == '__main__':
+# Run the tests
+if __name__ == "__main__":
     unittest.main()

@@ -113,6 +113,20 @@ Using python manage.py test has a few advantages over using unittest directly:
 
 That being said, it is still possible to use unittest directly to run tests in a Django project. However, in most cases, using python manage.py test is the recommended approach.
 
++ Regarding `unit_test`:
+  - Remember importing relative to root, e.g.
+  ```shell
+  from ..xafsdb_web.utils import term_checker
+  ```
+  - Change to correct directory:
+  ```shell
+  cd /home/sepa/Desktop/xafs-db/xafsdb/
+  ```
+  - Finally, run the test from this directory:
+  ```shell
+  python -m unittest webserver.test.test_utils
+  ```
+
 ### Pre-deploy to gitlab -> atm hzdr
 
 + Push the image:
@@ -429,3 +443,27 @@ make html
             <a href="https://www.daphne4nfdi.de/english/index.php" target="_blank">
                 <img class="responsive_daph" src="{% static 'img/daphne.png' %}" alt="daphne" style="object-fit:contain; background-color: white;" ></a>
         </div>-->
+
+# Outreach
+
+In order to have badges and proper formatting, please use `isort` and `black`, e.g.:
+  ```shell
+  python -m isort test/test_utils.py
+  ```
+  and
+  ```shell
+  python -m black test/test_utils.py
+  ```
+**NOTE**: Firstly `black`and secondly `isort`!
+
+## Linter / Formatting django
+
+For the django.htmls: use `python -m pip install djlint` via e.g.
+  ```shell
+  python -m djlint login.html --profile django
+  ```
+and formatting via:
+  ```shell
+  python -m djlint login.html --profile django --reformat
+  ```
+**NOTE**: Reformatting django-htmls may cause syntax errors...
