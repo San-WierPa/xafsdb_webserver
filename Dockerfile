@@ -10,6 +10,8 @@ COPY webserver /app/webserver
 
 COPY xafsdb_web /app/xafsdb_web
 
+COPY materials /app/materials
+
 COPY manage.py /app
 
 COPY db.sqlite3 /app
