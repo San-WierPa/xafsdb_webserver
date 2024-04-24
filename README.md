@@ -1,5 +1,15 @@
 # REFXAS - XAS REFERENCE DATABASE UNDER DAPHNE4NFDI
 
+<div align="center">
+
+<a href="https://github.com/psf/black">
+    <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black">
+</a>
+
+</div>
+
+
+
 ## THE PROJECT
 
 REFXAS (formerly XAFSDB) is a collaborational project under [Daphne4nfdi](https://www.daphne4nfdi.de/english/index.php)
