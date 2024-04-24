@@ -1,7 +1,10 @@
+name: Lint
+
+on: [push, pull_request]
+
 jobs:
-  lint:
+  black:
     runs-on: ubuntu-latest
-    steps:
     - uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -12,4 +15,4 @@ jobs:
         python -m pip install --upgrade pip
         pip install black
     - name: Run Black
-      run: python -m black . --check  # Use python -m to ensure correct version
+      run: python -m black . --check
