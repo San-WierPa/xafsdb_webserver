@@ -1,7 +1,7 @@
 from django.test import TestCase
-from xafsdb_web.models import Files
 
 from webserver.backends import PrivateMediaStorage
+from xafsdb_web.models import Files
 
 
 class FilesModelTest(TestCase):
