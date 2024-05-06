@@ -1,6 +1,6 @@
 site_name: RefXAS - Reference database for XAS
 site_url: https://san-wierpa.github.io/refxas_docs/
-repo_url: https://github.com/SParipsa/refxas_docs
+repo_url: https://github.com/San-WierPa/xafsdb_webserver
 
 copyright: Copyright &copy; 2022 - 2024 Sebastian Paripsa
 
@@ -32,7 +32,10 @@ theme:
 
 plugins:
   - search
-  - mkdocstrings
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [..]
 
 extra:
   social:
@@ -42,6 +45,7 @@ extra:
       link: https://www.linkedin.com/in/sebastian-paripsa/
     - icon: fontawesome/solid/paper-plane
       link: mailto:<paripsa@uni-wuppertal.de>
+
   consent:
     title: Cookie consent
     description: >-
