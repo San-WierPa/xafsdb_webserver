@@ -3,6 +3,10 @@
 <a href="https://github.com/psf/black">
     <img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black">
 </a>
+<a href="https://squidfunk.github.io/mkdocs-material/">
+    <img src="https://img.shields.io/badge/docs-mkdocs%20material-blue.svg" alt="Docs: mkdocs material">
+</a>
+
 
 </div>
 
