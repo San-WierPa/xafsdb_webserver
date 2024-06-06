@@ -7,7 +7,6 @@
     <img src="https://img.shields.io/badge/docs-mkdocs%20material-blue.svg" alt="Docs: mkdocs material">
 </a>
 
-
 </div>
 
 # REFXAS - XAS REFERENCE DATABASE UNDER DAPHNE4NFDI
