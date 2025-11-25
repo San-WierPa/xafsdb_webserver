@@ -1,0 +1,9 @@
+xraylarch
+matplotlib
+scipy
+pillow
+numpy
+glob2
+pybase64
+datetime
+h5py

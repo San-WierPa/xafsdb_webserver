@@ -1,25 +1,28 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Mon Mar 23 14:33:49 2020
-
 @author: Frank Foerste
 ffoerste@physik.tu-berlin.de
 """
 
-##############################################################################
-### import packages ###
-##############################################################################
+###################
+# import packages #
+###################
 import json
 from glob import glob
-
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 import matplotlib.pyplot as plt
-plt.ioff()
 import numpy as np
 from scipy.signal import argrelextrema
 from larch import Group, Interpreter, fitting, xafs, xray
 from PIL import Image
-
+import base64
+import io
+import os
+from datetime import datetime
+from plugins.read_data import ReadData
+plt.ioff()
 
 use_originpo_style = True
 if use_originpo_style:
@@ -35,11 +38,8 @@ if use_originpo_style:
     plt.rcParams['axes.xmargin'] = 0
     plt.rcParams['axes.ymargin'] = 0
     plt.rcParams["legend.markerscale"] = 0.8
-    # plt.rcParams["legend.frameon"] = False
     plt.rcParams["legend.fontsize"] = "small"
     plt.rcParams["legend.loc"] = "best"
-    # plt.rcParams["xtick.labelsize"] = "small"
-    # plt.rcParams["ytick.labelsize"] = "small"
     plt.rcParams.update({"figure.figsize" : (6.4,4.8),
                      "figure.subplot.left" : 0.177, "figure.subplot.right" : 0.946,
                      "figure.subplot.bottom" : 0.156, "figure.subplot.top" : 0.965,
@@ -73,23 +73,10 @@ else:
     plt.rcParams["lines.markersize"] = 16
     plt.rcParams.update({"figure.figsize" : (10, 6.25)})
 
-import base64
-import io
-import os
-from datetime import datetime
-from sys import path, platform
-
-##############################################################################
-### import custom packages ###
-##############################################################################
-path.append("/".join(os.path.abspath(os.curdir).split("/")[:-1]))
-from plugins.read_data import read_data
-
-
-##############################################################################
-### define quality check and testing feature ###
-##############################################################################
-class check_quality(object):
+############################################
+# define quality check and testing feature #
+############################################
+class CheckQuality(object):
     """
     This class implements the automated routines to check the quality criteria
     of XAFS measurements. The evaluation is based on larch
@@ -107,7 +94,6 @@ class check_quality(object):
         with open(quality_criteria_json, "r") as f:
             self.quality_criteria = json.load(f)
             
-    
     def shorten_data(self,):
         '''
         functionality to cut the last index of the data to avoid unwanted behaviour
@@ -120,9 +106,8 @@ class check_quality(object):
         self.data.post_edge = self.data.post_edge[:-1]
         self.data.k = self.data.k[:-1]
         self.data.chi = self.data.chi[:-1]
-        
-        
-    def clip_data(self, data, minimum = -5, maximum = 5):
+    
+    def clip_data(self, data, minimum=-5, maximum=5):
         '''
         functionality to clip k-data to minimum and maximum to avoid unwanted 
         behaviour in k
@@ -134,8 +119,7 @@ class check_quality(object):
         maximum : float
             maximum value to clip data.k
         '''
-        return np.clip(data, a_min = -5, a_max = 5)
-
+        return np.clip(data, a_min=-5, a_max=5)
 
     def load_data(self, measurement_data, source="SYNCHROTRON",
                   mode="ABSORPTION", processed="RAW", 
@@ -162,20 +146,19 @@ class check_quality(object):
             self.name = "sample"
         else:
             self.name = name
-        ### store the parameters in the class
+        # store the parameters in the class
         self.plot = plot
         self.source = source
         self.mode = mode
         self.processed = processed
-        ### read the correct quality criteria correspondend to the sample
+        # read the correct quality criteria correspondend to the sample
         self.quality_criteria_sample = self.quality_criteria[self.source][self.mode][self.processed]
-        ### initialize the larch Group to evaluate the data
+        # initialize the larch Group to evaluate the data
         self.data = Group()
-        ### add energy and absorption to the larch Group
+        # add energy and absorption to the larch Group
         self.data.energy = measurement_data[0, :]
         self.data.mu = measurement_data[1, :]
-
-
+        
     def preprocess_data(self, take_first=False):
         """
         This function preprocesses the data, finds the edge, fits the pre and post
@@ -188,78 +171,76 @@ class check_quality(object):
             (as it is done in Athena), if False, the maximum derivative is taken
             (as in Larch). The default is False.
         """
-        ### find the edge energy E0 of the absorption data
+        # find the edge energy E0 of the absorption data
         self.find_e0(self.data.energy, self.data.mu, group=self.data,
                      take_first=take_first)
         # xafs.find_e0(self.data.energy, self.data.mu, group=self.data)
-        ### perform an energy calibration
-        ### for this guess the element edge and retrieve the edge energy from
-        ### the database of larch mostly based on Elam
-        ### https://xraypy.github.io/xraylarch/xray.html
+        # perform an energy calibration
+        # for this guess the element edge and retrieve the edge energy from
+        # the database of larch mostly based on Elam
+        # https://xraypy.github.io/xraylarch/xray.html
         element_n_edge = xray.guess_edge(self.data.e0)
         edge_E_DB = xray.xray_edge(*element_n_edge)[0]
         self.data.E_difference = self.data.e0 - edge_E_DB
         self.data.energy -= (self.data.e0 - edge_E_DB)
         self.find_e0(self.data.energy, self.data.mu, group=self.data,
                      take_first=take_first)
-        ### retrieve the array index of E0 to determine low cut energy
-        edge_index = np.where(np.argmin(np.abs(self.data.energy-self.data.e0)))[0][0]
+        # retrieve the array index of E0 to determine low cut energy
+        edge_index = np.argmin(np.abs(self.data.energy-self.data.e0))
         cut_index = edge_index - 150
-        ### if the data below edge is not sufficient, set index to 0 to avoid
-        ### using data from the end of the array
+        # if the data below edge is not sufficient, set index to 0 to avoid
+        # using data from the end of the array
         if cut_index < 0: cut_index = 0
         if cut_index > edge_index//2: cut_index = (cut_index + edge_index//2) // 2
-        ### cut the energy and absorption in the pre-edge region
+        # cut the energy and absorption in the pre-edge region
         self.data.element_n_edge = element_n_edge
         self.data.energy = self.data.energy[cut_index:]
         self.data.mu = self.data.mu[cut_index:]
-        ### calculate the edge position
-        xafs.pre_edge(energy = self.data.energy,
-                      mu = self.data.mu,
-                      e0 = self.data.e0,
-                      group = self.data,
-                      pre1 = -150,
-                      pre2 = -30,
-                      norm1 = 50,
-                      norm2 = 700,
-                      make_flat = True,
-                      nvict = 3,
+        # calculate the edge position
+        xafs.pre_edge(energy=self.data.energy,
+                      mu=self.data.mu,
+                      e0=self.data.e0,
+                      group=self.data,
+                      pre1=-150,
+                      pre2=-30,
+                      norm1=50,
+                      norm2=700,
+                      make_flat=True,
+                      nvict=3,
                       )
-        ### estimate pre and post edge and correct the background
+        # estimate pre and post edge and correct the background
         xafs.autobk(energy=self.data.energy, mu=self.data.mu, group=self.data,
-                    rbkg = 1.0,
-                    clamp_lo = 10,
-                    clamp_hi = 1,
-                    dk = 1.,
-                    kweight = 2,
-                    win = 'hanning',
+                    rbkg=1.0,
+                    clamp_lo=10,
+                    clamp_hi=1,
+                    dk=1.,
+                    kweight=2,
+                    win='hanning',
                     )
-        ### calculate k**2*chi to determine the k-range for Fourier R transformation
+        # calculate k**2*chi to determine the k-range for Fourier R transformation
         data = self.data.k**2 * self.data.chi
-        ### get root positions to capture whole fluctuation periods
+        # get root positions to capture whole fluctuation periods
         self.positive = np.where(np.clip(np.diff(np.sign(data[(self.data.k > 2)&(self.data.k < 13)])), 0, np.inf))[0]
         self.negative = np.where(np.clip(np.diff(np.sign(data[(self.data.k > 2)&(self.data.k < 13)])), -np.inf,0))[0]
-        print('positive', self.positive)
-        print('negative', self.negative)
-        ### determine kmin and kmax and cap kmax to 15
+        # determine kmin and kmax and cap kmax to 15
         self.kmin = self.data.k[(self.data.k > 2)&(self.data.k < 13)][self.positive[0]]
         self.kmax = self.data.k[(self.data.k > 2)&(self.data.k < 13)][self.negative[-1]]
         # self.kmin = self.data.k[self.data.k > 2][positive[0]]
         # self.kmax = self.data.k[self.data.k > 2][negative[-1]]
         if self.kmax > 13: self.kmax = 13
-        ### transform data to R
+        # transform data to R
         xafs.xftf(k=self.data.k, chi=self.data.chi, group=self.data,
-                  dk = 1,
-                  kmin = self.kmin,
-                  kmax = self.kmax,
-                  kweight = 2,
-                  rmax_out = 12,
-                  window = 'hanning',
+                  dk=1,
+                  kmin=self.kmin,
+                  kmax=self.kmax,
+                  kweight=2,
+                  rmax_out=12,
+                  window='hanning',
                   )
 
-        ### estimate noise with larch, this is but a estimation and should be
-        ### regarded with caution!
-        ### TODO
+        # estimate noise with larch, this is but a estimation and should be
+        # regarded with caution!
+        # TODO
         xafs.estimate_noise(k=self.data.k,
                             chi=self.data.chi,
                             group=self.data,
@@ -341,37 +322,33 @@ class check_quality(object):
             matplotlib figure with the data plotted.
         """
         
-        ### define figure
-        self.fig_data = plt.figure(f"{data_type} {self.name}",
-                                   # figsize=(10, 6.25),
-                                   )
+        # define figure
+        self.fig_data = plt.figure(f"{data_type} {self.name}")
         self.fig_data.clf()
         self.ax_data = self.fig_data.subplots()
         self.ax_data.grid()
-        ### calculate default ticks
+        # calculate default ticks
         major_ticks_exafs = np.arange(int(np.round(self.data.energy[0], decimals=-1)), int(self.data.energy[-1]), 100)
         minor_ticks_exafs = np.arange(int(np.round(self.data.energy[0], decimals=-1)), int(self.data.energy[-1]), 20)
         major_ticks_xanes = np.arange(int(np.round(self.data.energy[0], decimals=-1)), int(self.data.energy[-1]), 20)
         minor_ticks_xanes = np.arange(int(np.round(self.data.energy[0], decimals=-1)), int(self.data.energy[-1]), 10)
-        # major_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 100)
-        # minor_ticks = np.arange(self.data.energy[0], self.data.energy[-1], 20)
-        ### legend location
+        # legend location
         loc = 'lower right'
-        ### plot data depending on type
+        # plot data depending on type
         if data_type == 'RAW' or data_type == "BACKGROUND":
-            ### plotting
+            # plotting
             if show_name:
                 label = f"Measurement {self.name}"
             else: 
                 label = "Measurement"
             self.ax_data.plot(self.data.energy, self.data.mu,
                               label=label,
-                              color = "#003161")
+                              color="#003161")
             self.ax_data.plot(self.data.e0,
                               self.data.mu[np.where(self.data.e0 == self.data.energy)],
-                              marker = "*", color = "#69398B", lw=0,
+                              marker="*", color="#69398B", lw=0,
                               label="Edge Position",)
-            ### if background shall be plotted
+            # if background shall be plotted
             if data_type == "BACKGROUND":
                 if show_name:
                     label = f"Flattened Normalized {self.name}"
@@ -383,102 +360,104 @@ class check_quality(object):
                                   label="Post Edge Background")
                 self.ax_data.plot(self.data.energy, self.data.flat,
                                   label=label,)
-            ### labelling
+            # labelling
             self.ax_data.set_xlabel(r"Energy | eV")
             self.ax_data.set_ylabel(r"$\mu (E)$ | a.u.")
-            ### set ticks
+            # set ticks
             self.ax_data.set_xticks(major_ticks_exafs)
             self.ax_data.set_xticks(minor_ticks_exafs, minor=True)
-            ### limiting
-            self.ax_data.set_xlim(self.data.energy[0], self.data.energy[-1])
+            # limiting
+            self.ax_data.set_xlim(self.data.energy[0]-20, self.data.energy[-1]+20)
         elif data_type == 'NORMALIZED':
-            ### plotting
+            # plotting
             if show_name:
                 label = f"{data_type} {self.name}"
             else: 
                 label = f"{data_type}"
             self.ax_data.plot(self.data.energy, self.data.flat, 
                               label=label,
-                              color = "#003161")
+                              color="#003161")
             self.ax_data.plot(self.data.e0,
                               self.data.flat[np.where(self.data.e0 == self.data.energy)],
-                              marker = "*", color = "#69398B", lw=0,
+                              marker="*", color="#69398B", lw=0,
                               label="Edge Position",)
-            ### labelling
+            # labelling
             self.ax_data.set_xlabel(r"Energy | eV")
             self.ax_data.set_ylabel(r"$\mu (E)$ | a.u.")
-            ### set ticks
+            # set ticks
             self.ax_data.set_xticks(major_ticks_xanes)
             self.ax_data.set_xticks(minor_ticks_xanes, minor=True)
-            ### limiting
+            # limiting
             self.ax_data.set_xlim(self.data.e0-30, self.data.e0+100)
-            self.ax_data.set_ylim(0, np.round(self.data.flat.max()+0.1, 
+            self.ax_data.set_ylim(-0.05, np.round(self.data.flat.max()+0.1, 
                                               decimals=1))
+            self.ax_data.hlines(y=0, xmin=self.data.e0-30, xmax= self.data.e0+100, 
+                                color="black", lw=1)
             # self.ax_data.set_xlim(self.data.energy[0], self.data.energy[-1])
         elif data_type == 'k':
-            ### calculate specific ticks
+            # calculate specific ticks
             major_ticks = np.arange(self.data.k[0], self.data.k[-1], 2)
             minor_ticks = np.arange(self.data.k[0], self.data.k[-1], 0.5)
-            ### calculate data k**2*chi
+            # calculate data k**2*chi
             data = self.data.k**2 * self.data.chi 
             data = self.clip_data(data)
-            ### plotting
+            # plotting
             self.ax_data.plot(self.data.k, data, 
                               label=f"{data_type}",
-                              color = "#003161")
+                              color="#003161")
             self.ax_data.plot(self.data.k[(self.data.k > 2)&(self.data.k < 13)][self.positive[0]], 0, "gx")
             self.ax_data.plot(self.data.k[(self.data.k > 2)&(self.data.k < 13)][self.negative[-1]], 0, "gx")
-            ### labelling
+            # labelling
             self.ax_data.set_xlabel(r"k $\left[\AA^{-1}\right]$")
-            self.ax_data.set_ylabel(r"$k^2\chi(k) \left[\AA^{-1}\right]$")
-            ### set ticks
+            self.ax_data.set_ylabel(r"$k^2\chi(k) \left[\AA^{-2}\right]$")
+            # set ticks
             self.ax_data.set_xticks(major_ticks)
             self.ax_data.set_xticks(minor_ticks, minor=True)
-            ### limiting
-            if self.data.k.max() > 15: xmax = 15
-            else: xmax = self.data.k.max()
-            # self.ax_data.set_xlim(self.data.k[0], self.data.k[-1])
+            # limiting
+            if self.data.k.max() > 15: 
+                xmax = 15
+            else: 
+                xmax = self.data.k.max()
             self.ax_data.set_xlim(0, xmax)
             ymin = np.min(data[len(data)//8:-len(data)//8]) - 0.01
             ymax = np.max(data[len(data)//8:-len(data)//8]) + 0.01
-            # if ymin < -3: ymin = -3
-            # if ymax > 3: ymax = 3
             self.ax_data.set_ylim(ymin=-np.max(np.abs([ymin, ymax]))-0.1,
                                   ymax=np.max(np.abs([ymin, ymax]))+0.1)
+            self.ax_data.set_xlim(xmin=self.data.k[0]-0.5,
+                                  xmax=self.data.k[-1]+0.5)
             loc = 'upper left'
         elif data_type == 'R':
-            ### calculate specific ticks
+            # calculate specific ticks
             major_ticks = np.arange(self.data.r[0], self.data.r[-1], 2)
             minor_ticks = np.arange(self.data.r[0], self.data.r[-1], 0.5)
-            ### plotting
+            # plotting
             self.ax_data.plot(self.data.r, np.abs(self.data.chir), 
-                              label="{}".format(data_type), color = "#003161")
-            ### labelling
+                              label="{}".format(data_type), color="#003161")
+            # labelling
             self.ax_data.set_xlabel(r"$R(\AA)$")
             self.ax_data.set_ylabel(r"$\left| \chi(R) \right| \AA^{-3}$")
-            ### set ticks
+            # set ticks
             self.ax_data.set_xticks(major_ticks)
             self.ax_data.set_xticks(minor_ticks, minor=True)
-            ### limiting
-            self.ax_data.set_xlim(0, 6)
+            # limiting
+            self.ax_data.set_xlim(-0.1, 6.1)
             self.ax_data.set_ylim(0, np.round(np.abs(self.data.chir).max()+0.5, 
                                               decimals=0))
-            ### legend positioning
+            # legend positioning
             loc = 'upper right'
             # self.ax_data.set_xlim(self.data.r[0], self.data.r[-1])
-        ### set title
+        # set title
         if show_name:
             self.ax_data.set_title(self.name)
-        ### set legend
-        self.ax_data.legend(loc = loc)
-        ### show figure if desired
+        # set legend
+        self.ax_data.legend(loc=loc)
+        # show figure if desired
         if show:
             self.fig_data.show()
         if save_path:
             self.fig_data.savefig(save_path, dpi=300)
         return self.fig_data
     
-
     def check_edge_step(self, ):
         """
         this function automatically evaluates the edge step of the given data
@@ -493,7 +472,6 @@ class check_quality(object):
             if self.verbose:
                 print("\u274e edge step doesn't meet standards: {:.2f}".format(self.data.edge_step))
             return False, self.data.edge_step
-
 
     def check_energy_resolution(self, ):
         """
@@ -512,7 +490,6 @@ class check_quality(object):
                 print("\u274e energy resolution doesn't meet standards: {:.2f}eV".format(self.data.energy_resolution))
             return False, self.data.energy_resolution
 
-
     def check_k(self, ):
         """
         this function automatically evaluates the k range of the given data
@@ -527,7 +504,6 @@ class check_quality(object):
             if self.verbose:
                 print("\u274e k max doesn't meet standards: {:.2f}\u212b⁻¹".format(self.data.k[-1]))
             return False, self.data.k[-1]
-
 
     def estimate_noise(self, ):
         """
@@ -546,13 +522,12 @@ class check_quality(object):
                 print("\u274e estimated noise doesn't meet standards: {:.2f}".format(self.data.epsilon_k))
             return False, self.data.epsilon_k
 
-
-    def create_data_json(self, owner = '', owner_group = '', access_group = '',
-                         creation_location = '', principal_investigator = '',
-                         data_name = '', data_type = '',
-                         is_published = False, source_folder = '',
-                         contact_email = '', source = 'SYNCHROTRON',
-                         measurement_mode = 'ABSORPTION',
+    def create_data_json(self, owner='', owner_group='', access_group='',
+                         creation_location='', principal_investigator='',
+                         data_name='', data_type='',
+                         is_published=False, source_folder='',
+                         contact_email='', source='SYNCHROTRON',
+                         measurement_mode='ABSORPTION',
                          ):
         """
         This function creates a json file from the loaded data
@@ -605,7 +580,6 @@ class check_quality(object):
         with open(os.path.abspath(os.curdir)+ "/example data/LABORATORY/{}.json".format(self.name),"w") as tofile:
             json.dump(data, tofile, indent=4, ensure_ascii=False)
 
-
     def first_shell_fit(self, ):
         """
         Function to automatically fit the first shell with larch. Not yet 
@@ -616,7 +590,6 @@ class check_quality(object):
                                    sig2=fitting.param(0.0, vary=True),
                                    del_r=fitting.guess(0.0, vary=True),
                                    )
-
 
     def encode_base64_figure(self, figure):
         """
@@ -637,7 +610,6 @@ class check_quality(object):
         figure.savefig(buffer, format="jpeg", dpi=300)
         data = base64.b64encode(buffer.getbuffer()).decode("ascii")
         return f"data:image/jpeg;base64,{data}"
-
 
     def decode_base64_figure(self, base64_string):
         """
@@ -661,7 +633,7 @@ class check_quality(object):
         return image
 
 
-class check_quality_control(object):
+class CheckQualityControl(object):
     """
     This checks the quality control for a given facility type. It looks for data
     in the example data folder.
@@ -700,7 +672,7 @@ class check_quality_control(object):
         verbose : bool, optional
             if True certain data are printed
         """
-        ### store the given data in the self instance
+        # store the given data in the self instance
         self.facility_type = facility_type
         self.files = files
         self.plot_raw_data = plot_raw_data
@@ -711,10 +683,10 @@ class check_quality_control(object):
         self.save_figure_path = save_figure_path
         self.take_first = take_first
         self.verbose = verbose
-        ### initialize the read_data plugin with the facility type
-        ### !!! only one type allowed per init
-        self.read_data = read_data(source = facility_type)
-        ### perform the quality control
+        # initialize the read_data plugin with the facility type
+        # !!! only one type allowed per init
+        self.read_data = ReadData(source=facility_type)
+        # perform the quality control
         self.results = self.check_data()
 
     def compare_plotting(self, data, data_type, save_path=None):
@@ -725,12 +697,12 @@ class check_quality_control(object):
         """
         # self.cq.ax_data.spines["top"].set_visible(False)
         # self.cq.ax_data.spines["right"].set_visible(False)
-        if data_type == 'RAW':
+        if self.verbose:
             print(data_type, dir(data))
+        if data_type == 'RAW':
             self.cq.ax_data.plot(data.ee, data.xmu, label='Athena',
                                  linestyle='dashed', color='red')
         elif data_type == 'NORMALIZED':
-            print(data_type, dir(data))
             for line in self.cq.ax_data.get_lines():
                 if "Edge Position" in line.get_label():
                     line.get_label()
@@ -749,7 +721,6 @@ class check_quality_control(object):
             #                      linestyle='dashed', color='blue')
             
         elif data_type == 'R':
-            print(data_type, dir(data))
             self.cq.ax_data.plot(data.r, data.chir_mag, label='Athena',
                                  linestyle='dashed', color='red')
             # self.cq.ax_data.autoscale(enable=True, axis='y', tight=True)
@@ -761,14 +732,13 @@ class check_quality_control(object):
                                        # fontweight="bold",
                                        )
         elif data_type == 'k':
-            print(data_type, dir(data))
             self.cq.ax_data.plot(data.k, data.chik, label='Athena',
                                  linestyle='dashed', color='red')
             self.cq.ax_data.axhline(y=0, color='black', lw=0.8)
             self.cq.ax_data.set_xlabel(r"k $\left[\AA^{-1}\right]$",
                                        # fontweight="bold",
                                        )
-            self.cq.ax_data.set_ylabel(r"$k^2\chi(k)$",
+            self.cq.ax_data.set_ylabel(r"$k^2\chi(k) \left[\AA^{-2}\right]$"
                                        # fontweight="bold",
                                        )
         self.cq.ax_data.tick_params(axis="both", which="both",
@@ -789,31 +759,28 @@ class check_quality_control(object):
         the results are printed.
 
         """
-        ### read out quality criteria
-        cq_json = os.path.abspath(os.curdir) + "/Criteria.json"
-        ### check out all files
+        # read out quality criteria
+        cq_json = Path(__file__).parent / "Criteria.json"
+        # check out all files
         if self.files is None:
-            folder = '/home/frank/Doktorarbeit/DAPHNE/xafsdb/quality_control/example data/SYNCHROTRON/'
+            folder = '/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/'
             files = sorted(glob(folder+'*'))[1:2]
         else: files = self.files
-        ### initialize the check_quality class
-        self.cq = check_quality(quality_criteria_json=cq_json, verbose=self.verbose)
-        ### analyse the quality for each file in the files list
+        # initialize the CheckQuality class
+        self.cq = CheckQuality(quality_criteria_json=cq_json, verbose=self.verbose)
+        # analyse the quality for each file in the files list
         for file in files:
             if self.verbose:
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 print('working on {}'.format(file.split('/')[-1]))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
                 print("file:\t", file.split('/')[-1])
-            ### transform the name variable corresponding to the host platform
-            if "win" in platform:
-                self.name = file.split("\\")[-1].split(".")[0]
-            else:
-                self.name = file.split("/")[-1].split(".")[0]
-            ### initialize the quality control list to store quality data of
-            ### the analysed file
+            # transform the name variable corresponding to the host sys.platform
+            self.name = file.stem
+            # initialize the quality control list to store quality data of
+            # the analysed file
             self.qc_list = []
-            ### read out the data of the file
+            # read out the data of the file
             self.read_data.process_data(data_path=file)
             self.cq.load_data(self.read_data.data, source=self.facility_type, name=self.name)
             self.data = self.cq.preprocess_data(take_first=self.take_first)
@@ -853,18 +820,18 @@ class check_quality_control(object):
                 image_k = self.cq.decode_base64_figure(base64_string=self.fig_k_base64)
             if self.plot_R:
                 if self.save_figure_path: save_path = self.save_figure_path+'/R/{}_R.png'.format(self.name)
-                self.fig_R = self.cq.plot_data(data_type = 'R',
+                self.fig_R = self.cq.plot_data(data_type='R',
                                                show_name=False, 
                                                show=show, 
-                                               save_path = save_path)
+                                               save_path=save_path)
                 self.fig_R_base64 = self.cq.encode_base64_figure(self.fig_R)
                 image_R = self.cq.decode_base64_figure(base64_string=self.fig_R_base64)
             if self.plot_background:
                 if self.save_figure_path: save_path = self.save_figure_path+'/BACKGROUND/{}_BACKGROUND.png'.format(self.name)
-                self.fig_background = self.cq.plot_data(data_type = 'BACKGROUND',
+                self.fig_background = self.cq.plot_data(data_type='BACKGROUND',
                                                         show_name=False, 
                                                         show=show,
-                                                        save_path = save_path)
+                                                        save_path=save_path)
                 self.fig_background_base64 = self.cq.encode_base64_figure(self.fig_background)
                 image_background = self.cq.decode_base64_figure(base64_string=self.fig_background_base64)
             
@@ -883,37 +850,45 @@ class check_quality_control(object):
 
 
 if __name__ == '__main__':
-  ### use this for automated check on metal foils
+  # use this for automated check on metal foils
     from larch.io import read_ascii, read_xdi, read_specfile, read_athena
-    folder_data = '/home/frank/Doktorarbeit/DAPHNE/xafsdb/quality_control/example data/SYNCHROTRON/'
-    files_data = glob(folder_data+'*')[:1]
-    folder_athena = '/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/evaluated/Abhijeet/Data Metal foils/'
-    files_athena_raw = glob(folder_athena+'Raw muE/*.xmu')
-    files_athena_chiR = glob(folder_athena+'ChiR new/*.rsp')
-    files_athena_k2chik = glob(folder_athena+'k2 chik/*.chi2')
-    files_athena_norm = glob(folder_athena+'Norm muE/*.nor')
+    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/not_yet_working/')
+    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/')
+    files_data = folder_data.glob('*.*')
+    # files_data = [files_data[i] for i in [5,] ]
+    folder_athena = Path('/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/evaluated/Abhijeet/Data Metal foils/')
+    files_athena_raw = folder_athena.glob('Raw muE/*.xmu')
+    files_athena_chiR = folder_athena.glob('ChiR new/*.rsp')
+    files_athena_k2chik = folder_athena.glob('k2 chik/*.chi2')
+    files_athena_norm = folder_athena.glob('Norm muE/*.nor')
     
     for file_data in files_data:
-        file_name_data = file_data.split('/')[-1]
-        file_name_athena_raw = [item for item in files_athena_raw if file_name_data in item]
-        file_name_athena_chiR = [item for item in files_athena_chiR if file_name_data in item]
-        file_name_athena_k2chik = [item for item in files_athena_k2chik if file_name_data in item]
-        file_name_athena_norm = [item for item in files_athena_norm if file_name_data in item]
+        print(f"# working on {file_data} ###")
+        file_name_data = file_data.name
+        file_name_athena_raw = [item for item in files_athena_raw if file_name_data in item.name]
+        file_name_athena_chiR = [item for item in files_athena_chiR if file_name_data in item.name]
+        file_name_athena_k2chik = [item for item in files_athena_k2chik if file_name_data in item.name]
+        file_name_athena_norm = [item for item in files_athena_norm if file_name_data in item.name]
         if not file_name_athena_raw:
-            continue
-        print(file_name_athena_raw)
-        RAW_Comp_data = read_ascii(file_name_athena_raw[0])
-        NORM_Comp_data = read_ascii(file_name_athena_norm[0])
-        CHIR_Comp_data = read_ascii(file_name_athena_chiR[0])
-        K2_Comp_data = read_ascii(file_name_athena_k2chik[0])
-        # data_dict = {'RAW': [RAW_Comp_data, plot_raw=True, plot_norm=False, plot_R=False, plot_k=False],
+            compare = False
+            RAW_Comp_data = None
+            NORM_Comp_data = None
+            CHIR_Comp_data = None
+            K2_Comp_data = None
+        else:
+            compare = True
+            RAW_Comp_data = read_ascii(file_name_athena_raw[0])
+            NORM_Comp_data = read_ascii(file_name_athena_norm[0])
+            CHIR_Comp_data = read_ascii(file_name_athena_chiR[0])
+            K2_Comp_data = read_ascii(file_name_athena_k2chik[0])
+            # data_dict = {'RAW': [RAW_Comp_data, plot_raw=True, plot_norm=False, plot_R=False, plot_k=False],
         data_dict = {'RAW': [RAW_Comp_data, True, False, False, False,'Raw muE'],
                       "NORMALIZED": [NORM_Comp_data, False, True, False, False,'Norm muE'],
                       'k': [K2_Comp_data, False, False, False, True,'k2 chik'],
                       'R': [CHIR_Comp_data, False, False, True, False,'ChiR new'],
                       }
-        qc = check_quality_control(facility_type='SYNCHROTRON', 
-                                      files = [file_data],
+        qc = CheckQualityControl(facility_type='SYNCHROTRON', 
+                                      files=[file_data],
                                       plot_raw_data=data_dict['RAW'][1],
                                       plot_normalized_data=data_dict['NORMALIZED'][2],
                                       plot_R=data_dict['R'][4],
@@ -922,21 +897,17 @@ if __name__ == '__main__':
                                       save_figure_path=False,
                                       # save_figure_path=os.environ['HOME']+'/Doktorarbeit/DAPHNE/Quality Criteria/evaluated/',
                                       take_first=True,
-                                      verbose=True,
+                                      verbose=False,
                                       )
         for key, data in data_dict.items():
-            qc.cq.plot_data(key, show_name=False, 
-                            show=True)
-            qc.compare_plotting(data[0], key, 
-                                save_path=folder_athena+f'{data[5]}/')
-    
-#     pass
-
-### use this for Dortmund Delta beamline stuff
-# test = check_quality_control(facility_type='SYNCHROTRON', files=["/home/frank/Documents/id11_jaqtry_avg_Down.txt"])
-# test.cq.plot_data("RAW", show=True)
-# test.cq.plot_data("NORMALIZED", show=True)
-# test.cq.plot_data("k", show=True)
-# test.cq.plot_data("R", show=True)
-
-
+            if compare:
+                save_path = folder_athena+f'{data[5]}/'
+            else:
+                save_path = None
+            qc.cq.plot_data(key, 
+                            show_name=False, 
+                            show=True, save_path=save_path)
+            if compare:
+                qc.compare_plotting(data[0], 
+                                    key, 
+                                    save_path=save_path)

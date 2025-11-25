@@ -55,7 +55,7 @@ from .models import Files
 from .serializers import FileCreateUpdateSerializer, FileSerializer
 from .utils import get_access, get_all_datasets, term_checker, snake_case_to_title_case
 
-from plugins.read_data import read_data
+from plugins.read_data import ReadData
 
 def beamline_details(request, beamline_id: str) -> HttpResponse:
     """
@@ -284,7 +284,7 @@ def dataset_upload(request):
 
             update_erange = request.POST
             #print("dataset_upload:", update_erange)
-            reader = read_data(update_erange=update_erange)
+            reader = ReadData(update_erange=update_erange)
             dictionary = reader.extract_header(data_path="temp/" + dataset_name)
             #print("I'm here:", dictionary)
             context = {

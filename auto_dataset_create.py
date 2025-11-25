@@ -42,7 +42,7 @@ import requests
 import scicat_py
 from webserver.settings import EMAIL_HOST_USER
 from quality_control.quality_check import check_quality
-from plugins.read_data import read_data
+from plugins.read_data import ReadData
 from typing import Dict, Any
 import logging
 
@@ -319,7 +319,7 @@ class AutoDatasetCreation(object):
             qc_list = [] ### this list will contain the quality criteria
             ### here the measurement data has to be forwarded, where will the data be stored in SciCat?
             #meas_data = np.loadtxt(self.short_url, skiprows=1)
-            rd = read_data(update_erange=self.verify_data)
+            rd = ReadData(update_erange=self.verify_data)
             rd.process_data(self.s3_data_path)
             #print("Meas_data from qc_and_update:", meas_data)
             cq.load_data(
