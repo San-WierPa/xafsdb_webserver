@@ -100,6 +100,7 @@ class CheckQuality(object):
         in k
         '''
         self.data.energy = self.data.energy[:-1]
+        self.data.mu_ref = self.data.mu_ref[:-1]
         self.data.mu = self.data.mu[:-1]
         self.data.flat = self.data.flat[:-1]
         self.data.pre_edge = self.data.pre_edge[:-1]
@@ -157,7 +158,8 @@ class CheckQuality(object):
         self.data = Group()
         # add energy and absorption to the larch Group
         self.data.energy = measurement_data[0, :]
-        self.data.mu = measurement_data[1, :]
+        self.data.mu_ref = measurement_data[1, :]
+        self.data.mu = measurement_data[2, :]
         
     def preprocess_data(self, take_first=False):
         """
@@ -172,7 +174,9 @@ class CheckQuality(object):
             (as in Larch). The default is False.
         """
         # find the edge energy E0 of the absorption data
-        self.find_e0(self.data.energy, self.data.mu, group=self.data,
+        self.find_e0(self.data.energy, 
+                     self.data.mu_ref,
+                     group=self.data,
                      take_first=take_first)
         # xafs.find_e0(self.data.energy, self.data.mu, group=self.data)
         # perform an energy calibration
@@ -183,7 +187,7 @@ class CheckQuality(object):
         edge_E_DB = xray.xray_edge(*element_n_edge)[0]
         self.data.E_difference = self.data.e0 - edge_E_DB
         self.data.energy -= (self.data.e0 - edge_E_DB)
-        self.find_e0(self.data.energy, self.data.mu, group=self.data,
+        self.find_e0(self.data.energy, self.data.mu_ref, group=self.data,
                      take_first=take_first)
         # retrieve the array index of E0 to determine low cut energy
         edge_index = np.argmin(np.abs(self.data.energy-self.data.e0))
@@ -645,6 +649,7 @@ class CheckQualityControl(object):
     def __init__(self, facility_type, files=None,
                  plot_raw_data=False, plot_normalized_data=False,
                  plot_k=False, plot_R=False, plot_background=False,
+                 plot_quiet=True,
                  save_figure_path=None,
                  take_first=False,
                  verbose=False):
@@ -664,6 +669,8 @@ class CheckQualityControl(object):
             plot chi(k). The default is False.
         plot_R : bool, optional
             plot chi(R). The default is False.
+        plot_quiet: bool, optional
+            Create the plots but don't show them.
         save_figure_path : str, optional
             absolute path to the folder where figures shall be stored.
             The default is None.
@@ -680,6 +687,7 @@ class CheckQualityControl(object):
         self.plot_k = plot_k
         self.plot_R = plot_R
         self.plot_background = plot_background
+        self.plot_quiet = plot_quiet
         self.save_figure_path = save_figure_path
         self.take_first = take_first
         self.verbose = verbose
@@ -762,10 +770,11 @@ class CheckQualityControl(object):
         # read out quality criteria
         cq_json = Path(__file__).parent / "Criteria.json"
         # check out all files
-        if self.files is None:
-            folder = '/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/'
-            files = sorted(glob(folder+'*'))[1:2]
-        else: files = self.files
+        # if self.files is None:
+        #     folder = '/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/'
+        #     files = sorted(glob(folder+'*'))[1:2]
+        # else: files = self.files
+        files = self.files
         # initialize the CheckQuality class
         self.cq = CheckQuality(quality_criteria_json=cq_json, verbose=self.verbose)
         # analyse the quality for each file in the files list
@@ -782,6 +791,7 @@ class CheckQualityControl(object):
             self.qc_list = []
             # read out the data of the file
             self.read_data.process_data(data_path=file)
+            print(self.read_data.data.shape)
             self.cq.load_data(self.read_data.data, source=self.facility_type, name=self.name)
             self.data = self.cq.preprocess_data(take_first=self.take_first)
             if self.verbose:
@@ -852,9 +862,9 @@ class CheckQualityControl(object):
 if __name__ == '__main__':
   # use this for automated check on metal foils
     from larch.io import read_ascii, read_xdi, read_specfile, read_athena
-    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/not_yet_working/')
-    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/')
-    files_data = folder_data.glob('*.*')
+    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/FOR_TESTING/')
+    # folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/')
+    files_data = folder_data.glob('*')
     # files_data = [files_data[i] for i in [5,] ]
     folder_athena = Path('/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/evaluated/Abhijeet/Data Metal foils/')
     files_athena_raw = folder_athena.glob('Raw muE/*.xmu')
@@ -863,6 +873,10 @@ if __name__ == '__main__':
     files_athena_norm = folder_athena.glob('Norm muE/*.nor')
     
     for file_data in files_data:
+        if "gitkeep" in file_data.name:
+            continue
+        if not file_data.is_file():
+            continue
         print(f"# working on {file_data} ###")
         file_name_data = file_data.name
         file_name_athena_raw = [item for item in files_athena_raw if file_name_data in item.name]
@@ -906,8 +920,9 @@ if __name__ == '__main__':
                 save_path = None
             qc.cq.plot_data(key, 
                             show_name=False, 
-                            show=True, save_path=save_path)
+                            show=False, save_path=save_path)
             if compare:
                 qc.compare_plotting(data[0], 
                                     key, 
                                     save_path=save_path)
+        print("evaluation successful")

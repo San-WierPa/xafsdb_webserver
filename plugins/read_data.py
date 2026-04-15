@@ -59,30 +59,40 @@ class ReadData(object):
         # for each file and has to be adapted when a change of syntax occurs
         # in the beamline datasets
         self.supported_beamlines = {"SYNCHROTRON" : ["CATACT KIT", 
-                                                     "PETRA III Extension Beamline P65",
                                                      "PETRA III Extension Beamline P64",
-                                                     "ELETTRA XAFS", "SLRI", "ESRF BM 23", 
-                                                     "SOLEIL ROCK", "SOLEIL SAMBA",
-                                                     "SLS", "DELTA", "SOLARIS",
+                                                     "PETRA III Extension Beamline P65",
+                                                     "ELETTRA XAFS",
+                                                     "SLRI",
+                                                     "ESRF BM 23", 
+                                                     "SOLEIL ROCK",#
+                                                     "SOLEIL SAMBA",
+                                                     "SLS",
+                                                     "DELTA",
+                                                     "SOLARIS",
                                                       ],
                                      "LABORATORY" : ["TU Berlin",
                                                      ]
                                      }
-        self.beamline_key_words = {"SYNCHROTRON" : {"CATACT KIT" : ["catexp",],
-                                                    "PETRA III Extension Beamline P65" : ["PETRA III Extension Beamline P65",],
-                                                    "PETRA III Extension Beamline P64" : ["##  0 - Position",],
-                                                    "ELETTRA XAFS" : ["Project Name:"],
-                                                    "SLRI" : ["BL8: X-ray Absorption Spectroscopy"],
-                                                    "ESRF BM 23" : ["# ZapEnergy"],
-                                                    "SOLEIL ROCK" : ["Synchrotron SOLEIL"],
-                                                    "SOLEIL SAMBA" : ["#  Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
-                                                    "SLS" : ["# posX	SAI01-MEAN	SAI02-MEAN"],
-                                                    "DELTA" : ["#  created:"],
-                                                    "SOLARIS" : ['# C Acquisition started']
-                                           },
-                          "LABORATORY" : {"TU Berlin" : ["#  Energies_eV"],
-                                          }
-                          }
+        self.beamline_key_words = {
+            "SYNCHROTRON" : {
+                "CATACT KIT" : ["catexp",],
+                "PETRA III Extension Beamline P64" : ["##  0 - Position",],
+                "PETRA III Extension Beamline P65" : ["PETRA III Extension Beamline P65",
+                                                      "PETRA III P65"],
+                "ELETTRA XAFS" : ["Project Name:"],
+                "SLRI" : ["BL8: X-ray Absorption Spectroscopy"],
+                "ESRF BM 23" : ["#ZapEnergy",
+                                "eneenc   mu_trans   mu_fluo   mu_ref"],
+                "SOLEIL ROCK" : ["Synchrotron SOLEIL"],
+                "SOLEIL SAMBA" : ["#  Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
+                "SLS" : ["# posX	SAI01-MEAN	SAI02-MEAN"],
+                "DELTA" : ["#  created:"],
+                "SOLARIS" : ['# C Acquisition started']
+                },
+            "LABORATORY" : {
+                "TU Berlin" : ["#  Energies_eV"],
+                }
+            }
         # initialize the class to default
         self.reset_2_default()
         self.update_erange=update_erange
@@ -136,7 +146,7 @@ class ReadData(object):
                     if keyword in line:
                         self.beamline = beamline
                         break
-        # if a beamline was found, e
+        # if a beamline was found, extract data
         if self.beamline:
             if self.verbose:
                 print('beamline found:\t', self.beamline)
@@ -145,7 +155,9 @@ class ReadData(object):
             self.load_data()
         else:
             print('no beamline found, going to numpy extraction mode')
-            self.data = read_ascii(self.data_path).data[:2]
+            data = read_ascii(self.data_path)
+            self.data = np.array([data.data[0], data.data[1], data.data[1]])
+            
             # check unit of energy, if value below 100 it is most likely keV
             # --> change it to eV by multipying it with 1000
             if self.data[0,0] < 100:
@@ -284,72 +296,111 @@ class ReadData(object):
         array([energy, mu]) depending of the found beamline. This has to be 
         adapted and extended if changes in the beamline data occurs or new 
         beamlines to be supported.
+        To distinguish between sample and reference materials the content of the
+        provided file is checked for facility specific key words. If only 1
+        measurement column is found, the material is likely a reference. If 2 are
+        detected, the reference and sample mu are extracted. The energy calibration
+        is than applied to the reference mu.
 
         Returns
         -------
         numpy.array
-            array([energy, mu])
+            array([energy, mu_reference, mu_sample])
         """
+        reference_sample_simultaneous = False  # keyword if sample and reference are measured simultaneously
         entries = [entry.lower() for entry in dir(self.larch_data)]
         print(f"entries - {entries}")
         # SYNCHROTRON
         if self.beamline == "CATACT KIT":
-            self.larch_data.energy = self.larch_data.data[0, :]
-            self.larch_data.I0 = self.larch_data.data[6, :]
-            self.larch_data.transmission = self.larch_data.data[5, :]
+            self.larch_data.energy = self.larch_data.energy
+            self.larch_data.I0 = self.larch_data.ioni3
+            self.larch_data.transmission = self.larch_data.ioni2
+            self.larch_data.mu_ref = np.log(self.larch_data.ioni1/self.larch_data.I0)
             self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "PETRA III Extension Beamline P64":
             self.larch_data.energy = self.larch_data.data[0]
             self.larch_data.transmission = self.larch_data.data[1]
             self.larch_data.I0 = self.larch_data.data[3]
+            self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
             self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "PETRA III Extension Beamline P65":
-            if "mono_energy" in entries:
-                self.larch_data.energy = self.larch_data.mono_energy
-            elif "energy_enc" in entries:
-                self.larch_data.energy = self.larch_data.energy_enc
-            elif "e_enc" in entries:
-                self.larch_data.energy = self.larch_data.e_enc
-            if "vfc03" in entries:
-                self.larch_data.I0 = self.larch_data.vfc03
-            elif "i0" in entries:
-                self.larch_data.I0 = self.larch_data.i2
-            if "vfc02" in entries:
-                self.larch_data.transmission = self.larch_data.vfc02
-            elif "i2" in entries:
-                self.larch_data.transmission = self.larch_data.i0
-            if "_ev" in entries:
-                self.larch_data.energy = self.larch_data.energy
-                self.larch_data.mu = self.larch_data._ev
-            try:
-                self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
-                if np.isnan(self.larch_data.mu).any() or np.isinf(self.larch_data.mu).any():
-                    print("changing dataset, darn P65 always something special!")
+            if "i0" in entries and "i1" in entries and "i2" in entries:
+                reference_sample_simultaneous = True
+                try:
+                    self.larch_data.energy = self.larch_data.energy_enc
+                except AttributeError as e:
+                    self.larch_data.energy = self.larch_data.e_enc
+                self.larch_data.mu_ref = self.larch_data.i0/self.larch_data.i2
+                self.larch_data.mu = self.larch_data.i0/self.larch_data.i1
+            if not reference_sample_simultaneous:
+                if "mono_energy" in entries:
+                    self.larch_data.energy = self.larch_data.mono_energy
+                elif "energy_enc" in entries:
+                    self.larch_data.energy = self.larch_data.energy_enc
+                elif "e_enc" in entries:
+                    self.larch_data.energy = self.larch_data.e_enc
+                elif "energy" in entries:
+                    self.larch_data.energy = self.larch_data.energy
+                if "vfc03" in entries:
+                    self.larch_data.I0 = self.larch_data.vfc03
+                elif "i0" in entries and "i2" in entries:
+                    self.larch_data.I0 = self.larch_data.i2
+                if "vfc02" in entries:
+                    self.larch_data.transmission = self.larch_data.vfc02
+                elif "i2" in entries:
                     self.larch_data.transmission = self.larch_data.i0
-                    self.larch_data.I0 = self.larch_data.i1
+                if "_ev" in entries:
+                    self.larch_data.energy = self.larch_data.energy
+                    self.larch_data.mu_ref = self.larch_data._ev
+                    self.larch_data.mu = self.larch_data._ev
+                elif "murefer" in entries:
+                    self.larch_data.mu_ref = self.larch_data.murefer
+                    self.larch_data.mu = self.larch_data.murefer
+                try:
+                    self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
                     self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
-            except:
-                print("no transmission data loaded")
+                    if np.isnan(self.larch_data.mu).any() or np.isinf(self.larch_data.mu).any():
+                        print("changing dataset, darn P65 always something special!")
+                        self.larch_data.transmission = self.larch_data.i0
+                        self.larch_data.I0 = self.larch_data.i1
+                        self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
+                        self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
+                except:
+                    print("no transmission data loaded")
         elif self.beamline == "ELETTRA XAFS":
             self.larch_data.energy = self.larch_data.data[0, :]
             self.larch_data.I0 = self.larch_data.data[3, :]
             self.larch_data.transmission = self.larch_data.data[2, :]
+            self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
             self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "SLRI":
             self.larch_data.energy = self.larch_data.data[0, :]
             self.larch_data.I0 = self.larch_data.data[4, :]
             self.larch_data.transmission = self.larch_data.data[3, :]
+            self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
             self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "ESRF BM 23":
-            self.larch_data.energy = self.larch_data.data[0, :]
-            self.larch_data.I0 = self.larch_data.data[2, :]
-            self.larch_data.transmission = self.larch_data.data[1, :]
-            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
+            if "zapenergy" in entries:
+                self.larch_data.energy = self.larch_data.zapenergy
+                self.larch_data.I0 = self.larch_data.data[2, :]
+                self.larch_data.transmission = self.larch_data.data[1, :]
+                self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
+                self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
+            elif "eneenc" in entries:
+                self.larch_data.energy = self.larch_data.eneenc
+                self.larch_data.mu_ref = self.larch_data.mu_ref
+                self.larch_data.mu = self.larch_data.mu_trans
+            
         elif self.beamline == "SOLEIL ROCK":
-            entries = [entry.lower() for entry in dir(self.larch_data)]
-            if "energy" in entries:
-                self.larch_data.energy = self.larch_data.energy
-            if "normalized" in entries:
+            # check if a reference was measured in parallel
+            # this is determined via the keys mux (sample) and mus(reference)
+            if "mux" in entries and "mus" in entries:
+                reference_sample_simultaneous = True
+                self.larch_data.mu_ref = self.larch_data.mus  # reference absorption
+                self.larch_data.mu = self.larch_data.mux  # sample absorption
+                self.larch_data.I0 = self.larch_data.i0
+            elif "normalized" in entries:
+                self.larch_data.mu_ref = self.larch_data.normalized
                 self.larch_data.mu = self.larch_data.normalized
             elif "i0" in entries:
                 self.larch_data.I0 = self.larch_data.i1
@@ -357,33 +408,40 @@ class ReadData(object):
                 self.larch_data.transmission = self.larch_data.vfc02
             elif "i1" in entries:
                 self.larch_data.transmission = self.larch_data.i0
-            
             if "shifted" in entries:
                 self.larch_data.energy = self.larch_data.shifted
+                self.larch_data.mu_ref = self.larch_data.normalized
                 self.larch_data.mu = self.larch_data.normalized
-            try:
-                self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
-            except:
-                print("no transmission data loaded")
+            if not reference_sample_simultaneous:
+                try:
+                    self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
+                    self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
+                except:
+                    print("no transmission data loaded")
         elif self.beamline == "SOLEIL SAMBA":
             self.larch_data.energy = self.larch_data.data[0, :]
             self.larch_data.I0 = self.larch_data.data[8, :]
             self.larch_data.transmission = self.larch_data.data[6, :]
+            self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
             self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "SLS":
             self.larch_data.energy = self.larch_data.data[0, :]
             self.larch_data.I0 = self.larch_data.data[3, :]
             self.larch_data.transmission = self.larch_data.data[2, :]
+            self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
             self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
         elif self.beamline == "DELTA":
             self.larch_data.energy = self.larch_data.data[0, :]
+            self.larch_data.mu_ref = self.larch_data.data[1, :]
             self.larch_data.mu = self.larch_data.data[1, :]
         elif self.beamline == "SOLARIS":
+            self.larch_data.mu_ref = self.larch_data.d2/self.larch_data.sr
             self.larch_data.mu = self.larch_data.d2/self.larch_data.sr
         
         # LABORATORY
         elif self.beamline == "TU Berlin":
             self.larch_data.energy = self.larch_data.data[0, :]
+            self.larch_data.mu_ref = self.larch_data.data[1, :]
             self.larch_data.mu = self.larch_data.data[1, :]
         
         # check unit of energy, if value below 100 it is most likely keV
@@ -392,6 +450,7 @@ class ReadData(object):
         # sort the energy to be strictly increasing (for scipy spline in larch.autobk)
         energy_sorted_idx = self.larch_data.energy.argsort()
         self.larch_data.energy = self.larch_data.energy[energy_sorted_idx]
+        self.larch_data.mu_ref = self.larch_data.mu_ref[energy_sorted_idx]
         self.larch_data.mu = self.larch_data.mu[energy_sorted_idx]
         diff_E = np.diff(self.larch_data.energy)
         mean_diff = diff_E.mean()
@@ -399,15 +458,20 @@ class ReadData(object):
         # convert NaN to 0
         self.larch_data.energy = np.nan_to_num(self.larch_data.energy, posinf=0,
                                                neginf=0)
+        self.larch_data.mu_ref = np.nan_to_num(self.larch_data.mu_ref, posinf=0,
+                                            neginf=0)
         self.larch_data.mu = np.nan_to_num(self.larch_data.mu, posinf=0,
                                             neginf=0)
         
         if self.beamline == "PETRA III Extension Beamline P65":
             self.larch_data.energy = self.larch_data.energy[remove_idx]
+            self.larch_data.mu_ref = self.larch_data.mu_ref[remove_idx]
             self.larch_data.mu = self.larch_data.mu[remove_idx]
         
         # convert data to numpy array with [energy, mu]
-        self.data = np.array([self.larch_data.energy, self.larch_data.mu])
+        self.data = np.array([self.larch_data.energy,
+                              self.larch_data.mu_ref,
+                              self.larch_data.mu])
         # set e-range
         self.meta_data_dict['E_range_min'] = np.round(self.data[0,0], decimals=1)
         self.meta_data_dict['E_range_max'] = np.round(self.data[0,-1], decimals=1)
@@ -433,11 +497,14 @@ class ReadData(object):
         # now open the h5 and retrieve the measurement data
         with h5py.File(self.data_path, 'r') as f:
             self.h5_energy = f[self.scan_number]['measurement']['energy_cenc'][()]
+            self.h5_mu_ref = f[self.scan_number]['measurement']['mu_trans_ref'][()]
             self.h5_mu = f[self.scan_number]['measurement']['mu_trans'][()]
         # check if energy is in eV
         self.h5_energy = self.keV2eV(self.h5_energy)
         # convert data to numpy array with [energy, mu]
-        self.data = np.array([self.h5_energy, self.h5_mu])
+        self.data = np.array([self.h5_energy,
+                              self.h5_mu_ref,
+                              self.h5_mu])
         # set e-range
         self.meta_data_dict['E_range_min'] = np.round(self.data[0,0], decimals=1)
         self.meta_data_dict['E_range_max'] = np.round(self.data[0,-1], decimals=1)
@@ -453,11 +520,14 @@ class ReadData(object):
         """
         self.larch_data = read_specfile(self.data_path, scan=self.scan_number)
         self.larch_data.energy = self.larch_data.Energy
+        self.larch_data.mu_ref = self.larch_data.RingCurrent #  TODO this is not correct!!! No example data for implementation...
         self.larch_data.mu = self.larch_data.RingCurrent #  TODO this is not correct!!! No example data for implementation...
         #  check if energy is in eV
         self.larch_data.energy = self.keV2eV(self.larch_data.energy)
         #  convert data to numpy array with [energy, mu]
-        self.data = np.array([self.larch_data.energy, self.larch_data.mu])
+        self.data = np.array([self.larch_data.energy,
+                              self.larch_data.mu_ref,
+                              self.larch_data.mu])
         #  set e-range
         self.meta_data_dict['E_range_min'] = np.round(self.data[0,0], decimals=1)
         self.meta_data_dict['E_range_max'] = np.round(self.data[0,-1], decimals=1)
@@ -484,12 +554,15 @@ class ReadData(object):
                 self.meta_data_dict["E_range_min"] = self.E_range_min
                 self.meta_data_dict["E_range_max"] = self.E_range_max
                 energy = self.data[0]
-                mu = self.data[1]
+                mu_ref = self.data[1]
+                mu_ref = mu_ref[self.E_range_min <= energy]
+                mu = self.data[2]
                 mu = mu[self.E_range_min <= energy]
                 energy = energy[self.E_range_min <= energy]
+                mu_ref = mu_ref[self.E_range_max >= energy]
                 mu = mu[self.E_range_max >= energy]
                 energy = energy[self.E_range_max >= energy]
-                self.data = np.array([energy, mu])
+                self.data = np.array([energy, mu_ref, mu])
             except (TypeError,AttributeError):
                 print("Update of e-range not possible!")
         #  define figures
