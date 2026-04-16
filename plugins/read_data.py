@@ -85,7 +85,7 @@ class ReadData(object):
                                 "eneenc   mu_trans   mu_fluo   mu_ref"],
                 "SOLEIL ROCK" : ["Synchrotron SOLEIL"],
                 "SOLEIL SAMBA" : ["#  Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
-                "SLS" : ["# posX	SAI01-MEAN	SAI02-MEAN"],
+                "SLS" : ["#posX	SAI01-MEAN	SAI02-MEAN"],
                 "DELTA" : ["#  created:"],
                 "SOLARIS" : ['# C Acquisition started']
                 },
@@ -150,11 +150,11 @@ class ReadData(object):
         if self.beamline:
             if self.verbose:
                 print('beamline found:\t', self.beamline)
-            print('beamline found:\t', self.beamline)
             self.extract_header()
             self.load_data()
         else:
-            print('no beamline found, going to numpy extraction mode')
+            if self.verbose:
+                print('no beamline found, going to numpy extraction mode')
             data = read_ascii(self.data_path)
             self.data = np.array([data.data[0], data.data[1], data.data[1]])
             
@@ -309,14 +309,16 @@ class ReadData(object):
         """
         reference_sample_simultaneous = False  # keyword if sample and reference are measured simultaneously
         entries = [entry.lower() for entry in dir(self.larch_data)]
-        print(f"entries - {entries}")
         # SYNCHROTRON
         if self.beamline == "CATACT KIT":
             self.larch_data.energy = self.larch_data.energy
             self.larch_data.I0 = self.larch_data.ioni3
             self.larch_data.transmission = self.larch_data.ioni2
             self.larch_data.mu_ref = np.log(self.larch_data.ioni1/self.larch_data.I0)
-            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
+            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.ioni1)
+            if np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)[0,1] < 0.8:
+                self.larch_data.mu = self.larch_data.mu_ref
+
         elif self.beamline == "PETRA III Extension Beamline P64":
             self.larch_data.energy = self.larch_data.data[0]
             self.larch_data.transmission = self.larch_data.data[1]
@@ -330,8 +332,31 @@ class ReadData(object):
                     self.larch_data.energy = self.larch_data.energy_enc
                 except AttributeError as e:
                     self.larch_data.energy = self.larch_data.e_enc
-                self.larch_data.mu_ref = self.larch_data.i0/self.larch_data.i2
+                self.larch_data.mu_ref = self.larch_data.i1/self.larch_data.i2
                 self.larch_data.mu = self.larch_data.i0/self.larch_data.i1
+                # remove inf and nan
+                self.larch_data.mu_ref = np.nan_to_num(self.larch_data.mu_ref, posinf=0)
+                self.larch_data.mu = np.nan_to_num(self.larch_data.mu, posinf=0)
+                # if only reference is measured check if the reference and sample
+                # columns are switched by checking 
+                # 1) vast values in mu_ref or mu
+                # 2) by the std of the 1st derivative of the mu and mu_ref
+                # and last resort, 3) check the pearson correlation and check if 
+                # indeed sample and reference are measured simultaneously
+                # 1)
+                if len(self.larch_data.mu_ref[self.larch_data.mu_ref > 100]) > 5:
+                    self.larch_data.mu_ref = self.larch_data.mu
+                elif len(self.larch_data.mu[self.larch_data.mu > 100]) > 5:
+                    self.larch_data.mu = self.larch_data.mu_ref
+                # 2)
+                if np.std(np.diff(self.larch_data.mu_ref[:len(self.larch_data.mu_ref)//2])) < 0.005:
+                    self.larch_data.mu_ref = self.larch_data.mu
+                elif np.std(np.diff(self.larch_data.mu[:len(self.larch_data.mu)//2])) < 0.005:
+                    self.larch_data.mu = self.larch_data.mu_ref
+                # 3)
+                print(f"pearson of sample and reference: {np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)}")
+                if np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)[0,1] < 0.8:
+                    self.larch_data.mu = self.larch_data.mu_ref
             if not reference_sample_simultaneous:
                 if "mono_energy" in entries:
                     self.larch_data.energy = self.larch_data.mono_energy
@@ -354,19 +379,23 @@ class ReadData(object):
                     self.larch_data.mu_ref = self.larch_data._ev
                     self.larch_data.mu = self.larch_data._ev
                 elif "murefer" in entries:
-                    self.larch_data.mu_ref = self.larch_data.murefer
-                    self.larch_data.mu = self.larch_data.murefer
+                    self.larch_data.mu_ref = self.larch_data.i0/self.larch_data.irefer
+                    self.larch_data.mu = self.larch_data.i0/self.larch_data.itrans
+                    if np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)[0,1] < 0.8:
+                        self.larch_data.mu = self.larch_data.mu_ref
                 try:
                     self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
                     self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
                     if np.isnan(self.larch_data.mu).any() or np.isinf(self.larch_data.mu).any():
-                        print("changing dataset, darn P65 always something special!")
+                        if self.verbose:
+                            print("changing dataset, darn P65 always something special!")
                         self.larch_data.transmission = self.larch_data.i0
                         self.larch_data.I0 = self.larch_data.i1
                         self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
                         self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
                 except:
-                    print("no transmission data loaded")
+                    if self.verbose:
+                        print("no transmission data loaded")
         elif self.beamline == "ELETTRA XAFS":
             self.larch_data.energy = self.larch_data.data[0, :]
             self.larch_data.I0 = self.larch_data.data[3, :]
@@ -396,8 +425,8 @@ class ReadData(object):
             # this is determined via the keys mux (sample) and mus(reference)
             if "mux" in entries and "mus" in entries:
                 reference_sample_simultaneous = True
-                self.larch_data.mu_ref = self.larch_data.mus  # reference absorption
-                self.larch_data.mu = self.larch_data.mux  # sample absorption
+                self.larch_data.mu_ref = self.larch_data.i0/self.larch_data.i2  # reference absorption
+                self.larch_data.mu = self.larch_data.i0/self.larch_data.i1  # sample absorption
                 self.larch_data.I0 = self.larch_data.i0
             elif "normalized" in entries:
                 self.larch_data.mu_ref = self.larch_data.normalized
@@ -417,7 +446,8 @@ class ReadData(object):
                     self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
                     self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
                 except:
-                    print("no transmission data loaded")
+                    if self.verbose:
+                        print("no transmission data loaded")
         elif self.beamline == "SOLEIL SAMBA":
             self.larch_data.energy = self.larch_data.data[0, :]
             self.larch_data.I0 = self.larch_data.data[8, :]
@@ -564,7 +594,8 @@ class ReadData(object):
                 energy = energy[self.E_range_max >= energy]
                 self.data = np.array([energy, mu_ref, mu])
             except (TypeError,AttributeError):
-                print("Update of e-range not possible!")
+                if self.verbose:
+                    print("Update of e-range not possible!")
         #  define figures
         self.fig_raw_data = plt.figure("Preview Raw Data", figsize=(10, 6.25))
         self.fig_raw_data.clf()
@@ -622,11 +653,11 @@ class ReadData(object):
         """
         Important function to draw a cow saying mu.
         """
-        print("|¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|")
-        print("|\|/          (__)      |")
-        print("|     `\------(oo)      |")
-        print("|       ||    (__) <(mu)|")
-        print("|       ||w--||     \|/ |")
-        print("|   \|/                 |")
-        print("|¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|")
-        print("QC succesfully performed")
+        print("""|¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|
+        |\|/          (__)      |
+        |     `\------(oo)      |
+        |       ||    (__) <(mu)|
+        |       ||w--||     \|/ |
+        |   \|/                 |
+        |¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|
+        QC succesfully performed""")

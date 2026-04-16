@@ -756,7 +756,7 @@ class CheckQualityControl(object):
         self.cq.ax_data.legend()
         self.cq.fig_data.tight_layout()
         if save_path: 
-           self.cq.fig_data.savefig(save_path+f'{self.name}_{data_type}.png', 
+           self.cq.fig_data.savefig(save_path/f'{self.name}_{data_type}.png', 
                                     dpi=300)
 
     def check_data(self, ):
@@ -791,7 +791,6 @@ class CheckQualityControl(object):
             self.qc_list = []
             # read out the data of the file
             self.read_data.process_data(data_path=file)
-            print(self.read_data.data.shape)
             self.cq.load_data(self.read_data.data, source=self.facility_type, name=self.name)
             self.data = self.cq.preprocess_data(take_first=self.take_first)
             if self.verbose:
@@ -862,10 +861,9 @@ class CheckQualityControl(object):
 if __name__ == '__main__':
   # use this for automated check on metal foils
     from larch.io import read_ascii, read_xdi, read_specfile, read_athena
-    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/FOR_TESTING/')
-    # folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/')
-    files_data = folder_data.glob('*')
-    # files_data = [files_data[i] for i in [5,] ]
+    # folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/FOR_TESTING/')
+    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/')
+    files_data = folder_data.glob('Pt_foil_Pt L3 SLS*')
     folder_athena = Path('/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/evaluated/Abhijeet/Data Metal foils/')
     files_athena_raw = folder_athena.glob('Raw muE/*.xmu')
     files_athena_chiR = folder_athena.glob('ChiR new/*.rsp')
@@ -897,9 +895,9 @@ if __name__ == '__main__':
             K2_Comp_data = read_ascii(file_name_athena_k2chik[0])
             # data_dict = {'RAW': [RAW_Comp_data, plot_raw=True, plot_norm=False, plot_R=False, plot_k=False],
         data_dict = {'RAW': [RAW_Comp_data, True, False, False, False,'Raw muE'],
-                      "NORMALIZED": [NORM_Comp_data, False, True, False, False,'Norm muE'],
-                      'k': [K2_Comp_data, False, False, False, True,'k2 chik'],
-                      'R': [CHIR_Comp_data, False, False, True, False,'ChiR new'],
+                      "NORMALIZED": [NORM_Comp_data, True, True, False, False,'Norm muE'],
+                      'k': [K2_Comp_data, True, False, False, True,'k2 chik'],
+                      'R': [CHIR_Comp_data, True, False, True, False,'ChiR new'],
                       }
         qc = CheckQualityControl(facility_type='SYNCHROTRON', 
                                       files=[file_data],
@@ -908,14 +906,14 @@ if __name__ == '__main__':
                                       plot_R=data_dict['R'][4],
                                       plot_k=data_dict['k'][3],
                                       plot_background=False,
-                                      save_figure_path=False,
+                                      save_figure_path="/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/FOR_TESTING/results/",
                                       # save_figure_path=os.environ['HOME']+'/Doktorarbeit/DAPHNE/Quality Criteria/evaluated/',
                                       take_first=True,
                                       verbose=False,
                                       )
         for key, data in data_dict.items():
             if compare:
-                save_path = folder_athena+f'{data[5]}/'
+                save_path = folder_athena/f'{data[5]}/'
             else:
                 save_path = None
             qc.cq.plot_data(key, 
