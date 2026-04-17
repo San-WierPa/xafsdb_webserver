@@ -187,8 +187,21 @@ class CheckQuality(object):
         edge_E_DB = xray.xray_edge(*element_n_edge)[0]
         self.data.E_difference = self.data.e0 - edge_E_DB
         self.data.energy -= (self.data.e0 - edge_E_DB)
-        self.find_e0(self.data.energy, self.data.mu_ref, group=self.data,
-                     take_first=take_first)
+        # find the edge energy after the shift again for both reference and
+        # sample in order to calculate the edge shift for oxides
+        self.e0_ref = self.find_e0(
+            self.data.energy, 
+            self.data.mu_ref,
+            group=None,
+            take_first=take_first)
+        self.e0_sample = self.find_e0(
+            self.data.energy, 
+            self.data.mu,
+            group=None,
+            take_first=take_first)
+        # calculate the edge shift
+        self.edge_shift = self.e0_ref - self.e0_sample
+        print(f"detected edge shift of {self.edge_shift} eV")
         # retrieve the array index of E0 to determine low cut energy
         edge_index = np.argmin(np.abs(self.data.energy-self.data.e0))
         cut_index = edge_index - 150
@@ -861,9 +874,9 @@ class CheckQualityControl(object):
 if __name__ == '__main__':
   # use this for automated check on metal foils
     from larch.io import read_ascii, read_xdi, read_specfile, read_athena
-    # folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/FOR_TESTING/')
-    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/')
-    files_data = folder_data.glob('Pt_foil_Pt L3 SLS*')
+    folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/FOR_TESTING/')
+    # folder_data = Path('/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/')
+    files_data = folder_data.glob('*')
     folder_athena = Path('/home/frank/Doktorarbeit/DAPHNE/Quality Criteria/evaluated/Abhijeet/Data Metal foils/')
     files_athena_raw = folder_athena.glob('Raw muE/*.xmu')
     files_athena_chiR = folder_athena.glob('ChiR new/*.rsp')
@@ -874,6 +887,8 @@ if __name__ == '__main__':
         if "gitkeep" in file_data.name:
             continue
         if not file_data.is_file():
+            continue
+        if ".zip" in file_data.name:
             continue
         print(f"# working on {file_data} ###")
         file_name_data = file_data.name

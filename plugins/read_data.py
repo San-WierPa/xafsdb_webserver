@@ -83,7 +83,8 @@ class ReadData(object):
                 "SLRI" : ["BL8: X-ray Absorption Spectroscopy"],
                 "ESRF BM 23" : ["#ZapEnergy",
                                 "eneenc   mu_trans   mu_fluo   mu_ref"],
-                "SOLEIL ROCK" : ["Synchrotron SOLEIL"],
+                "SOLEIL ROCK" : ["Synchrotron SOLEIL",
+                                 "rock-soleil"],
                 "SOLEIL SAMBA" : ["#  Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
                 "SLS" : ["#posX	SAI01-MEAN	SAI02-MEAN"],
                 "DELTA" : ["#  created:"],
@@ -308,7 +309,7 @@ class ReadData(object):
             array([energy, mu_reference, mu_sample])
         """
         reference_sample_simultaneous = False  # keyword if sample and reference are measured simultaneously
-        entries = [entry.lower() for entry in dir(self.larch_data)]
+        entries = [entry.lower() for entry in self.larch_data.array_labels]
         # SYNCHROTRON
         if self.beamline == "CATACT KIT":
             self.larch_data.energy = self.larch_data.energy
@@ -349,9 +350,9 @@ class ReadData(object):
                 elif len(self.larch_data.mu[self.larch_data.mu > 100]) > 5:
                     self.larch_data.mu = self.larch_data.mu_ref
                 # 2)
-                if np.std(np.diff(self.larch_data.mu_ref[:len(self.larch_data.mu_ref)//2])) < 0.005:
+                if np.std(np.diff(self.larch_data.mu_ref[:len(self.larch_data.mu_ref)//2])) < 0.0005:
                     self.larch_data.mu_ref = self.larch_data.mu
-                elif np.std(np.diff(self.larch_data.mu[:len(self.larch_data.mu)//2])) < 0.005:
+                elif np.std(np.diff(self.larch_data.mu[:len(self.larch_data.mu)//2])) < 0.0005:
                     self.larch_data.mu = self.larch_data.mu_ref
                 # 3)
                 print(f"pearson of sample and reference: {np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)}")
@@ -439,8 +440,8 @@ class ReadData(object):
                 self.larch_data.transmission = self.larch_data.i0
             if "shifted" in entries:
                 self.larch_data.energy = self.larch_data.shifted
-                self.larch_data.mu_ref = self.larch_data.normalized
-                self.larch_data.mu = self.larch_data.normalized
+                self.larch_data.mu_ref = np.abs(self.larch_data.normalized)
+                self.larch_data.mu = np.abs(self.larch_data.normalized)
             if not reference_sample_simultaneous:
                 try:
                     self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
