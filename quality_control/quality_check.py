@@ -174,10 +174,16 @@ class CheckQuality(object):
             (as in Larch). The default is False.
         """
         # find the edge energy E0 of the absorption data
-        self.find_e0(self.data.energy, 
+        e0_test = self.find_e0(self.data.energy,
+                     self.data.mu,
+                     group=None,
+                     take_first=take_first)
+        print(f"uncalibrated edge energy on sample: {e0_test}")
+        self.find_e0(self.data.energy,
                      self.data.mu_ref,
                      group=self.data,
                      take_first=take_first)
+        print(f"uncalibrated edge energy: {self.data.e0}")
         # xafs.find_e0(self.data.energy, self.data.mu, group=self.data)
         # perform an energy calibration
         # for this guess the element edge and retrieve the edge energy from
@@ -185,24 +191,29 @@ class CheckQuality(object):
         # https://xraypy.github.io/xraylarch/xray.html
         element_n_edge = xray.guess_edge(self.data.e0)
         edge_E_DB = xray.xray_edge(*element_n_edge)[0]
+        print(f"detected edge: {element_n_edge} at energy: {edge_E_DB}")
         self.data.E_difference = self.data.e0 - edge_E_DB
+        print(f"detected spectrometer energy shift: {self.data.E_difference}")
         self.data.energy -= (self.data.e0 - edge_E_DB)
         # find the edge energy after the shift again for both reference and
         # sample in order to calculate the edge shift for oxides
-        self.e0_ref = self.find_e0(
-            self.data.energy, 
-            self.data.mu_ref,
-            group=None,
-            take_first=take_first)
         self.e0_sample = self.find_e0(
             self.data.energy, 
             self.data.mu,
             group=None,
             take_first=take_first)
+        self.e0_ref = self.find_e0(
+            self.data.energy, 
+            self.data.mu_ref,
+            group=self.data,
+            take_first=take_first)
+        print(f"detected e0 reference: {self.e0_ref} eV")
+        print(f"detected e0 sample: {self.e0_sample} eV")
         # calculate the edge shift
-        self.edge_shift = self.e0_ref - self.e0_sample
+        self.edge_shift = self.e0_sample - self.e0_ref
         print(f"detected edge shift of {self.edge_shift} eV")
         # retrieve the array index of E0 to determine low cut energy
+
         edge_index = np.argmin(np.abs(self.data.energy-self.data.e0))
         cut_index = edge_index - 150
         # if the data below edge is not sufficient, set index to 0 to avoid
@@ -363,8 +374,12 @@ class CheckQuality(object):
                               color="#003161")
             self.ax_data.plot(self.data.e0,
                               self.data.mu[np.where(self.data.e0 == self.data.energy)],
-                              marker="*", color="#69398B", lw=0,
-                              label="Edge Position",)
+                              marker="1", color="#69398B", lw=0,
+                              label="Reference Edge Position",)
+            self.ax_data.plot(self.e0_sample,
+                              self.data.mu[np.where(self.e0_sample == self.data.energy)],
+                              marker="2", color="#69398B", lw=0,
+                              label="Sample Edge Position",)
             # if background shall be plotted
             if data_type == "BACKGROUND":
                 if show_name:
@@ -396,8 +411,12 @@ class CheckQuality(object):
                               color="#003161")
             self.ax_data.plot(self.data.e0,
                               self.data.flat[np.where(self.data.e0 == self.data.energy)],
-                              marker="*", color="#69398B", lw=0,
-                              label="Edge Position",)
+                              marker="1", color="#69398B", lw=0,
+                              label="Reference Edge Position",)
+            self.ax_data.plot(self.e0_sample,
+                              self.data.flat[np.where(self.e0_sample == self.data.energy)],
+                              marker="2", color="red", lw=0,
+                              label="Sample Edge Position",)
             # labelling
             self.ax_data.set_xlabel(r"Energy | eV")
             self.ax_data.set_ylabel(r"$\mu (E)$ | a.u.")
@@ -833,7 +852,7 @@ class CheckQualityControl(object):
                 self.fig_normalized_data_base64 = self.cq.encode_base64_figure(self.fig_normalized_data)
                 image_data = self.cq.decode_base64_figure(base64_string=self.fig_normalized_data_base64)
             if self.plot_k:
-                if self.save_figure_path: save_path = self.save_figure_path+'/k/{}_k.png'.format(self.ame)
+                if self.save_figure_path: save_path = self.save_figure_path+'/k/{}_k.png'.format(self.name)
                 self.fig_k = self.cq.plot_data(data_type='k',
                                                show_name=False, 
                                                show=show, 
@@ -911,8 +930,8 @@ if __name__ == '__main__':
             # data_dict = {'RAW': [RAW_Comp_data, plot_raw=True, plot_norm=False, plot_R=False, plot_k=False],
         data_dict = {'RAW': [RAW_Comp_data, True, False, False, False,'Raw muE'],
                       "NORMALIZED": [NORM_Comp_data, True, True, False, False,'Norm muE'],
-                      'k': [K2_Comp_data, True, False, False, True,'k2 chik'],
-                      'R': [CHIR_Comp_data, True, False, True, False,'ChiR new'],
+                      'k': [K2_Comp_data, True, False, True, True,'k2 chik'],
+                      'R': [CHIR_Comp_data, True, False, True, True,'ChiR new'],
                       }
         qc = CheckQualityControl(facility_type='SYNCHROTRON', 
                                       files=[file_data],

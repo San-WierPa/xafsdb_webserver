@@ -315,8 +315,8 @@ class ReadData(object):
             self.larch_data.energy = self.larch_data.energy
             self.larch_data.I0 = self.larch_data.ioni3
             self.larch_data.transmission = self.larch_data.ioni2
-            self.larch_data.mu_ref = np.log(self.larch_data.ioni1/self.larch_data.I0)
-            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.ioni1)
+            self.larch_data.mu_ref = np.log(self.larch_data.ioni2/self.larch_data.ioni3)
+            self.larch_data.mu = np.log(self.larch_data.ioni1/self.larch_data.ioni2)
             if np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)[0,1] < 0.8:
                 self.larch_data.mu = self.larch_data.mu_ref
 
@@ -356,8 +356,10 @@ class ReadData(object):
                     self.larch_data.mu = self.larch_data.mu_ref
                 # 3)
                 print(f"pearson of sample and reference: {np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)}")
-                if np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)[0,1] < 0.8:
+                if 0 < np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)[0,1] < 0.8:
                     self.larch_data.mu = self.larch_data.mu_ref
+                elif -0.8 < np.corrcoef(self.larch_data.mu, self.larch_data.mu_ref)[0,1] < 0:
+                    self.larch_data.mu_ref = self.larch_data.mu
             if not reference_sample_simultaneous:
                 if "mono_energy" in entries:
                     self.larch_data.energy = self.larch_data.mono_energy
@@ -401,8 +403,8 @@ class ReadData(object):
             self.larch_data.energy = self.larch_data.data[0, :]
             self.larch_data.I0 = self.larch_data.data[3, :]
             self.larch_data.transmission = self.larch_data.data[2, :]
-            self.larch_data.mu_ref = np.log(self.larch_data.transmission/self.larch_data.I0)
-            self.larch_data.mu = np.log(self.larch_data.transmission/self.larch_data.I0)
+            self.larch_data.mu_ref = np.log(self.larch_data.data[6, :]/self.larch_data.data[7, :])
+            self.larch_data.mu = np.log(self.larch_data.data[2, :]/self.larch_data.data[3, :])
         elif self.beamline == "SLRI":
             self.larch_data.energy = self.larch_data.data[0, :]
             self.larch_data.I0 = self.larch_data.data[4, :]
@@ -426,7 +428,7 @@ class ReadData(object):
             # this is determined via the keys mux (sample) and mus(reference)
             if "mux" in entries and "mus" in entries:
                 reference_sample_simultaneous = True
-                self.larch_data.mu_ref = self.larch_data.i0/self.larch_data.i2  # reference absorption
+                self.larch_data.mu_ref = self.larch_data.i1/self.larch_data.i2  # reference absorption
                 self.larch_data.mu = self.larch_data.i0/self.larch_data.i1  # sample absorption
                 self.larch_data.I0 = self.larch_data.i0
             elif "normalized" in entries:
