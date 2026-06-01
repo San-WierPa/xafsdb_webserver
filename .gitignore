@@ -2,6 +2,12 @@
 **/.hugo_build.lock
 **/.DS_Store
 
+_image_snapshot/
+_image_snapshot_current*/
+_local_qc_snapshot*/
+migration_kit/
+.codex
+
 # https://djangowaves.com/tips-tricks/gitignore-for-a-django-project/
 
 # Django #
