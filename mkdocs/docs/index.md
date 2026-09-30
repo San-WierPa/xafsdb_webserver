@@ -8,6 +8,7 @@
 [Authors](#authors)<br>
 [Overview](#overview)<br>
 [Flowchart](#flowchart)<br>
+[Acknowledgments](#acknowledgments)<br>
 [Disclaimer](#disclaimer)<br>
 
 ## Authors
@@ -37,6 +38,9 @@ The automated data processing follows a well-established protocol. At first the 
 
 ## Flowchart
 ![Flowchart](assets/images/1.png)
+
+## Acknowledgments
+We are thankful to our colleagues at the institutes for their valuable feedback and contributions in the development of the database. Thanks are due to Paolo Dolcet, Florian Maurer, Vitaly Biniyaminov, Tim Delrieux, Saikumar Pathireddy, Daria Gashnikova, Simon Barth, Tim Wetzel, Linus Pithan, Heike Görzig, Bridget Murphy & many more..
 
 !!! info
     ## Disclaimer
