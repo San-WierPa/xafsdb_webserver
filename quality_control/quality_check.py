@@ -28,7 +28,7 @@ use_originpo_style = True
 if use_originpo_style:
     plt.rcParams['font.family'] = 'sans-serif'
     plt.rcParams['font.sans-serif'] = ['Arial']
-    plt.rcParams['font.size'] = 16
+    plt.rcParams['font.size'] = 12
     plt.rcParams['axes.linewidth'] = 1.1
     plt.rcParams['axes.labelpad'] = 10.0
     plot_color_cycle = plt.cycler('color', ['000000', '0000FE', 'FE0000', '008001', 'FD8000', '8c564b', 
@@ -38,9 +38,9 @@ if use_originpo_style:
     plt.rcParams['axes.xmargin'] = 0
     plt.rcParams['axes.ymargin'] = 0
     plt.rcParams["legend.markerscale"] = 0.8
-    plt.rcParams["legend.fontsize"] = "small"
+    plt.rcParams["legend.fontsize"] = "9"
     plt.rcParams["legend.loc"] = "best"
-    plt.rcParams.update({"figure.figsize" : (6.4,4.8),
+    plt.rcParams.update({"figure.figsize" : (9.0, 5.5),
                      "figure.subplot.left" : 0.177, "figure.subplot.right" : 0.946,
                      "figure.subplot.bottom" : 0.156, "figure.subplot.top" : 0.965,
                      "axes.autolimit_mode" : "round_numbers",
@@ -316,13 +316,18 @@ class CheckQuality(object):
         high_deriv_pts = np.where(dmu >  maxdmu*0.1)[0]
         high_deriv_pts = high_deriv_pts[dmu[high_deriv_pts] > np.mean(dmu[high_deriv_pts])]
         maxima_indices = argrelextrema(dmu[high_deriv_pts], np.greater)
-        # Access the values at the maxima indices
-        if take_first:
-            e0_idx = np.take(high_deriv_pts[maxima_indices], 0)
-            e0 = energy[e0_idx]
+        local_maxima = high_deriv_pts[maxima_indices]
+        # Robust fallback for spectra where no local maximum survives filtering.
+        if local_maxima.size == 0:
+            search = dmu[nmin:-nmin] if len(dmu) > (2 * nmin) else dmu
+            offset = nmin if len(dmu) > (2 * nmin) else 0
+            e0_idx = int(np.argmax(search)) + offset
+        elif take_first:
+            e0_idx = int(local_maxima[0])
         else:
-            e0_idx = np.max(high_deriv_pts[maxima_indices])
-            e0 = energy[e0_idx]
+            # Preserve larch202530's later-local-maximum behavior when candidates exist.
+            e0_idx = int(np.max(local_maxima))
+        e0 = energy[e0_idx]
         if group:
             group.e0 = e0
         return e0
@@ -361,7 +366,7 @@ class CheckQuality(object):
         major_ticks_xanes = np.arange(int(np.round(self.data.energy[0], decimals=-1)), int(self.data.energy[-1]), 20)
         minor_ticks_xanes = np.arange(int(np.round(self.data.energy[0], decimals=-1)), int(self.data.energy[-1]), 10)
         # legend location
-        loc = 'lower right'
+        loc = 'best'
         # plot data depending on type
         if data_type == 'RAW' or data_type == "BACKGROUND":
             # plotting
@@ -487,6 +492,7 @@ class CheckQuality(object):
             self.ax_data.set_title(self.name)
         # set legend
         self.ax_data.legend(loc=loc)
+        self.fig_data.tight_layout()
         # show figure if desired
         if show:
             self.fig_data.show()
@@ -806,16 +812,23 @@ class CheckQualityControl(object):
         #     folder = '/home/frank/Doktorarbeit/DAPHNE/xafsdb_webserver/quality_control/example data/SYNCHROTRON/'
         #     files = sorted(glob(folder+'*'))[1:2]
         # else: files = self.files
-        files = self.files
+        if self.files is None:
+            example_dir = Path(__file__).parent / "example data" / self.facility_type
+            files = [
+                item for item in sorted(example_dir.iterdir())
+                if item.is_file() and "gitkeep" not in item.name and item.suffix.lower() != ".zip"
+            ]
+        else:
+            files = [Path(item) for item in self.files]
         # initialize the CheckQuality class
         self.cq = CheckQuality(quality_criteria_json=cq_json, verbose=self.verbose)
         # analyse the quality for each file in the files list
         for file in files:
             if self.verbose:
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                print('working on {}'.format(file.split('/')[-1]))
+                print('working on {}'.format(file.name))
                 print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-                print("file:\t", file.split('/')[-1])
+                print("file:\t", file.name)
             # transform the name variable corresponding to the host sys.platform
             self.name = file.stem
             # initialize the quality control list to store quality data of
@@ -830,10 +843,11 @@ class CheckQualityControl(object):
                 print('guessed element and edge: ', self.cq.data.element_n_edge)
                 print('E0: {:.0f}eV'.format(self.cq.data.e0))
                 print('k-range: {:.1f}-{:.1f}'.format(self.cq.kmin, self.cq.kmax))
-            if self.save_figure_path: show = False
+            if self.save_figure_path:
+                show = False
             else:
-                show = True
-                save_path= None
+                show = not self.plot_quiet
+                save_path = None
             
             if self.plot_raw_data:
                 if self.save_figure_path: save_path = self.save_figure_path+'/RAW/{}_RAW.png'.format(self.name)
@@ -888,6 +902,13 @@ class CheckQualityControl(object):
                     print("data not matchs all quality criteria, please check")
             self.cq.first_shell_fit()
         return self.cq.data
+
+
+# Backward-compatible public names used by v_beta/updatedQC/master/Hotfix
+# and by auto_dataset_create.py. Keeping these aliases avoids breaking callers
+# while retaining the modern CheckQuality/CheckQualityControl class names.
+check_quality = CheckQuality
+check_quality_control = CheckQualityControl
 
 
 if __name__ == '__main__':

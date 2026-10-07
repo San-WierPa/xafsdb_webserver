@@ -9,6 +9,7 @@ import h5py
 import matplotlib.pyplot as plt
 import base64
 import io
+from pathlib import Path
 plt.ioff()
 plt.rcParams["xtick.direction"] = "in"
 plt.rcParams["xtick.top"] = True
@@ -120,9 +121,11 @@ class ReadData(object):
         data_path : str
             absolute path to the xdi file.
         """
-        self.data_path = data_path
-        self.data_type = self.data_path.suffix
-        if self.data_type in ['h5', 'hdf', 'hdf5']:
+        # Integration fix: normalize string/Path inputs before using .suffix.
+        # Original larch202530 behavior is preserved in _integration_archive.
+        self.data_path = Path(data_path)
+        self.data_type = self.data_path.suffix.lower()
+        if self.data_type in ['.h5', '.hdf', '.hdf5']:
             self.load_hdf()
         elif self.data_type in ['.spec']:
             self.load_specfile()
@@ -664,3 +667,8 @@ class ReadData(object):
         |   \|/                 |
         |¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|¯¯¯¯¯|
         QC succesfully performed""")
+
+
+# Backward compatibility for older branches and external callers.
+# v_beta/updatedQC/Hotfix/master imported the historical lowercase class name.
+read_data = ReadData
