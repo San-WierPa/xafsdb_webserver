@@ -4,8 +4,11 @@
 
 
 const date = document.querySelector("#date");
-// set year
-date.innerHTML = new Date().getFullYear();
+// set year (optional element: no template currently renders #date, and
+// dereferencing null here threw before the rest of this file could run)
+if (date) {
+    date.innerHTML = new Date().getFullYear();
+}
 
 // show/hide tables
 function showHideRow(row) {
