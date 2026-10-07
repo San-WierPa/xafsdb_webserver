@@ -774,14 +774,16 @@ def dataset_list_curator(request: HttpRequest) -> HttpResponse:
             filter=filter
         )
 
-        page = request.GET.get("page", 1)
-        paginator = Paginator(dataset_meta_list, 15)
-        try:
-            dataset_meta_list = paginator.page(page)
-        except PageNotAnInteger:
-            dataset_meta_list = paginator.page(1)
-        except EmptyPage:
-            dataset_meta_list = paginator.page(paginator.num_pages)
+        # Show every dataset still awaiting curation on one page.
+        # The filter has to happen here, not in the template: the list was
+        # previously paginated first and published entries were hidden
+        # afterwards, so a page holding only published datasets rendered
+        # completely empty (page 1 did, while later pages showed entries).
+        dataset_meta_list = [
+            dataset_meta
+            for dataset_meta in dataset_meta_list
+            if not dataset_meta.get("isPublished")
+        ]
 
     return render(
         request,
