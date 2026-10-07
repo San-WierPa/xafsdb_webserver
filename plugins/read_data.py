@@ -77,7 +77,7 @@ class ReadData(object):
         self.beamline_key_words = {
             "SYNCHROTRON" : {
                 "CATACT KIT" : ["catexp",],
-                "PETRA III Extension Beamline P64" : ["##  0 - Position",],
+                "PETRA III Extension Beamline P64" : ["##  0 - Position", "# # 0 - Position",],
                 "PETRA III Extension Beamline P65" : ["PETRA III Extension Beamline P65",
                                                       "PETRA III P65"],
                 "ELETTRA XAFS" : ["Project Name:"],
@@ -86,13 +86,14 @@ class ReadData(object):
                                 "eneenc   mu_trans   mu_fluo   mu_ref"],
                 "SOLEIL ROCK" : ["Synchrotron SOLEIL",
                                  "rock-soleil"],
-                "SOLEIL SAMBA" : ["#  Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
+                "SOLEIL SAMBA" : ["#  Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3",
+                                  "# Energy, Theta, XMU, FLUO, REF, FLUO_RAW, I0, I1, I2, I3"],
                 "SLS" : ["#posX	SAI01-MEAN	SAI02-MEAN"],
-                "DELTA" : ["#  created:"],
-                "SOLARIS" : ['# C Acquisition started']
+                "DELTA" : ["#  created:", "# created:"],
+                "SOLARIS" : ['# C Acquisition started', '#C Acquisition started']
                 },
             "LABORATORY" : {
-                "TU Berlin" : ["#  Energies_eV"],
+                "TU Berlin" : ["#  Energies_eV", "# Energies_eV"],
                 }
             }
         # initialize the class to default
@@ -532,15 +533,25 @@ class ReadData(object):
                 print('No scan number for hdf5 files provided, setting to default 1.1')
         # now open the h5 and retrieve the measurement data
         with h5py.File(self.data_path, 'r') as f:
-            self.h5_energy = f[self.scan_number]['measurement']['energy_cenc'][()]
-            self.h5_mu_ref = f[self.scan_number]['measurement']['mu_trans_ref'][()]
-            self.h5_mu = f[self.scan_number]['measurement']['mu_trans'][()]
+            measurement = f[self.scan_number]['measurement']
+            self.h5_energy = measurement['energy_cenc'][()]
+            self.h5_mu = measurement['mu_trans'][()]
+            # mu_trans_ref is not present in every ESRF export; fall back to
+            # the two-row [energy, mu] layout when the reference is missing.
+            self.h5_mu_ref = (measurement['mu_trans_ref'][()]
+                              if 'mu_trans_ref' in measurement else None)
         # check if energy is in eV
         self.h5_energy = self.keV2eV(self.h5_energy)
         # convert data to numpy array with [energy, mu]
-        self.data = np.array([self.h5_energy,
-                              self.h5_mu_ref,
-                              self.h5_mu])
+        # Keep the three-row [energy, mu_ref, mu] layout the rest of this
+        # class relies on; without a reference channel mu is duplicated,
+        # mirroring the fallback used in process_data().
+        if self.h5_mu_ref is None:
+            self.data = np.array([self.h5_energy, self.h5_mu, self.h5_mu])
+        else:
+            self.data = np.array([self.h5_energy,
+                                  self.h5_mu_ref,
+                                  self.h5_mu])
         # set e-range
         self.meta_data_dict['E_range_min'] = np.round(self.data[0,0], decimals=1)
         self.meta_data_dict['E_range_max'] = np.round(self.data[0,-1], decimals=1)
@@ -615,6 +626,10 @@ class ReadData(object):
         self.ax_raw_data.plot(self.data[0], self.data[1],
                               label="Measurement",
                               color="#003161")
+        # Expose the raw arrays to the web layer: verify.html renders an
+        # interactive preview plot from dictionary.raw_energy / raw_mu.
+        self.meta_data_dict['raw_energy'] = self.data[0].tolist()
+        self.meta_data_dict['raw_mu'] = self.data[1].tolist()
         
         self.ax_raw_data.set_xlabel(r" Energy | eV")
         self.ax_raw_data.set_ylabel(r"$\mu (E)$ | a.u.")
