@@ -45,6 +45,7 @@ import requests
 from django.core.mail import send_mail
 
 import scicat_py
+from plugins.column_correction import selection_from_form
 from plugins.read_data import read_data
 from quality_control.quality_check import check_quality
 from webserver.settings import EMAIL_HOST_USER
@@ -340,11 +341,24 @@ class AutoDatasetCreation(object):
             ### loading the json criteria file for reference
             cq_json = self.qc_path + "Criteria.json"
             ### initialize quality check object
-            cq = check_quality(quality_criteria_json=cq_json)
+            # A corrected upload must be stored with the same columns, edge and
+            # edge rule the user confirmed in the preview (plugins/frank_preview.py).
+            # Keep both in step, otherwise the stored data differs from the
+            # plots the user and curator saw. None means automatic columns.
+            selection = selection_from_form(self.verify_data)
+            cq = check_quality(
+                quality_criteria_json=cq_json,
+                element=(self.verify_data.get("Element") or None) if selection else None,
+                edge=(self.verify_data.get("Edge") or None) if selection else None,
+            )
             qc_list = []  ### this list will contain the quality criteria
             ### here the measurement data has to be forwarded, where will the data be stored in SciCat?
             # meas_data = np.loadtxt(self.short_url, skiprows=1)
-            rd = read_data(update_erange=self.verify_data)
+            rd = read_data(
+                source=self.verify_data.get("Source", "SYNCHROTRON") if selection else "SYNCHROTRON",
+                update_erange=self.verify_data,
+                column_selection=selection,
+            )
             rd.process_data(self.s3_data_path)
             # print("Meas_data from qc_and_update:", meas_data)
             cq.load_data(
@@ -354,7 +368,7 @@ class AutoDatasetCreation(object):
             )
             ### perform preprocessing on the data
             data = (
-                cq.preprocess_data(take_first=True)
+                cq.preprocess_data(take_first=not bool(selection))
             )  #: data is a larch group with calibrated_energy = data.energy and absorption data.mu
             # TODO: print(data) and send to download (here mu and energy)
             ### plot the data and return the figure object
