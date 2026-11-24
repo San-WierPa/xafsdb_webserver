@@ -1,0 +1,11 @@
+<div class="raw-preview-card" id="frank-qc-panel">
+    <div class="panel-heading"><div><h4>Quality control</h4><p>{{ frank_qc.input_label|default:'Automatic columns' }} · Standard QC settings</p></div>
+    {% if frank_qc.available %}<span class="preview-badge qc-{{ frank_qc.report.status }}">{{ frank_qc.report.status }}</span>{% endif %}</div>
+    {% if frank_qc.available %}
+    <div class="frank-plots">{% for plot in frank_qc.plots %}<figure><a href="{{ plot.url }}" target="_blank" rel="noopener"><img src="{{ plot.url }}" alt="{{ plot.label }} - QC"></a><figcaption>{{ plot.label }}</figcaption></figure>{% endfor %}</div>
+    <div class="frank-results"><table><thead><tr><th>Check</th><th>Value</th><th>Range</th><th>Result</th></tr></thead><tbody>{% for check in frank_qc.checks %}<tr><th scope="row">{{ check.label }}</th><td>{{ check.value }} {{ check.unit }}</td><td>{{ check.lower }}–{{ check.upper }}</td><td class="qc-{{ check.status }}">{{ check.status }}</td></tr>{% endfor %}</tbody></table></div>
+    <p class="preview-metrics">The first energy interval is scan spacing, not instrumental resolution. Calibration requires a suitable independent reference.</p>
+    {% else %}<p class="preview-status review">{{ frank_qc.error }}</p>{% endif %}
+    <p class="preview-metrics">{{ frank_qc.reference_note }}</p>
+    <p class="preview-metrics">Plots update after you apply columns. Upload uses the confirmed QC inputs.</p>
+</div>

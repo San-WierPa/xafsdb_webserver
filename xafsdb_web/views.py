@@ -248,72 +248,45 @@ def dataset_upload_view(request) -> HttpResponse:
 # read the uploaded file and send the data to verify view
 @api_view(["POST"])
 def dataset_upload(request):
-    """
-    Handles dataset file uploads from the user and processes the file content for further use.
+    from django.http import HttpResponseBadRequest
+    from plugins.column_correction import initial_qc_state, pending_upload_path, store_pending_upload
+    from plugins.column_preview import build_column_preview
+    from plugins.frank_preview import original_file_qc
+    from plugins.read_data import ReadData
 
-    Args:
-    request (HttpRequest): An HttpRequest object that contains metadata about the dataset file.
-
-    Returns:
-    context (dict): A dictionary containing decoded file name, description, and dictionary data,
-    which is used for further processing and storage in the reference database.
-
-    Example:
-    The function is typically used within a webserver created using Django framework. It processes
-    uploaded dataset files by decoding and extracting relevant information, preparing it for storage
-    and further analysis.
-    """
-    # try:
-    temporary_uploaded_file = request.FILES.get("file")
-    # print("I'm the temporary_uploaded_file:", temporary_uploaded_file)
-
-    if temporary_uploaded_file is None:
-        dataset_name = request.POST.get("dataset_name")
-        if str(dataset_name).split("/")[-1].split(".")[-1] != "h5":
-            readout_type = "r"
+    try:
+        incoming = request.FILES.get("file")
+        if incoming is not None:
+            path = store_pending_upload(request, incoming)
         else:
-            readout_type = "rb"
-        with open("temp/" + dataset_name, readout_type) as f:
-            decoded_list = f.readlines()
-        # if dataset_name is not None:
-        #    temporary_uploaded_file.name = dataset_name
-        # else:
-        #    error_msg = json.dumps({"detail": "Please add a file before click upload"})
-        #    return HttpResponse(error_msg, status=500)
-        # return redirect("landing/error.html")
-    else:
-        if str(temporary_uploaded_file).split("/")[-1].split(".")[-1] != "h5":
-            write_type = "w"
-            decoded_file = temporary_uploaded_file.read().decode("utf-8")
-        else:
-            write_type = "wb"
-            decoded_file = temporary_uploaded_file.read()
-        dataset_name = temporary_uploaded_file.name
-        decoded_list = str(decoded_file).split("\r\n")
-        # print(decoded_list)
+            path = pending_upload_path(request, request.POST.get("dataset_name", ""))
+    except (ValueError, OSError) as exc:
+        return HttpResponseBadRequest("Unable to open measurement: " + str(exc))
 
-        # save file in temp folder
-        file = open("temp/" + temporary_uploaded_file.name, write_type)
-        # print("File from dataset_upload:", file)
-        file.write(decoded_file)
-        file.close()
+    try:
+        reader = ReadData(update_erange=request.POST, preview_columns=True)
+        dictionary = reader.extract_header(data_path=path)
+        column_preview = build_column_preview(reader)
+    except (ValueError, OSError, AttributeError, KeyError, IndexError):
+        logging.getLogger(__name__).exception("Unable to read uploaded measurement")
+        return HttpResponseBadRequest("Unable to read the measurement. Check its format and try again.")
 
-    if len(decoded_list) > 0:
-        data = [str(data).split("\t") for data in decoded_list]
-
-        update_erange = request.POST
-        # print("dataset_upload:", update_erange)
-        reader = read_data(update_erange=update_erange)
-        dictionary = reader.extract_header(data_path="temp/" + dataset_name)
-        # print("I'm here:", dictionary)
-        context = {
-            "decode_file_name": dataset_name,
-            ### pass the dictionary to the template context
-            "dictionary": dictionary,
-        }
-        # print("Context:", context)
-
-        return render(request, "landing/verify.html", context)
+    dictionary["Source"] = reader.source
+    frank_qc = original_file_qc(path, reader.source)
+    if frank_qc["available"]:
+        dictionary.update(
+            E_range_min=frank_qc["energy_min"],
+            E_range_max=frank_qc["energy_max"],
+            Detected_element=frank_qc["element"],
+            Detected_edge=frank_qc["edge"],
+        )
+    return render(request, "landing/verify.html", {
+        "decode_file_name": path.name,
+        "dictionary": dictionary,
+        "column_preview": column_preview,
+        "frank_qc": frank_qc,
+        "qc_initial_state": initial_qc_state(path, frank_qc),
+    })
 
 
 # TODO:
@@ -343,12 +316,28 @@ def verify_upload(request) -> HttpResponse:
     # try:
     # verify_data = request.POST
     # print("verify_data:", verify_data)
+    from django.http import HttpResponseBadRequest
+    from plugins.column_correction import pending_upload_path
+
     update_erange = request.POST
+    try:
+        measurement_path = pending_upload_path(request, update_erange.get("dataset_name", ""))
+    except ValueError as exc:
+        return HttpResponseBadRequest(str(exc))
+    if update_erange.get("Use Column Selection") == "yes":
+        from plugins.column_correction import validate_applied_qc
+
+        try:
+            update_erange = validate_applied_qc(update_erange, path=measurement_path)
+        except ValueError as exc:
+            return HttpResponseBadRequest(
+                "Please review the selected spectrum: " + str(exc)
+            )
     # print("update_erange:", update_erange)
-    file_path = request.POST.get("dataset_name")
+    file_path = update_erange.get("dataset_name")
     # print("FILE_path from verify_upload:", str(file_path))
     AutoDatasetCreation(
-        s3_data_path="temp/" + str(file_path),
+        s3_data_path=str(measurement_path),
         data_set_name=file_path,
         verify_data=update_erange,
     )

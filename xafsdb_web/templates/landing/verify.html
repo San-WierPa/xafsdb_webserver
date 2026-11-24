@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
 * {
@@ -19,10 +18,12 @@
 
 body {
     width: 100%;
-    background-color: black;
+    min-height: 100vh;
+    background: #eef2f6;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    color: #17212b;
 }
 
 .disclaimer {
@@ -39,9 +40,12 @@ body {
 
 .registration-container {
     background: #fff;
-    border-radius: 0.5rem;
-    padding: 1rem;
+    border-radius: .8rem;
+    padding: 1.4rem;
     margin: 1rem;
+    width: calc(100% - 2rem);
+    max-width: 1680px;
+    box-shadow: 0 10px 30px rgba(28, 46, 64, .12);
 }
 
 .registration-container h2 {
@@ -149,31 +153,142 @@ a {
     resize: both;
     overflow: auto;
 }
-.notice-box {
-    display: inline-block;
-    border: 1px solid #f5c6cb;
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 20px;
-    font-size: 14px;
+
+.preview-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.2rem;
+    align-items: stretch;
+    margin-top: .9rem;
 }
 
-.notice-box p {
+.preview-layout .resize_img {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: .4rem;
+    resize: none;
+    background: white;
+}
+
+.raw-preview-card,
+.column-preview-panel {
+    border: 1px solid #d6dee7;
+    border-radius: .65rem;
+    padding: 1rem;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(28, 46, 64, .08);
+}
+
+.raw-preview-card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.raw-preview-card img {
+    max-height: 525px;
+    object-fit: contain;
+}
+.frank-plots {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.frank-plots figure {margin:0;border:1px solid #d6dee7;border-radius:5px;padding:5px;}
+.frank-plots figcaption {font-size:11px;text-align:center;}
+.frank-results {overflow-x:auto;margin-top:12px;}
+.frank-results table {width:100%;border-collapse:collapse;font-size:11px;}
+.frank-results th,.frank-results td {padding:7px 4px;text-align:left;border-bottom:1px solid #d6dee7;}
+.qc-PASS {color:#075c3d;background:#e3f4eb;}
+.qc-REVIEW {color:#805000;background:#fff1ce;}
+@media(max-width:500px){.frank-plots{grid-template-columns:1fr}}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: .9rem;
+}
+
+.panel-heading h4 {
     margin: 0;
-    padding-left: 25px;
-    position: relative;
+    font-size: 1rem;
 }
 
-.notice-box p::before {
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 20px;
-    color: #721c24;
+.panel-heading p {
+    color: #667687;
+    font-size: .72rem;
+    margin-top: .2rem;
 }
 
+.preview-badge {
+    background: #e8f1fb;
+    color: #003161;
+    border-radius: 999px;
+    padding: .25rem .65rem;
+    font-size: .68rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.column-preview-panel {
+    background: #f9fbfd;
+}
+
+.column-preview-panel h4 {
+    margin-bottom: .5rem;
+}
+
+.preview-status {
+    margin-top: .6rem;
+    padding: .55rem;
+    border-radius: .45rem;
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+.preview-status.ready {
+    background: #dff4e5;
+    color: #155c2e;
+}
+
+.preview-status.ready::before {
+    content: '✓  ';
+}
+
+.preview-status.review {
+    background: #fff1cf;
+    color: #6b4a00;
+}
+
+.preview-status.review::before {
+    content: '!  ';
+}
+
+.preview-metrics {
+    margin-top: .45rem;
+    color: #5d6b79;
+    font-size: .72rem;
+    line-height: 1.55;
+}
+
+@media (max-width: 1050px) {
+    .preview-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.column-preview-panel fieldset {border:1px solid #d6dee7;border-radius:6px;padding:12px;margin:16px 0;min-width:0;}
+.column-preview-panel legend {font-size:14px;font-weight:600;padding:0 5px;}
+.column-preview-panel label {display:block;font-size:13px;margin-bottom:10px;}
+.column-preview-panel select {display:block;width:100%;min-width:0;padding:8px;border:1px solid #b9c9d9;border-radius:5px;background:white;color:#123e63;}
+.correction-fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.correction-help {font-size:13px;line-height:1.6;margin:0 0 16px;}
+.correction-actions {display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;}
+.correction-actions button {padding:10px 13px;border:1px solid #123e63;border-radius:5px;cursor:pointer;background:white;color:#123e63;}
+#apply-columns {background:#123e63;color:white;}
+.correction-actions button:disabled,.submit-btn:disabled {opacity:.5;cursor:default;}
+[hidden] {display:none !important;}
+@media(max-width:500px){.correction-fields {grid-template-columns:1fr;}}
 </style>
 
     {% block title %}
@@ -186,112 +301,92 @@ a {
     <section class="registration-container">
         <h2> Verify Data </h2>
         <section class="details-section">
-            <form method="post" action="" enctype="multipart/form-data">
+            <form method="post" action="" enctype="multipart/form-data" autocomplete="off">
                 {% csrf_token %}
-
-                <!-- Dataset Title (Always Visible) -->
+                <!--Sample info Section -->
                 <label for="name">
                     Dataset Title   <input type="text" name="dataset_name" id="name" value="{{decode_file_name}}" placeholder="Enter your dataset name">
                 </label>
-
                 <hr>
-
-                
-                <hr>
-
-                    <!-- Interactive Plotly Plot -->
-                <div>
-                    <h3>Interactive raw preview</h3>
-                    <!-- Plotly plot container -->
-                    <div id="plotly-plot"></div>
+                <div class="preview-layout">
+                    {% include 'landing/frank_panel.html' %}
+                    {% if column_preview %}
+                    <aside class="column-preview-panel" id="column-correction-panel"
+                           data-apply-url="{% url 'apply_columns' %}" data-scan-url="{% url 'scan_columns' %}">
+                        <div class="panel-heading"><div><h4>Column selection</h4>
+                            <p>Correct the inputs if automatic QC selected the wrong columns.</p></div></div>
+                        <p class="correction-help">Choose the energy, sample and reference signals, then apply the columns. QC processes them automatically.</p>
+                        <label id="scan-selection-wrap" hidden>Measurement scan
+                            <select id="preview-scan" autocomplete="off"></select>
+                        </label>
+                        <p id="file-reading-note" class="preview-metrics"></p>
+                        <div class="correction-fields">
+                            <label>Energy column<select id="preview-energy" autocomplete="off"></select></label>
+                            <label>Energy units<select id="preview-energy-unit"><option value="auto">From file / automatic</option><option value="eV">eV</option><option value="keV">keV</option></select></label>
+                        </div>
+                        <fieldset><legend>Sample</legend>
+                            <label>Signal type<select id="preview-formula">
+                                <option value="raw">Absorption column</option><option value="log_ratio">Transmission: ln(A / B)</option>
+                                <option value="ratio">Intensity ratio: A / B</option><option value="negative_log_ratio">Transmission: -ln(A / B)</option>
+                            </select></label>
+                            <div class="correction-fields">
+                                <label id="sample-a-label"><span>Sample signal A</span><select id="preview-signal-a"></select></label>
+                                <label id="sample-b-label"><span>Sample signal B</span><select id="preview-signal-b"></select></label>
+                            </div>
+                        </fieldset>
+                        <fieldset><legend>Reference</legend>
+                            <label>Reference input<select id="reference-enabled"><option value="no">No separate reference</option><option value="yes">Separate reference signal</option></select></label>
+                            <div id="reference-fields" hidden>
+                                <label>Signal type<select id="reference-formula">
+                                    <option value="raw">Absorption column</option><option value="log_ratio">Transmission: ln(A / B)</option>
+                                    <option value="ratio">Intensity ratio: A / B</option><option value="negative_log_ratio">Transmission: -ln(A / B)</option>
+                                </select></label>
+                                <div class="correction-fields">
+                                    <label id="reference-a-label"><span>Reference signal A</span><select id="reference-a"></select></label>
+                                    <label id="reference-b-label"><span>Reference signal B</span><select id="reference-b"></select></label>
+                                </div>
+                            </div>
+                            <p id="reference-note" class="preview-metrics"></p>
+                        </fieldset>
+                        <p class="preview-metrics">Detector names vary by beamline. Check the file header below to identify the sample and reference channels.</p>
+                        <div id="column-plot-preview" aria-label="Selected column preview"></div>
+                        <p id="column-plot-note" class="preview-metrics" role="status" aria-live="polite"></p>
+                        <div class="correction-actions"><button type="button" id="apply-columns">Apply columns</button>
+                            <button type="button" id="reset-columns">Use automatic columns</button></div>
+                        <p id="correction-status" class="preview-status" role="status" aria-live="polite"></p>
+                    </aside>
+                    {% endif %}
                 </div>
-
-                <script>
-                    // Extract data from Django context
-                    const energyData = {{ dictionary.raw_energy|safe }};
-                    const muData = {{ dictionary.raw_mu|safe }};
-
-                    // Prepare Plotly data
-                    var trace1 = {
-                        x: energyData,
-                        y: muData,
-                        mode: 'lines+markers',
-                        name: 'Mu Data',
-                        line: { width: 0.7, color: 'green' },
-                        marker: { size: 4 }
-                    };
-
-                    var data = [trace1];
-
-                    var layout = {
-                        title: '{{decode_file_name}}',
-                        xaxis: {
-                            title: 'Energy | eV',
-                            gridcolor: 'rgba(0, 0, 0, 0.2)',
-                            gridwidth: 1
-                        },
-                        yaxis: {
-                            title: '&#x3BC;(E) | a.u.',
-                            gridcolor: 'rgba(0, 0, 0, 0.2)',
-                            gridwidth: 1
-                        },
-                        width: 850,
-                        height: 650,
-                        responsive: true
-                    };
-
-                    // Render the plot inside 'plotly-plot' div
-                    Plotly.newPlot('plotly-plot', data, layout);
-                </script>
-
           </form>
 
 
             <form action="/dataset/verify_upload" method=post id="verify_form" class="registration-form">
                 {% csrf_token %}
                     <label for="name" style="display:none">
-                        <input type="text" name="dataset_name" id="name" value="{{decode_file_name}}" placeholder="Enter your dataset name">
+                        <input type="text" name="dataset_name" id="qc-dataset-name" value="{{decode_file_name}}" placeholder="Enter your dataset name">
                     </label>
                     <div class="resize_img" style="display:none">
-                            <img src={{ dictionary.PreviewRawData }} alt="Raw preview" />
+                            {% if dictionary.PreviewRawData %}<img src="{{ dictionary.PreviewRawData }}" alt="Raw preview" />{% endif %}
                     </div>
                     <label for="E_range_min" style="display:none">
-                        <input type="text" name="E_range_min" id="E_range_min" value="{{dictionary.E_range_min}}" placeholder="298.15">
+                        <input type="text" name="E_range_min" id="qc-range-min" value="{{dictionary.E_range_min}}" placeholder="298.15">
                     </label>
                     <label for="E_range_max" style="display:none">
-                        <input type="text" name="E_range_max" id="E_range_max" value="{{dictionary.E_range_max}}" placeholder="298.15">
+                        <input type="text" name="E_range_max" id="qc-range-max" value="{{dictionary.E_range_max}}" placeholder="298.15">
                     </label>
+                    <input type="hidden" name="Use Column Selection" id="qc-use-column-selection" value="no">
+                    <input type="hidden" name="QC Energy Column" id="qc-energy-column">
+                    <input type="hidden" name="QC Signal A" id="qc-signal-a">
+                    <input type="hidden" name="QC Signal B" id="qc-signal-b">
+                    <input type="hidden" name="QC Formula" id="qc-formula">
+                    <input type="hidden" name="QC Scan" id="qc-scan" value="0">
+                    <input type="hidden" name="QC Energy Unit" id="qc-energy-unit" value="auto">
+                    <input type="hidden" name="QC Reference Enabled" id="qc-reference-enabled" value="no">
+                    <input type="hidden" name="QC Reference A" id="qc-reference-a">
+                    <input type="hidden" name="QC Reference B" id="qc-reference-b">
+                    <input type="hidden" name="QC Reference Formula" id="qc-reference-formula" value="raw">
+                    <input type="hidden" name="QC Confirmation" id="qc-confirmation">
 
-                    <h4> Data </h4>
-                <section class="identity-details">
-                    <div class="three-details-item">
-
-                        <label for="Source" >
-                            <p> Source </p>
-                        <select  name='Source' id="Source">
-                            <option value=SYNCHROTRON  > SYNCHROTRON</option>
-                            <option value=LABORATORY  > LABORATORY</option>
-                        </select>
-                        </label>
-
-                        <label for="Measurement Mode" >
-                            <p> Measurement Mode </p>
-                        <select  name='Measurement Mode' id="Measurement Mode">
-                            <option value="Absorption"  selected=1  > Absorption</option>
-                            <option value="Fluorescence"  > Fluorescence</option>
-                            <option value="Transmission" > Transmission</option>
-                            <option value="Fluorescence, total yield"  > Fluorescence, total yield</option>
-                            <option value="Fluorescence, energy analyzed"  > Fluorescence, energy analyzed</option>
-                            <option value="Herfd"  > Herfd</option>
-                            <option value="Raman"  > Raman</option>
-                            <option value="Xeol"  > Xeol</option>
-                            <option value="Electron emission"  > Electron emission</option>
-                        </select>
-                        </label>
-
-
-                    </div>
-                </section>
                 <hr>
                     {% if dictionary.Header_str %}
                     <label for="Header info">
@@ -357,12 +452,10 @@ a {
                     </div>
                 </section>
                 <hr>
-
                 <h4> Instrument </h4>
                 <section class="identity-details">
+<div id="synchrotron-instrument-fields">
 
-                    <!-- Synchrotron Fields (shown by default) -->
-                    <div id="synchrotron-instrument-fields">
                     <div class="three-details-item">
                         <label for="Facility">
                             <p> Facility </p>
@@ -462,8 +555,8 @@ a {
                             <option value="NSRRC BL17C1"  > NSRRC BL17C1</option>
                             <option value="P65"  > P65</option>
                             <option value="CATACT (KIT)" > CATACT (KIT)</option>
-                            <option value="PETRA III P64"  > PETRA III P64</option>
-                            <option value="PETRA III P65"  > PETRA III P65</option>
+                            <option value="PETRA III P04"  > PETRA III P04</option>
+                            <option value="PETRA III P06"  > PETRA III P06</option>
                             <option value="PF AR-NW10A"  > PF AR-NW10A</option>
                             <option value="PF AR-NW14A"  > PF AR-NW14A</option>
                             <option value="PF AR-NW2A"  > PF AR-NW2A</option>
@@ -524,84 +617,31 @@ a {
                         </label>
                     </div>
 
-                        <div class="three-details-item">
-                            <label for="Crystals">
-                                <p> Crystals </p>
-                                <input type="text" name="Crystals" id="Crystals" placeholder="e.g.: DCM">
-                            </label>
-                            <label for="Mirrors">
-                                <p> Mirrors </p>
-                                <input type="text" name="Mirrors" id="Mirrors" placeholder="e.g.: Kirkpatrick-Baez (KB)">
-                            </label>
-                            <label for="Detectors">
-                                <p> Detectors  </p>
-                                <input type="text" name="Detectors" id="Detectors" placeholder="e.g.: Silicon drift detector (SDD)">
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Laboratory Fields (hidden by default) -->
-                    <div id="laboratory-instrument-fields" style="display: none;">
-                        <div class="three-details-item">
-                            <label for="LabMode">
-                                <p> Mode </p>
-                                <select name="LabMode" id="LabMode">
-                                    <option value="LabScanning">Scanning</option>
-                                    <option value="LabDispersive">Dispersive</option>
-                                </select>
-                            </label>
-
-                            <label for="LabGeometry">
-                                <p> Geometry </p>
-                                <select name="LabGeometry" id="LabGeometry">
-                                    <option value="Lab von Hamos">von Hamos</option>
-                                    <option value="LabJohan">Johan</option>
-                                    <option value="LabJohansson">Johansson</option>
-                                </select>
-                            </label>
-
-                            <label for="LabInstrument_name">
-                                <p> Commercial Instrument Name </p>
-                                <input type="text" name="LabInstrument_name" id="LabInstrument_name" placeholder="e.g.: easyXAFS300+">
-                            </label>
-                        </div>
-
-                        <div class="three-details-item">
-                            <label for="LabInstitute">
-                                <p> Institute </p>
-                                <input type="text" name="LabInstitute" id="LabInstitute" placeholder="Enter LabInstitute name">
-                            </label>
-
-                            <label for="LabSource_anode">
-                                <p> Source and Anode Material </p>
-                                <input type="text" name="LabSource_anode" id="LabSource_anode" placeholder="e.g. side/end window X-ray tube (Mo)">
-                            </label>
-
-                            <label for="LabOptic">
-                                <p> Optic </p>
-                                <input type="text" name="LabOptic" id="LabOptic" placeholder="e.g.: HAPG (002) or Si (111)">
-                            </label>
-                        </div>
-
-                        <div class="three-details-item">
-                            <label for="LabDiffraction_order">
-                                <p> Diffraction Order for Optic </p>
-                                <input type="number" name="LabDiffraction_order" id="LabDiffraction_order" placeholder="e.g.: 1">
-                            </label>
-
-                            <label for="LabDetector">
-                                <p> Detector </p>
-                                <input type="text" name="LabDetector" id="LabDetector" placeholder="e.g.: Silicon drift detector">
-                            </label>
-                        </div>
-
+                    <div class="three-details-item">
+                        <label for="Crystals">
+                            <p> Crystals </p>
+                            <input type="text" name="Crystals" id="Crystals" placeholder="e.g.: DCM">
+                        </label>
+                        <label for="Mirrors">
+                            <p> Mirrors </p>
+                            <input type="text" name="Mirrors" id="Mirrors" placeholder="e.g.: Kirkpatrick-Baez (KB)">
+                        </label>
+                        <label for="Detectors">
+                            <p> Detectors  </p>
+                            <input type="text" name="Detectors" id="Detectors" placeholder="e.g.: Silicon drift detector (SDD)">
+                        </label>
                     </div>
 
                     <div class="three-details-item">
                         <label for="Element" >
                             <p> Element </p>
                         <select  name='Element' id="Element">
-                            <option value=As  selected=1 >As</option>
+                            {% if dictionary.Detected_element %}
+                            <option value="{{ dictionary.Detected_element }}" selected>{{ dictionary.Detected_element }}</option>
+                            {% else %}
+                            <option value="" selected>Auto-detect unavailable</option>
+                            {% endif %}
+                            <option value=As>As</option>
                             <option value=H >H</option>
                             <option value=He >He</option>
                             <option value=Li >Li</option>
@@ -718,7 +758,12 @@ a {
                         <label for="Edge" >
                             <p> Edge </p>
                         <select  name='Edge' id="Edge">
-                            <option value="K"  selected=1  > K</option>
+                            {% if dictionary.Detected_edge %}
+                            <option value="{{ dictionary.Detected_edge }}" selected>{{ dictionary.Detected_edge }}</option>
+                            {% else %}
+                            <option value="" selected>Auto-detect unavailable</option>
+                            {% endif %}
+                            <option value="K"> K</option>
                             <option value="L3"  > L3</option>
                             <option value="L2"  > L2</option>
                             <option value="L1"  > L1</option>
@@ -730,8 +775,64 @@ a {
                             <input type="text" name="Max k-range" id="Max k-range" placeholder="Enter max k-range">
                         </label>
                     </div>
+                
+</div>
+<div id="laboratory-instrument-fields" style="display: none;">
+                        <div class="three-details-item">
+                            <label for="LabMode">
+                                <p> Mode </p>
+                                <select name="LabMode" id="LabMode">
+                                    <option value="LabScanning">Scanning</option>
+                                    <option value="LabDispersive">Dispersive</option>
+                                </select>
+                            </label>
 
-                </section>
+                            <label for="LabGeometry">
+                                <p> Geometry </p>
+                                <select name="LabGeometry" id="LabGeometry">
+                                    <option value="Lab von Hamos">von Hamos</option>
+                                    <option value="LabJohan">Johan</option>
+                                    <option value="LabJohansson">Johansson</option>
+                                </select>
+                            </label>
+
+                            <label for="LabInstrument_name">
+                                <p> Commercial Instrument Name </p>
+                                <input type="text" name="LabInstrument_name" id="LabInstrument_name" placeholder="e.g.: easyXAFS300+">
+                            </label>
+                        </div>
+
+                        <div class="three-details-item">
+                            <label for="LabInstitute">
+                                <p> Institute </p>
+                                <input type="text" name="LabInstitute" id="LabInstitute" placeholder="Enter LabInstitute name">
+                            </label>
+
+                            <label for="LabSource_anode">
+                                <p> Source and Anode Material </p>
+                                <input type="text" name="LabSource_anode" id="LabSource_anode" placeholder="e.g. side/end window X-ray tube (Mo)">
+                            </label>
+
+                            <label for="LabOptic">
+                                <p> Optic </p>
+                                <input type="text" name="LabOptic" id="LabOptic" placeholder="e.g.: HAPG (002) or Si (111)">
+                            </label>
+                        </div>
+
+                        <div class="three-details-item">
+                            <label for="LabDiffraction_order">
+                                <p> Diffraction Order for Optic </p>
+                                <input type="number" name="LabDiffraction_order" id="LabDiffraction_order" placeholder="e.g.: 1">
+                            </label>
+
+                            <label for="LabDetector">
+                                <p> Detector </p>
+                                <input type="text" name="LabDetector" id="LabDetector" placeholder="e.g.: Silicon drift detector">
+                            </label>
+                        </div>
+
+                    </div>
+</section>
 
                  <hr>
                 <h4> Bibliography </h4>
@@ -754,9 +855,9 @@ a {
                             <input type="text" name="Owner group" id="Owner group" placeholder="Enter institute" required>
                         </label>
                         <label for="Owner">
-                            <p> Contact person </p>
+                            <p> Owner </p>
                             <input type="text" name="Owner" id="Owner"
-                                placeholder="Enter contact person" required>
+                                placeholder="Enter owner" required>
                         </label>
                         <label for="Contact email">
                             <p> Contact email </p>
@@ -767,9 +868,36 @@ a {
 
                 </section>
                 <hr>
+                <h4> Data </h4>
+                <section class="identity-details">
+                    <div class="three-details-item">
 
-                
+                        <label for="Source" >
+                            <p> Source </p>
+                        <select  name='Source' id="Source">
+                    <option value=SYNCHROTRON {% if dictionary.Source == "SYNCHROTRON" %}selected{% endif %}> SYNCHROTRON</option>
+                    <option value=LABORATORY {% if dictionary.Source == "LABORATORY" %}selected{% endif %}> LABORATORY</option>
+                        </select>
+                        </label>
 
+                        <label for="Measurement Mode" >
+                            <p> Measurement Mode </p>
+                        <select  name='Measurement Mode' id="Measurement Mode">
+                            <option value="Absorption"  selected=1  > Absorption</option>
+                            <option value="Fluorescence"  > Fluorescence</option>
+                            <option value="Transmission" > Transmission</option>
+                            <option value="Fluorescence, total yield"  > Fluorescence, total yield</option>
+                            <option value="Fluorescence, energy analyzed"  > Fluorescence, energy analyzed</option>
+                            <option value="Herfd"  > Herfd</option>
+                            <option value="Raman"  > Raman</option>
+                            <option value="Xeol"  > Xeol</option>
+                            <option value="Electron emission"  > Electron emission</option>
+                        </select>
+                        </label>
+
+
+                    </div>
+                </section>
                     <div class="disclaimer" id="disclaimer">
                         <p>
                             By uploading your datafiles to this platform, you agree to release them under the
@@ -786,39 +914,33 @@ a {
                         </label>
                     </div>
                 <button class="cancel-btn" ><a href="{% url 'dataset_list' %}">Cancel</a></button>
-                <button class="submit-btn" value="Verify Data" type="submit"> Submit </button>
+                <button class="submit-btn" id="submit-measurement" value="Verify Data"> Submit </button>
             </form>
         </section>
     </section>
 
-</body>
+    {% if column_preview %}
+    {{ column_preview|json_script:"column-preview-data" }}
+    {{ qc_initial_state|json_script:"qc-initial-state" }}
+    <script src="{% static 'js/column_correction.js' %}" defer></script>
+    {% endif %}
+
 <script>
-    document.getElementById("verify_form").addEventListener("submit", function(event) {
-        // Show a pop-up message
-        alert("SERVER COMMUNICATION -> CREATE DATASET! SENDING MESSAGE TO CURATOR...PLEASE STAND BY");
-        // The form will continue to submit normally after the alert
-    });
-    function toggleFields() {
-        var source = document.getElementById('Source').value;
-        var synchrotronFields = document.getElementById('synchrotron-instrument-fields');
-        var laboratoryFields = document.getElementById('laboratory-instrument-fields');
+document.addEventListener("DOMContentLoaded", function () {
+    const source = document.getElementById("Source");
+    const synchrotron = document.getElementById("synchrotron-instrument-fields");
+    const laboratory = document.getElementById("laboratory-instrument-fields");
 
-        if (source === 'LABORATORY') {
-            synchrotronFields.style.display = 'none';
-            laboratoryFields.style.display = 'block';
-        } else {
-            synchrotronFields.style.display = 'block';
-            laboratoryFields.style.display = 'none';
-        }
+    function toggleInstrumentFields() {
+        const isLaboratory = source.value === "LABORATORY";
+        synchrotron.style.display = isLaboratory ? "none" : "block";
+        laboratory.style.display = isLaboratory ? "block" : "none";
     }
-    // Reload the page when the user selects a different option
-    document.getElementById('Source').addEventListener('change', function() {
-        location.reload();
-    });
 
-    // Initialize with Synchrotron fields visible by default
-    window.onload = function() {
-        toggleFields();
-    };
+    source.addEventListener("change", toggleInstrumentFields);
+    toggleInstrumentFields();
+});
 </script>
+
+</body>
 </html>

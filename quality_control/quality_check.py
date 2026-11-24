@@ -76,6 +76,37 @@ else:
 ############################################
 # define quality check and testing feature #
 ############################################
+
+def _resolve_edge_for_qc(e0, element=None, edge=None):
+    from math import isfinite
+    try:
+        energy = float(e0)
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError("No valid edge energy was detected. Check the energy and signal columns.")
+    if not isfinite(energy) or energy <= 0:
+        raise ValueError("No valid edge energy was detected. Check the energy column and its units.")
+    try:
+        pair = (element, edge) if element else xray.guess_edge(energy)
+    except (AttributeError, TypeError, ValueError, KeyError):
+        pair = None
+    if (not isinstance(pair, (tuple, list)) or len(pair) != 2
+            or not all(isinstance(value, str) and value.strip() for value in pair)):
+        raise ValueError("No supported element and edge could be identified. Check the energy column, units and sample signal.")
+    pairs = [(pair[0], "M4"), (pair[0], "M5")] if pair[1] == "M4,5" else [tuple(pair)]
+    candidates = []
+    for symbol, label in pairs:
+        try:
+            record = xray.xray_edge(symbol, label)
+            edge_energy = float(record[0])
+        except (AttributeError, TypeError, ValueError, KeyError, IndexError, OverflowError):
+            continue
+        if isfinite(edge_energy) and edge_energy > 0:
+            candidates.append(((symbol, label), edge_energy))
+    if not candidates:
+        raise ValueError("The element/edge combination is unavailable. Check the selection or use automatic detection.")
+    return min(candidates, key=lambda item: abs(energy - item[1]))
+
+
 class CheckQuality(object):
     """
     This class implements the automated routines to check the quality criteria
@@ -83,9 +114,17 @@ class CheckQuality(object):
     https://xraypy.github.io/xraylarch/
     """
 
-    def __init__(self, quality_criteria_json, verbose = False):
+    def __init__(self, quality_criteria_json, verbose = False, element=None, edge=None):
         
         self.verbose = verbose
+        if element is not None and not isinstance(element, str):
+            raise ValueError("Element must be a chemical symbol.")
+        if edge is not None and not isinstance(edge, str):
+            raise ValueError("Edge must be an edge label.")
+        self.requested_element = (element or "").strip().capitalize() or None
+        self.requested_edge = (edge or "").strip().upper() or None
+        if bool(self.requested_element) != bool(self.requested_edge):
+            raise ValueError("Select both element and edge, or leave both automatic.")
         if self.verbose:
             print("+++++++++++++++++++++++++++++++++++++++++")
             print("+ quality criteria function initialized +")
@@ -189,8 +228,9 @@ class CheckQuality(object):
         # for this guess the element edge and retrieve the edge energy from
         # the database of larch mostly based on Elam
         # https://xraypy.github.io/xraylarch/xray.html
-        element_n_edge = xray.guess_edge(self.data.e0)
-        edge_E_DB = xray.xray_edge(*element_n_edge)[0]
+        element_n_edge, edge_E_DB = _resolve_edge_for_qc(
+            self.data.e0, self.requested_element, self.requested_edge
+        )
         print(f"detected edge: {element_n_edge} at energy: {edge_E_DB}")
         self.data.E_difference = self.data.e0 - edge_E_DB
         print(f"detected spectrometer energy shift: {self.data.E_difference}")
@@ -325,8 +365,13 @@ class CheckQuality(object):
         elif take_first:
             e0_idx = int(local_maxima[0])
         else:
-            # Preserve larch202530's later-local-maximum behavior when candidates exist.
-            e0_idx = int(np.max(local_maxima))
+            # Use the strongest interior peak. A late scan artifact can have
+            # a higher index than the absorption edge.
+            interior_maxima = local_maxima[(local_maxima >= nmin) & (local_maxima < len(dmu) - nmin)]
+            if interior_maxima.size:
+                e0_idx = int(interior_maxima[np.argmax(dmu[interior_maxima])])
+            else:
+                e0_idx = int(np.argmax(dmu[nmin:-nmin])) + nmin
         e0 = energy[e0_idx]
         if group:
             group.e0 = e0

@@ -32,6 +32,9 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+from plugins.column_views import apply_columns_view, scan_columns_view
+
+
 urlpatterns = [
     path("", views.home, name="home"),
     path("dataset/list", views.dataset_list, name="dataset_list"),
@@ -77,6 +80,8 @@ urlpatterns = [
     path("dataset/upload_view", views.dataset_upload_view, name="dataset_upload_view"),
     path("dataset/upload", views.dataset_upload, name="dataset_upload"),
     path("dataset/verify_upload", views.verify_upload, name="verify_upload"),
+    path("dataset/apply_columns", apply_columns_view, name="apply_columns"),
+    path("dataset/scan_columns", scan_columns_view, name="scan_columns"),
     path("instruments/beamline_upload", views.beamline_upload, name="beamline_upload"),
     path("instruments/add_beamline", views.add_beamline, name="add_beamline"),
     path("thank_you/", views.thank_you, name="thank_you"),
