@@ -663,6 +663,20 @@ class ReadData(object):
                 for key, value in item.attrs.items():
                     metadata.append(f'{name}@{key}: {value}')
 
+            # ESRF files expose the scan through links in <scan>/measurement.
+            # visititems() does not follow links, so without this the channel
+            # names (energy_cenc, mu_trans, ...) are never seen. Added first so
+            # the scan's own names win over same-named arrays elsewhere.
+            # An int scan number is a text-table index; H5 then uses '1.1'.
+            scan = str(self.scan_number)
+            measurement = hdf_file.get((scan if '.' in scan else '1.1') + '/measurement')
+            if isinstance(measurement, h5py.Group):
+                for name in measurement:
+                    try:
+                        item = measurement[name]
+                    except (KeyError, OSError):
+                        continue  # link target (e.g. detector file) not uploaded
+                    collect(f'{measurement.name.strip("/")}/{name}', item)
             hdf_file.visititems(collect)
             for key, value in hdf_file.attrs.items():
                 metadata.append(f'@{key}: {value}')
