@@ -277,7 +277,7 @@ a {
     height: 40vh;
     position: relative;
     margin-bottom: 2rem;
-    background: url('../img/spectra.JPG') center/cover no-repeat;
+    background: url('../img/refxas_thumbnail.JPG') center/cover no-repeat;
     border-radius: var(--borderRadius);
 }
 

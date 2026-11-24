@@ -144,7 +144,8 @@
             <!--{% if user.is_authenticated %}{% endif %}-->
             <li class="menu-list-item active_nav"><a href="{% url 'dataset_upload_view' %}">Upload</a></li>
             
-            <li class="menu-list-item active_nav"><a href="{% url 'dataset_list' %}">DataSets</a></li>
+            <!--<li class="menu-list-item active_nav"><a href="{% url 'dataset_list' %}">DataSets</a></li>-->
+            <li class="menu-list-item active_nav"><a href="{% url 'pg_search' %}">Search all DataSets (with filters)</a></li>
             <li class="menu-list-item active_nav"><a href="{% url 'team_contact' %}">Team/Contact</a></li>
           </ul>
       </div>
@@ -163,8 +164,9 @@
                 
                 <li><a class="menu__item"  href="{% url 'beamline_upload' %}">Add Beamline</a></li>
             {% endif %}
+            <li><a class="menu__item"  href="{% url 'pg_search' %}">Search with filters</a></li>
             <li><a class="menu__item"  href="{% url 'dataset_upload_view' %}">Upload</a></li>
-            <li><a class="menu__item"  href="{% url 'dataset_list' %}">DataSets</a></li>
+            <!--<li><a class="menu__item"  href="{% url 'dataset_list' %}">DataSets</a></li>-->
             <li><a class="menu__item"  href="{% url 'beamline_list' %}">Added Beamlines</a></li>
             <li><a class="menu__item"  href="{% url 'team_contact' %}">Team/Contact</a></li>
             {% block content %}

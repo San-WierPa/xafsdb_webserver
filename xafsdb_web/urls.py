@@ -2,11 +2,12 @@
 @author: Sebastian Paripsa
 """
 
+import environ
 from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
-import environ
+
 env = environ.Env()
 environ.Env.read_env()
 
@@ -45,14 +46,22 @@ urlpatterns = [
         views.dataset_details_curator,
         name="dataset_details_curator",
     ),
-    path('curator/approve/<str:dataset_id>/', views.approval_by_curator, name='approval_by_curator'),
+    path(
+        "curator/approve/<str:dataset_id>/",
+        views.approval_by_curator,
+        name="approval_by_curator",
+    ),
     path("instruments/beamline_list", views.beamline_list, name="beamline_list"),
-    path('instruments/beamline_details/<str:beamline_id>/', views.beamline_details, name='beamline_details'),
+    path(
+        "instruments/beamline_details/<str:beamline_id>/",
+        views.beamline_details,
+        name="beamline_details",
+    ),
     path("team_contact", views.team_contact, name="team_contact"),
     path("search/", SearchView.as_view(), name="pg_search"),
     ## The following two lines manage accessibility of the DRF CRUD operations:
     ## first line ought to be activated in production!
-    #path(f"{prefix}/", user_passes_test(lambda user: user.is_superuser)(include(router.urls))),
+    # path(f"{prefix}/", user_passes_test(lambda user: user.is_superuser)(include(router.urls))),
     path(f"{prefix}/", include(router.urls)),
     re_path(
         r"^api/swagger(?P<format>\.json|\.yaml)$",
@@ -70,5 +79,5 @@ urlpatterns = [
     path("dataset/verify_upload", views.verify_upload, name="verify_upload"),
     path("instruments/beamline_upload", views.beamline_upload, name="beamline_upload"),
     path("instruments/add_beamline", views.add_beamline, name="add_beamline"),
-    path('thank_you/', views.thank_you, name='thank_you'),
+    path("thank_you/", views.thank_you, name="thank_you"),
 ]

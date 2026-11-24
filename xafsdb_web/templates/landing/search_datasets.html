@@ -14,51 +14,193 @@
         <title>RefXAS - Search results</title>
     {% endblock %}
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
+
+    <style>
+        .element-button {
+            background-color: #f0f0f0; /* Light grey background */
+            border: none;
+            color: black;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .reset-button {
+            background-color: #f44336; /* Red background for the reset button to make it stand out */
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        .filter-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filter-indicator p, .reset-filters a {
+            margin: 5px;
+        }
+        .clear-filter {
+            font-size: 16px;
+            color: red;
+            cursor: pointer;
+            padding: 0 10px;
+            text-decoration: none;
+        }
+        .content-area {
+            display: flex;
+            justify-content: start; /* Align items to the start of the container */
+        }
+        .element-counts {
+            width: 20%; /* Adjust the width as needed */
+            min-width: 180px; /* Ensure it doesn’t get too narrow */
+            margin-right: 20px; /* Space between the sidebar and the table */
+        }
+        .table-container {
+            flex-grow: 1; /* Takes up the remaining space */
+            overflow-x: auto; /* Handles horizontal scrolling if the table is wide */
+        }
+        .element-counts .dropdown-btn {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+        .element-counts .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .element-counts .dropdown-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .element-counts ul {
+            list-style: none; /* Removes the bullet points */
+        }
+        .element-counts .dropdown-content ul li {
+            padding: 8px 16px;
+        }
+        .element-counts .dropdown-content ul li button {
+            width: 100%;
+            text-align: left;
+        }
+        .hidden-element {
+            display: none;
+        }
+        .more-btn {
+            background-color: #4CAF50; /* Green for visibility */
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+    </style>
 </head>
 
 {% include "landing/navbar.html" %}
 
 <main class="page">
 
-    <table id="datatablesSimple">
-
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>Title</th>
-            </tr>
-        </thead>
-
-    {% block datasets_found %}
-        <p class="results-found">A total of <b>{{datasetList.paginator.count}}</b> datasets match your search<br>
-            (number of records displayed may be lower due to non-visible records that are not yet verified): </p>
-    {% endblock %}
-
-        {% for dataset_meta in datasetList %}
-            {% if dataset_meta.scientificMetadata.is_approved or dataset_meta.isPublished %}
-            <tbody>
-                <tr>
-                    <td class="limit-id-length"> {{ dataset_meta.id }} </td>
-                    <td class="table-title limit-title-length">
-                        {{ dataset_meta.datasetName }}
-                        <table>
-                            <tr>
-                                <td class="limit-abstract-length"> Description: {{ dataset_meta.scientificMetadata.Description }} </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        <form action="{% url 'dataset_details' dataset_id=dataset_meta.id %}">
-                            <button class="button-more button4" type="submit" />More</button>
+    <div class="content-area">
+        <div class="element-counts">
+            <!--<button onclick="toggleElements()" class="dropdown-btn">Element</button>
+            <div id="elementsDropdown" class="dropdown-content" style="display:none;">-->
+            <div id="elementsDropdown">
+            <h3>Element:</h3>
+            <ul>
+                {% for element, count in elementCounts.items %}
+                    <li class="{% if forloop.counter > 3 %}hidden-element{% endif %}">
+                        <form action="{% url 'pg_search' %}" method="get">
+                            <input type="hidden" name="term" value="{{ request.GET.term }}">
+                            <input type="hidden" name="element_filter" value="{{ element }}">
+                            <button type="submit" class="element-button">{{ element }}: {{ count }}</button>
                         </form>
-                    </td>
-                </tr>
-            </tbody>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if elementCounts.items|length > 3 %}
+                <button onclick="toggleVisibility()" class="more-btn">More...</button>
             {% endif %}
-        {% endfor %}
-    </table>
 
-    {% block pagination %}
+            </div>
+        </div>
+        <div class="table-container">
+
+        <table id="datatablesSimple">
+
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+
+        {% block datasets_found %}
+            <p class="results-found">A total of <b>{{datasetList.paginator.count}}</b> datasets match the search:<br>
+                (number of records displayed may be lower due to non-visible records that are not yet verified): </p>
+        {% endblock %}
+                <br>
+
+                <div class="filter-controls">
+                    <div class="filter-indicator">
+                        {% if element_filter %}
+                            <p>Filter applied: {{ element_filter }} <a href="{% url 'pg_search' %}?term={{ request.GET.term }}" class="clear-filter">X</a></p>
+                        {% endif %}
+                    </div>
+                    <div class="reset-filters">
+                        <a href="{% url 'pg_search' %}" class="reset-button">Reset All Filters</a>
+                    </div>
+                </div>
+
+                <br>
+            {% for dataset_meta in datasetList %}
+                {% if dataset_meta.scientificMetadata.is_approved or dataset_meta.isPublished %}
+                <tbody>
+                    <tr>
+                        <td class="limit-id-length"> {{ dataset_meta.id }} </td>
+                        <td class="table-title limit-title-length">
+                            {{ dataset_meta.datasetName }}
+                            <table>
+                                {% if dataset_meta.history.0.updatedscientificMetadata.Description and dataset_meta.history.0.updatedscientificMetadata.Description != dataset_meta.scientificMetadata.Description %}
+                                    <tr>
+                                        <td class="limit-abstract-length"> Description: {{ dataset_meta.history.0.updatedscientificMetadata.Description }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td class="limit-abstract-length"> Description: {{ dataset_meta.scientificMetadata.Description }}</td>
+                                    </tr>
+                                {% endif %}
+                              </table>
+                        <td>
+                            <form action="{% url 'dataset_details' dataset_id=dataset_meta.id %}">
+                                <button class="button-more button4" type="submit" />More</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+        <br>
+
+</main>
+{% block pagination %}
         {% if datasetList.paginator.count > 0 %}
           <div class="pagination">
             <span class="step-links">
@@ -80,6 +222,25 @@
         {% endif %}
     {% endblock %}
 
-</main>
-
 {% include "landing/footer.html" %}
+
+<script>
+    function toggleElements() {
+        var dropdown = document.getElementById("elementsDropdown");
+        if (dropdown.style.display === "none" || dropdown.style.display === "") {
+            dropdown.style.display = "block";
+        } else {
+            dropdown.style.display = "none";
+        }
+    }
+    function toggleVisibility() {
+        var hiddenElements = document.querySelectorAll('.hidden-element');
+        hiddenElements.forEach(function(element) {
+            if (element.style.display === 'none' || element.style.display === '') {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        });
+    }
+    </script>

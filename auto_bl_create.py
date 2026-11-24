@@ -52,9 +52,13 @@ class AutoBlCreation(object):
     def __init__(self, verify_beamline_meta) -> None:
         self.configuration = scicat_py.Configuration(
             # production
-            host="http://34.29.91.220",
+            host="http://34.27.28.17",
             # dev (varies due to shut-down/restart of vm - every restart changes ip)
-            # host="http://34.29.27.51",
+            #host="http://34.29.27.51",
+            # local server
+            #host = "http://localhost:8000",
+            # ubuntu
+            #host = "http://172.27.20.173",
         )
         self.auth_login()
         self.verify_beamline_meta = verify_beamline_meta

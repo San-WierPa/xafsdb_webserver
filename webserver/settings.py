@@ -176,41 +176,26 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-# STATIC_ROOT = os.path.join("landing", "static")
-# STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_URL = "/static/"
+WHITENOISE_USE_FINDERS = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# S3 Object Storage
-# AWS_ACCESS_KEY_ID = config(AMAZON_ACCESS_KEY_ID)  # For Digital Ocean Set region same as to your Digital Ocean Access Key
-# AWS_SECRET_ACCESS_KEY = config(AMAZON_SECRET_ACCESS_KEY)  # For Digital Ocean Set region same as to your Digital Ocean Secret Key
-# AWS_STORAGE_BUCKET_NAME = config(AMAZON_STORAGE_BUCKET_NAME)
-# AWS_REGION = config("AWS_REGION", "eu-central-1")  # For Digital Ocean Set region same as to your Digital Ocean region (such as nyc3 or sfo2)
-# AWS_S3_REGION_NAME = config("AWS_REGION", "eu-central-1")
-AWS_ACCESS_KEY_ID = env(
-    "AMAZON_ACCESS_KEY_ID"
-)  # For Digital Ocean Set region same as to your Digital Ocean Access Key
-AWS_SECRET_ACCESS_KEY = env(
-    "AMAZON_SECRET_ACCESS_KEY"
-)  # For Digital Ocean Set region same as to your Digital Ocean Secret Key
-AWS_STORAGE_BUCKET_NAME = env("AMAZON_STORAGE_BUCKET_NAME")
-# AWS_REGION = ("eu-central-1")  # For Digital Ocean Set region same as to your Digital Ocean region (such as nyc3 or sfo2)
-AWS_S3_REGION_NAME = "eu-central-1"
-AWS_S3_ENDPOINT_URL = f"https://s3.{AWS_S3_REGION_NAME}.amazonaws.com"
-# For Digital Ocean Uncomment below line and comment above line.
-# AWS_S3_ENDPOINT_URL = f"https://${AWS_S3_REGION_NAME}.digitaloceanspaces.com"
-AWS_S3_USE_SSL = True
-AWS_QUERYSTRING_AUTH = True
-AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
-AWS_LOCATION = "static"
-MEDIA_LOCATION = "media"
-DEFAULT_FILE_STORAGE = "webserver.backends.PublicMediaStorage"
-STATICFILES_STORAGE = "webserver.backends.StaticsMediaStorage"
-STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_LOCATION}/"
-MEDIA_URL = f"https://{AWS_S3_ENDPOINT_URL}/{MEDIA_LOCATION}/"
+# Raw data file storage (local filesystem, no external object storage).
+# RAW_DATA_ROOT is a dedicated, volume-mountable folder so uploaded raw
+# measurement files persist independently of the container lifecycle.
+RAW_DATA_ROOT = env("RAW_DATA_ROOT", default="/raw_data_files")
+MEDIA_ROOT = RAW_DATA_ROOT
+MEDIA_URL = "/media/"
+
+# Base URL this instance is publicly reachable at. Used to build absolute
+# download links (e.g. for source_folder / short_url) since local storage
+# only returns MEDIA_URL-relative paths, unlike S3's absolute URLs.
+PUBLIC_BASE_URL = env("PUBLIC_BASE_URL", default="http://127.0.0.1:8000")
 
 LOGGING = {
     "version": 1,

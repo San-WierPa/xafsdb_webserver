@@ -30,45 +30,54 @@ Requirements:
 """
 
 from __future__ import print_function
+
 import json
+import logging
+import os
 from datetime import datetime
-from django.core.mail import send_mail
 from sys import path
-from typing import Optional, NoReturn
+from typing import Any, Dict, NoReturn, Optional
+
 import environ
 import numpy as np
 import pyshorteners
 import requests
+from django.core.mail import send_mail
+
 import scicat_py
-from webserver.settings import EMAIL_HOST_USER
+from plugins.read_data import read_data
 from quality_control.quality_check import check_quality
-from plugins.read_data import ReadData
-from typing import Dict, Any
-import logging
+from webserver.settings import EMAIL_HOST_USER
 
 env = environ.Env()
 environ.Env.read_env()
 
-prefix = env("PREFIX")
+prefix = env("PREFIX", default="file")
+
 
 class AutoDatasetCreation(object):
     """
     This class automatically creates, respectively updates a dataset,
     does the quality_control and serves all to the webserver
     """
+
     def __init__(self, s3_data_path, data_set_name, verify_data):
         self.data_set_name = data_set_name
-        #print("data_set_name:", data_set_name)
+        # print("data_set_name:", data_set_name)
         self.s3_data_path = s3_data_path
-        #print("s3_data_path:", s3_data_path)
+        # print("s3_data_path:", s3_data_path)
         self.verify_data = verify_data
 
-        #print("Dataset creation initialized...how exciting!")
+        # print("Dataset creation initialized...how exciting!")
         self.configuration = scicat_py.Configuration(
             # production
-            host="http://34.29.91.220",
+            host=os.getenv("SCICAT_BASE_URL", "http://scicat:3000"),
             # dev (varies due to shut-down/restart of vm - every restart changes ip)
             #host="http://34.29.27.51",
+            # local server
+            #host = "http://localhost:8000",
+            # ubuntu
+            #host = "http://172.27.20.173",
         )
         self.qc_path = "quality_control/"
         path.append(self.qc_path)
@@ -77,14 +86,20 @@ class AutoDatasetCreation(object):
         self.post_sthree()
         self.short_url()
         self.qc_and_update()
-        self.upload_figure_data(figure=self.data_dict["scientific_metadata"]["Figures"]["raw_data"],
-                                caption="Raw data")
-        self.upload_figure_data(figure=self.data_dict["scientific_metadata"]["Figures"]["normalized_data"],
-                                caption="Normalized data")
-        self.upload_figure_data(figure=self.data_dict["scientific_metadata"]["Figures"]["k"],
-                                caption="k")
-        self.upload_figure_data(figure=self.data_dict["scientific_metadata"]["Figures"]["R"],
-                                caption="R")
+        self.upload_figure_data(
+            figure=self.data_dict["scientific_metadata"]["Figures"]["raw_data"],
+            caption="Raw data",
+        )
+        self.upload_figure_data(
+            figure=self.data_dict["scientific_metadata"]["Figures"]["normalized_data"],
+            caption="Normalized data",
+        )
+        self.upload_figure_data(
+            figure=self.data_dict["scientific_metadata"]["Figures"]["k"], caption="k"
+        )
+        self.upload_figure_data(
+            figure=self.data_dict["scientific_metadata"]["Figures"]["R"], caption="R"
+        )
 
     def auth_login(self) -> Optional[str]:
         """
@@ -132,14 +147,15 @@ class AutoDatasetCreation(object):
                 "Data": {
                     "Source": self.verify_data.get("Source"),
                     "Mode": self.verify_data.get("Measurement Mode"),
-                    #"Energy": "None", # actual value
-                    #"EnergyColumn": self.verify_data.get("Energy Column"), # description
-                    #"Mu": "None", # actual value
-                    #"MuColumn": self.verify_data.get("Mu Column"), # description
-                    #"I_zero": "None", # actual value
-                    #"I_zeroColumn": self.verify_data.get("I0 Column"), # description
-                    #"Transmission": "None", # actual value
-                    #"TransmissionColumn": self.verify_data.get("Transmission Column"), # description
+                    # TODO:
+                    # "Energy": "None", # actual value
+                    # "EnergyColumn": self.verify_data.get("Energy Column"), # description
+                    # "Mu": "None", # actual value
+                    # "MuColumn": self.verify_data.get("Mu Column"), # description
+                    # "I_zero": "None", # actual value
+                    # "I_zeroColumn": self.verify_data.get("I0 Column"), # description
+                    # "Transmission": "None", # actual value
+                    # "TransmissionColumn": self.verify_data.get("Transmission Column"), # description
                 },
                 "RAW": {
                     "edge_step": {
@@ -161,6 +177,11 @@ class AutoDatasetCreation(object):
                         "value": 0.0,
                         "unit": "a.u.",
                         "documentation": "Noise of the measurement.",
+                    },
+                    "edge_energy": {
+                        "value": 0.0,
+                        "unit": "eV",
+                        "documentation": "Energy of the detected edge [eV].",
                     },
                 },
                 "PROCESSED": {
@@ -223,7 +244,7 @@ class AutoDatasetCreation(object):
                 create_dataset_dto, async_req=False, _preload_content=False
             )
             self.resp = json.loads(api_response.data)
-            print('ME RAW DATA:', self.resp)
+            print("ME RAW DATA:", self.resp)
             self.datasetId = self.resp["id"]
             print("ME DATASET ID:", self.datasetId)
             return self.datasetId
@@ -243,13 +264,17 @@ class AutoDatasetCreation(object):
             values: Dict[str, Any] = {"dataset_id": self.datasetId}
             # production:
             self.responds = requests.post(
-                f"http://34.29.91.220/{prefix}/{prefix}/", files=files, data=values
+                os.getenv("XAFSDB_FILE_API_URL", f"http://xafsdb:8000/{prefix}/{prefix}/"), files=files, data=values
             )
             # dev:
             #self.responds = requests.post(
-            #    f"http://34.29.27.51/{prefix}/{prefix}/", files=files, data=values
+            #   f"http://34.29.27.51/{prefix}/{prefix}/", files=files, data=values
             #)
-            #print("I'm in sthree:", self.responds.json)
+            # local server
+            #self.responds = requests.post(
+            #    f"http://172.27.20.173/{prefix}/{prefix}/", files=files, data=values
+            #)
+            # print("I'm in sthree:", self.responds.json)
             return self.responds
         except FileNotFoundError as e:
             logging.exception(f"Could not upload file: {e}")
@@ -268,9 +293,9 @@ class AutoDatasetCreation(object):
         Returns:
             The generated short URL as a string.
         """
-        #self.short_url = self.responds.json()["file"].split("?")[0]
+        # self.short_url = self.responds.json()["file"].split("?")[0]
         type_tiny = pyshorteners.Shortener()
-        #print("I'm in short_url:", self.responds.status_code, self.responds.text)
+        # print("I'm in short_url:", self.responds.status_code, self.responds.text)
         self.short_url = type_tiny.tinyurl.short(self.responds.json()["file"])
 
         return self.short_url
@@ -313,58 +338,119 @@ class AutoDatasetCreation(object):
 
             ### CHECK QUALITY CONTROL ###
             ### loading the json criteria file for reference
-            cq_json = (self.qc_path + "Criteria.json")
+            cq_json = self.qc_path + "Criteria.json"
             ### initialize quality check object
             cq = check_quality(quality_criteria_json=cq_json)
-            qc_list = [] ### this list will contain the quality criteria
+            qc_list = []  ### this list will contain the quality criteria
             ### here the measurement data has to be forwarded, where will the data be stored in SciCat?
-            #meas_data = np.loadtxt(self.short_url, skiprows=1)
-            rd = ReadData(update_erange=self.verify_data)
+            # meas_data = np.loadtxt(self.short_url, skiprows=1)
+            rd = read_data(update_erange=self.verify_data)
             rd.process_data(self.s3_data_path)
-            #print("Meas_data from qc_and_update:", meas_data)
+            # print("Meas_data from qc_and_update:", meas_data)
             cq.load_data(
                 rd.data,
                 source=self.data_dict["scientific_metadata"]["Data"]["Source"],
                 name=self.data_dict["dataset_name"],
             )
             ### perform preprocessing on the data
-            data = cq.preprocess_data()
+            data = (
+                cq.preprocess_data(take_first=True)
+            )  #: data is a larch group with calibrated_energy = data.energy and absorption data.mu
+            # TODO: print(data) and send to download (here mu and energy)
             ### plot the data and return the figure object
-            fig_raw_data = cq.plot_data(data_type = "RAW")
-            fig_normalized_data = cq.plot_data(data_type = "NORMALIZED")
-            fig_k = cq.plot_data(data_type = "k")  ### plot data in k and return the figure object
-            fig_R = cq.plot_data(data_type = "R")  ### plot data in R and return the figure object
-            self.data_dict["scientific_metadata"]["Figures"]["raw_data"] = cq.encode_base64_figure(fig_raw_data)
-            self.data_dict["scientific_metadata"]["Figures"]["normalized_data"] = cq.encode_base64_figure(fig_normalized_data)
-            self.data_dict["scientific_metadata"]["Figures"]["k"] = cq.encode_base64_figure(fig_k)
-            self.data_dict["scientific_metadata"]["Figures"]["R"] = cq.encode_base64_figure(fig_R)
+            # TODO: cache k and R - in der cq.data.R/k
+            fig_raw_data = cq.plot_data(data_type="RAW")
+            fig_normalized_data = cq.plot_data(data_type="NORMALIZED")
+            fig_k = cq.plot_data(
+                data_type="k"
+            )  ### plot data in k and return the figure object
+            fig_R = cq.plot_data(
+                data_type="R"
+            )  ### plot data in R and return the figure object
+            self.data_dict["scientific_metadata"]["Figures"][
+                "raw_data"
+            ] = cq.encode_base64_figure(fig_raw_data)
+            self.data_dict["scientific_metadata"]["Figures"][
+                "normalized_data"
+            ] = cq.encode_base64_figure(fig_normalized_data)
+            self.data_dict["scientific_metadata"]["Figures"][
+                "k"
+            ] = cq.encode_base64_figure(fig_k)
+            self.data_dict["scientific_metadata"]["Figures"][
+                "R"
+            ] = cq.encode_base64_figure(fig_R)
             ### check for the edge step
             qc_list.append(cq.check_edge_step())
             ### add to data_dict
-            self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"] = np.round(qc_list[0][1], decimals = 3)
+            self.data_dict["scientific_metadata"]["RAW"]["edge_energy"][
+                "value"
+            ] = np.round(data.e0, decimals=1)
+            ### add to data_dict
+            self.data_dict["scientific_metadata"]["RAW"]["edge_step"][
+                "value"
+            ] = np.round(qc_list[0][1], decimals=3)
             ### check for the energy resolution
             qc_list.append(cq.check_energy_resolution())
             ### add to data_dict
-            self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"] = np.round(qc_list[1][1], decimals = 1)
+            self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"][
+                "value"
+            ] = np.round(qc_list[1][1], decimals=1)
             ### check for k
             qc_list.append(cq.check_k())
             ### add to data_dict
-            self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"] = np.round(qc_list[2][1], decimals = 1)
+            self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"] = np.round(
+                qc_list[2][1], decimals=1
+            )
             ### Hand over quality criteria to webserver
-            self.edge_step = self.data_dict["scientific_metadata"]["RAW"]["edge_step"]["value"]
-            self.energy_res = self.data_dict["scientific_metadata"]["RAW"]["energy_resolution"]["value"]
+            self.edge_step = self.data_dict["scientific_metadata"]["RAW"]["edge_step"][
+                "value"
+            ]
+            self.energy_res = self.data_dict["scientific_metadata"]["RAW"][
+                "energy_resolution"
+            ]["value"]
             self.k_max = self.data_dict["scientific_metadata"]["RAW"]["k_max"]["value"]
-            #self.noise = self.data_dict["scientific_metadata"]["RAW"]["noise"]["value"]
+            # self.noise = self.data_dict["scientific_metadata"]["RAW"]["noise"]["value"]
+            self.edge_energy = self.data_dict["scientific_metadata"]["RAW"][
+                "edge_energy"
+            ]["value"]
+            ## Store data:
+            self.data_dict["scientific_metadata"]["Data"]["Energy"] = data.energy
+            self.data_energy = self.data_dict["scientific_metadata"]["Data"]["Energy"]
+            self.data_dict["scientific_metadata"]["Data"]["Mu"] = data.mu
+            self.data_mu = self.data_dict["scientific_metadata"]["Data"]["Mu"]
+            self.data_dict["scientific_metadata"]["Data"]["Flat"] = data.flat
+            self.data_flat = self.data_dict["scientific_metadata"]["Data"]["Flat"]
+            # Convert lists to JSON strings for storage
+            energy_json = json.dumps(self.data_energy.tolist())
+            mu_json = json.dumps(self.data_mu.tolist())
+            flat_json = json.dumps(self.data_flat.tolist())
+
             if all(qc_list):
                 print("DO SERVER COMMUNICATION -> CREATE DATASET")
                 print("SENDING MESSAGE TO CURATOR...")
-                send_mail('RefXAS: NEW DATASET CREATED',
-                          'HEY MATE! \n\nSOMETHING EXCITING HAS HAPPENED: A NEW DATASET HAS BEEN CREATED! \nGO AND CURATE IT ASAP! \n\nSTAY HANDSOME :D'
-                          + "\n\nPayload-preview:" + "\n\nDATASET NAME:" + str(self.data_set_name) + "\n\nOWNER:" + str(self.resp["owner"]),
-                          EMAIL_HOST_USER, [EMAIL_HOST_USER, 'abhijeet.gaur@kit.edu'])
+                send_mail(
+                    "RefXAS: NEW DATASET CREATED",
+                    "HEY MATE! \n\nSOMETHING EXCITING HAS HAPPENED: A NEW DATASET HAS BEEN CREATED! \nGO AND CURATE IT ASAP! \n\nSTAY HANDSOME :D"
+                    + "\n\nPayload-preview:"
+                    + "\n\nDATASET NAME:"
+                    + str(self.data_set_name)
+                    + "\n\nOWNER:"
+                    + str(self.resp["owner"]),
+                    EMAIL_HOST_USER,
+                    [EMAIL_HOST_USER, "abhijeet.gaur@kit.edu"],
+                    fail_silently=True,
+                )
                 update_dataset_dto = scicat_py.UpdateDatasetDto(
                     source_folder=self.short_url,
-                    keywords=[self.edge_step, self.k_max, self.energy_res],
+                    keywords=[
+                        self.edge_step,
+                        self.k_max,
+                        self.energy_res,
+                        self.edge_energy,
+                        energy_json,
+                        mu_json,
+                        flat_json,
+                    ],
                 )  # UpdateDatasetDto |
                 api_response = (
                     api_instance.datasets_controller_find_by_id_replace_or_create(
@@ -380,7 +466,7 @@ class AutoDatasetCreation(object):
                 self.data_dict["scientific_metadata"]["Figures"]["k"]
                 self.data_dict["scientific_metadata"]["Figures"]["R"]
 
-    def upload_figure_data(self, figure: str, caption: Optional[str]="") -> None:
+    def upload_figure_data(self, figure: str, caption: Optional[str] = "") -> None:
         """
         Uploads a figure to the SciCat API as an attachment for a specific dataset.
 
@@ -402,7 +488,9 @@ class AutoDatasetCreation(object):
         with scicat_py.ApiClient(self.configuration) as api_client:
             api_client.configuration.access_token = self.access_token
             api_instance = scicat_py.DatasetsApi(api_client)
-            create_attachment_dto = scicat_py.CreateAttachmentDto(**QC_attach_figure_data)
+            create_attachment_dto = scicat_py.CreateAttachmentDto(
+                **QC_attach_figure_data
+            )
             api_response = api_instance.datasets_controller_create_attachment(
                 self.datasetId,
                 create_attachment_dto,

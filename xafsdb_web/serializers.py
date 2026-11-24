@@ -2,6 +2,7 @@
 @author: Sebastian Paripsa
 """
 
+from django.conf import settings
 from rest_framework import serializers
 
 from xafsdb_web.models import Files
@@ -26,5 +27,7 @@ class FileCreateUpdateSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(FileCreateUpdateSerializer, self).to_representation(instance)
-        data["file"] = instance.file.url
+        # instance.file.url is MEDIA_URL-relative for local storage (unlike S3's
+        # absolute URLs); build an absolute URL so short_url()/TinyURL can use it.
+        data["file"] = f"{settings.PUBLIC_BASE_URL}{instance.file.url}"
         return data

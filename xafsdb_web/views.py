@@ -18,44 +18,55 @@ Requirements:
 
 """
 
+import base64
+import json
+
 ##############################################################################
 ### import packages ###
 ##############################################################################
 import logging
-from typing import Type, List, Dict, Any, NoReturn
+import re  # Regular expression module
+import zipfile
+from collections import defaultdict
+from io import BytesIO
+from itertools import zip_longest
+from typing import Any, Dict, List, NoReturn, Type
 
-import scicat_py
-from auto_dataset_create import AutoDatasetCreation
-from auto_bl_create import AutoBlCreation
+import h5py
+import numpy as np
+import yaml
 from django import forms
-from django.core.mail import BadHeaderError, send_mail
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseForbidden, HttpResponseNotFound,
-                         HttpResponseServerError, HttpRequest)
-from django.shortcuts import redirect, render
-from django.views.generic.base import TemplateView
-from django.views.decorators.http import require_POST
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.core.mail import BadHeaderError, send_mail
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import (
+    HttpRequest,
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponseNotFound,
+    HttpResponseServerError,
+)
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_POST
+from django.views.generic.base import TemplateView
 from rest_framework.decorators import api_view
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
+import scicat_py
+from auto_bl_create import AutoBlCreation
+from auto_dataset_create import AutoDatasetCreation
+from plugins.read_data import read_data
 from webserver.settings import CONTEXT, EMAIL_HOST_USER
-import json
-import base64
-import zipfile
-import h5py
-from io import BytesIO
-import yaml
 
 from ._auth_constants import CONFIGURATION
 from .models import Files
 from .serializers import FileCreateUpdateSerializer, FileSerializer
-from .utils import get_access, get_all_datasets, term_checker, snake_case_to_title_case
+from .utils import get_access, get_all_datasets, snake_case_to_title_case, term_checker
 
-from plugins.read_data import ReadData
 
 def beamline_details(request, beamline_id: str) -> HttpResponse:
     """
@@ -77,14 +88,19 @@ def beamline_details(request, beamline_id: str) -> HttpResponse:
 
         # Assuming you have an API endpoint to fetch beamline metadata
         api_instance_beamline = scicat_py.InstrumentsApi(api_client)
-        #try:
-        beamline_metadata = api_instance_beamline.instruments_controller_find_one(id=beamline_id)
-        #except Exception as e:
-            # Handle exceptions and redirect to an error page or return an appropriate response
-            #return redirect('error')
+        # try:
+        beamline_metadata = api_instance_beamline.instruments_controller_find_one(
+            id=beamline_id
+        )
+        # except Exception as e:
+        # Handle exceptions and redirect to an error page or return an appropriate response
+        # return redirect('error')
 
     # Render the beamline details using a Django template
-    return render(request, 'landing/base_beamline.html', {'beamline_metadata': beamline_metadata})
+    return render(
+        request, "landing/base_beamline.html", {"beamline_metadata": beamline_metadata}
+    )
+
 
 def beamline_upload(request: HttpRequest) -> HttpResponse:
     """
@@ -104,6 +120,7 @@ def beamline_upload(request: HttpRequest) -> HttpResponse:
     mechanisms to locate and render the specified template.
     """
     return render(request, "landing/addbeamline.html")
+
 
 @api_view(["POST"])
 def add_beamline(request: HttpRequest) -> HttpResponse:
@@ -134,7 +151,7 @@ def add_beamline(request: HttpRequest) -> HttpResponse:
         - Interaction with the SciCat API to fetch existing beamlines and compare names.
         - User feedback provided through messages indicating success or failure.
     """
-    posted_beamline_name = request.POST.get('beamline', '')
+    posted_beamline_name = request.POST.get("beamline", "")
 
     # Initialize API client and fetch existing beamlines
     with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
@@ -146,27 +163,31 @@ def add_beamline(request: HttpRequest) -> HttpResponse:
         # Check if the posted beamline name already exists in the existing beamlines
         for instrument in beamline_list:
             # Safely check if custom_metadata exists and has the 'FACILITY' key
-            if instrument.custom_metadata and 'FACILITY' in instrument.custom_metadata:
-                facility_info = instrument.custom_metadata['FACILITY']
+            if instrument.custom_metadata and "FACILITY" in instrument.custom_metadata:
+                facility_info = instrument.custom_metadata["FACILITY"]
                 # Use .get() to safely access 'beamline', providing a default of an empty string if not found
-                existing_beamline_name = facility_info.get('beamline', '')
+                existing_beamline_name = facility_info.get("beamline", "")
 
                 # Proceed with comparison if existing_beamline_name is not an empty string
-                if existing_beamline_name and posted_beamline_name.lower() == existing_beamline_name.lower():
+                if (
+                    existing_beamline_name
+                    and posted_beamline_name.lower() == existing_beamline_name.lower()
+                ):
                     # Beamline with the same name already exists, handle accordingly
-                    messages.error(request, 'Beamline name already exists.')
+                    messages.error(request, "Beamline name already exists.")
                     return redirect("landing/error.html")
             else:
                 # Optionally handle the case where instrument does not have the expected metadata structure
-                print(f"Instrument {getattr(instrument, 'pid', 'Unknown ID')} does not have the expected custom_metadata structure.")
-
-
+                print(
+                    f"Instrument {getattr(instrument, 'pid', 'Unknown ID')} does not have the expected custom_metadata structure."
+                )
 
     # If the beamline name does not exist, proceed with creation
     AutoBlCreation(
         verify_beamline_meta=request.POST,
     )
-    return redirect('thank_you')
+    return redirect("thank_you")
+
 
 def beamline_list(request: HttpRequest) -> HttpResponse:
     """
@@ -201,7 +222,7 @@ def beamline_list(request: HttpRequest) -> HttpResponse:
 
         api_instance_dataset = scicat_py.InstrumentsApi(api_client)
         beamline_meta_list = api_instance_dataset.instruments_controller_find_all()
-        #print(beamline_meta_list)
+        # print(beamline_meta_list)
     return render(
         request,
         "landing/beamline_list.html",
@@ -210,7 +231,7 @@ def beamline_list(request: HttpRequest) -> HttpResponse:
 
 
 # render the file upload view and navigate to the html page
-#@user_passes_test(lambda u: u.is_superuser)
+# @user_passes_test(lambda u: u.is_superuser)
 def dataset_upload_view(request) -> HttpResponse:
     """
     Renders the "upload.html" template with the provided context.
@@ -227,78 +248,78 @@ def dataset_upload_view(request) -> HttpResponse:
 # read the uploaded file and send the data to verify view
 @api_view(["POST"])
 def dataset_upload(request):
-        '''
-        Handles dataset file uploads from the user and processes the file content for further use.
+    """
+    Handles dataset file uploads from the user and processes the file content for further use.
 
-        Args:
-        request (HttpRequest): An HttpRequest object that contains metadata about the dataset file.
+    Args:
+    request (HttpRequest): An HttpRequest object that contains metadata about the dataset file.
 
-        Returns:
-        context (dict): A dictionary containing decoded file name, description, and dictionary data,
-        which is used for further processing and storage in the reference database.
+    Returns:
+    context (dict): A dictionary containing decoded file name, description, and dictionary data,
+    which is used for further processing and storage in the reference database.
 
-        Example:
-        The function is typically used within a webserver created using Django framework. It processes
-        uploaded dataset files by decoding and extracting relevant information, preparing it for storage
-        and further analysis.
-        '''
-    #try:
-        temporary_uploaded_file = request.FILES.get("file")
-        #print("I'm the temporary_uploaded_file:", temporary_uploaded_file)
+    Example:
+    The function is typically used within a webserver created using Django framework. It processes
+    uploaded dataset files by decoding and extracting relevant information, preparing it for storage
+    and further analysis.
+    """
+    # try:
+    temporary_uploaded_file = request.FILES.get("file")
+    # print("I'm the temporary_uploaded_file:", temporary_uploaded_file)
 
-        if temporary_uploaded_file is None:
-            dataset_name = request.POST.get("dataset_name")
-            if str(dataset_name).split("/")[-1].split(".")[-1] != "h5":
-                readout_type = "r"
-            else:
-                readout_type = "rb"
-            with open("temp/" + dataset_name, readout_type) as f:
-                decoded_list = f.readlines()
-            #if dataset_name is not None:
-            #    temporary_uploaded_file.name = dataset_name
-            #else:
-            #    error_msg = json.dumps({"detail": "Please add a file before click upload"})
-            #    return HttpResponse(error_msg, status=500)
-            #return redirect("landing/error.html")
+    if temporary_uploaded_file is None:
+        dataset_name = request.POST.get("dataset_name")
+        if str(dataset_name).split("/")[-1].split(".")[-1] != "h5":
+            readout_type = "r"
         else:
-            if str(temporary_uploaded_file).split("/")[-1].split(".")[-1] != "h5":
-                write_type = "w"
-                decoded_file = temporary_uploaded_file.read().decode("utf-8")
-            else:
-                write_type = "wb"
-                decoded_file = temporary_uploaded_file.read()
-            dataset_name = temporary_uploaded_file.name
-            decoded_list = str(decoded_file).split("\r\n")
-            #print(decoded_list)
+            readout_type = "rb"
+        with open("temp/" + dataset_name, readout_type) as f:
+            decoded_list = f.readlines()
+        # if dataset_name is not None:
+        #    temporary_uploaded_file.name = dataset_name
+        # else:
+        #    error_msg = json.dumps({"detail": "Please add a file before click upload"})
+        #    return HttpResponse(error_msg, status=500)
+        # return redirect("landing/error.html")
+    else:
+        if str(temporary_uploaded_file).split("/")[-1].split(".")[-1] != "h5":
+            write_type = "w"
+            decoded_file = temporary_uploaded_file.read().decode("utf-8")
+        else:
+            write_type = "wb"
+            decoded_file = temporary_uploaded_file.read()
+        dataset_name = temporary_uploaded_file.name
+        decoded_list = str(decoded_file).split("\r\n")
+        # print(decoded_list)
 
-            # save file in temp folder
-            file = open("temp/" + temporary_uploaded_file.name, write_type)
-            #print("File from dataset_upload:", file)
-            file.write(decoded_file)
-            file.close()
+        # save file in temp folder
+        file = open("temp/" + temporary_uploaded_file.name, write_type)
+        # print("File from dataset_upload:", file)
+        file.write(decoded_file)
+        file.close()
 
-        if len(decoded_list) > 0:
-            data = [
-                str(data).split("\t") for data in decoded_list
-            ]
+    if len(decoded_list) > 0:
+        data = [str(data).split("\t") for data in decoded_list]
 
-            update_erange = request.POST
-            #print("dataset_upload:", update_erange)
-            reader = ReadData(update_erange=update_erange)
-            dictionary = reader.extract_header(data_path="temp/" + dataset_name)
-            #print("I'm here:", dictionary)
-            context = {
-                "decode_file_name": dataset_name,
-                ### pass the dictionary to the template context
-                "dictionary": dictionary,
-                }
-            #print("Context:", context)
+        update_erange = request.POST
+        # print("dataset_upload:", update_erange)
+        reader = read_data(update_erange=update_erange)
+        dictionary = reader.extract_header(data_path="temp/" + dataset_name)
+        # print("I'm here:", dictionary)
+        context = {
+            "decode_file_name": dataset_name,
+            ### pass the dictionary to the template context
+            "dictionary": dictionary,
+        }
+        # print("Context:", context)
 
-            return render(request, "landing/verify.html", context)
-    # TODO:
-    #except Exception as e:
-    #    error_msg = json.dumps({"detail": "Internal Server Error _" + str(e)})
-    #    return HttpResponse(error_msg, status=500)
+        return render(request, "landing/verify.html", context)
+
+
+# TODO:
+# except Exception as e:
+#    error_msg = json.dumps({"detail": "Internal Server Error _" + str(e)})
+#    return HttpResponse(error_msg, status=500)
 
 
 @api_view(["POST"])
@@ -319,26 +340,27 @@ def verify_upload(request) -> HttpResponse:
 
     """
     logger = logging.getLogger(__name__)
-    #try:
-    #verify_data = request.POST
-    #print("verify_data:", verify_data)
+    # try:
+    # verify_data = request.POST
+    # print("verify_data:", verify_data)
     update_erange = request.POST
-    #print("update_erange:", update_erange)
+    # print("update_erange:", update_erange)
     file_path = request.POST.get("dataset_name")
-    #print("FILE_path from verify_upload:", str(file_path))
+    # print("FILE_path from verify_upload:", str(file_path))
     AutoDatasetCreation(
         s3_data_path="temp/" + str(file_path),
         data_set_name=file_path,
         verify_data=update_erange,
     )
-    #dataset_id = adc.create_testdata()
-    #return redirect("dataset_details", dataset_id=dataset_id)
-    #return render(request, "landing/home.html")
-    return redirect('thank_you')
+    # dataset_id = adc.create_testdata()
+    # return redirect("dataset_details", dataset_id=dataset_id)
+    # return render(request, "landing/home.html")
+    return redirect("thank_you")
 
-    #except Exception as e:
+    # except Exception as e:
     #    logger.exception("Error occurred while verifying upload: %s", str(e))
     #    return HttpResponseServerError("Error occurred while verifying upload")
+
 
 @api_view(["POST"])
 def approval_by_curator(request: HttpRequest, dataset_id: str) -> NoReturn:
@@ -368,10 +390,28 @@ def approval_by_curator(request: HttpRequest, dataset_id: str) -> NoReturn:
         endpoint availability. It assumes that the dataset ID provided is valid and exists in the
         database.
     """
-    if request.method == 'POST':
-        approval_status = request.POST.get('approval_status') == 'APPROVAL'
-        curator_info = request.POST.get('curator_updated_by')
-        #print(f"Approval Status for dataset {dataset_id}: {approval_status}")
+    if request.method == "POST":
+        approval_status = request.POST.get("approval_status") == "APPROVAL"
+        curator_info = request.POST.get("curator_updated_by")
+        update_sample_id = request.POST.get("update_sample_id")
+        update_coll_code = request.POST.get("update_coll_code")
+        update_phys_state = request.POST.get("update_phys_state")
+        update_crystal_orientation = request.POST.get("update_crystal_orientation")
+        update_temperature = request.POST.get("update_temperature")
+        update_pressure = request.POST.get("update_pressure")
+        update_sample_environment = request.POST.get("update_sample_environment")
+        update_description = request.POST.get("update_description")
+        update_general_remarks = request.POST.get("update_general_remarks")
+        update_sample_preparation = request.POST.get("update_sample_preparation")
+        update_doi = request.POST.get("update_doi")
+        update_reference = request.POST.get("update_reference")
+        update_facility = request.POST.get("update_facility")
+        update_aquisition_mode = request.POST.get("update_aquisition_mode")
+        update_crystals = request.POST.get("update_crystals")
+        update_mirrors = request.POST.get("update_mirrors")
+        update_detectors = request.POST.get("update_detectors")
+        update_max_k_range = request.POST.get("update_max_k_range")
+        # print(f"Approval Status for dataset {dataset_id}: {approval_status}")
 
         with scicat_py.ApiClient(configuration=CONFIGURATION) as api_client:
             access_token = get_access()
@@ -381,18 +421,47 @@ def approval_by_curator(request: HttpRequest, dataset_id: str) -> NoReturn:
 
             update_dataset_dto = scicat_py.UpdateDatasetDto(
                 is_published=approval_status,
-                updated_by=curator_info
-                )
+                updated_by=curator_info,
+                history={
+                    "updatedscientificMetadata": {
+                        "Description": update_description,
+                        "sample_info": {
+                            "coll_code": update_coll_code,
+                            "physical_state": update_phys_state,
+                            "crystal_orientation": update_crystal_orientation,
+                            "temperature": update_temperature,
+                            "pressure": update_pressure,
+                            "sample_environment": update_sample_environment,
+                            "general_remarks": update_general_remarks,
+                            "sample_prep": update_sample_preparation,
+                            "sample_id": update_sample_id,
+                        },
+                        "bibliography": {
+                            "doi": update_doi,
+                            "reference": update_reference,
+                        },
+                        "instrument": {
+                            "facility": update_facility,
+                            "aquisition_mode": update_aquisition_mode,
+                            "crystals": update_crystals,
+                            "mirrors": update_mirrors,
+                            "detectors": update_detectors,
+                            "max_k_range": update_max_k_range,
+                        },
+                    },
+                },
+            )
             api_response = (
-                    api_instance.datasets_controller_find_by_id_replace_or_create(
-                        dataset_id,
-                        update_dataset_dto,
-                        async_req=False,
-                        _preload_content=False,
-                    )
+                api_instance.datasets_controller_find_by_id_replace_or_create(
+                    dataset_id,
+                    update_dataset_dto,
+                    async_req=False,
+                    _preload_content=False,
                 )
-            #json.loads(api_response.data)
-    return redirect('dataset_list_curator')
+            )
+            # print(json.loads(api_response.data))
+    return redirect("dataset_list_curator")
+
 
 def thank_you(request: HttpRequest) -> HttpResponse:
     """
@@ -408,7 +477,7 @@ def thank_you(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: An HttpResponse object that renders the 'thank_you.html' template.
     """
-    return render(request, 'landing/thank_you.html')
+    return render(request, "landing/thank_you.html")
 
 
 def dataset_list(request) -> HttpResponse:
@@ -452,6 +521,7 @@ def dataset_list(request) -> HttpResponse:
         {"dataset_meta_list": dataset_meta_list, "debug_data": debug_data},
     )
 
+
 def dataset_details(request, dataset_id: str) -> HttpResponse:
     """
     Retrieves information about the given dataset from scicat and renders the dataset details page with the
@@ -473,91 +543,10 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
 
         api_instance_dataset = scicat_py.DatasetsApi(api_client)
         dataset_meta = api_instance_dataset.datasets_controller_find_by_id(dataset_id)
-        #print("Dataset Meta:" , dataset_meta)
-
-        # Check if the user wants to download the metadata
-        #if request.GET.get('download_metadata'):
-        #    # Convert metadata to JSON formatted string
-        #    metadata_json = json.dumps(dataset_meta, indent=4)
-        #    # Create an HttpResponse object with the JSON data
-        #    response = HttpResponse(metadata_json, content_type='application/json')
-        #    # Set content disposition header for download prompt
-        #    response['Content-Disposition'] = f'attachment; filename="{dataset_id}_metadata.json"'
-        #    return response
-
-        #if request.GET.get('download_metadata_hdf5'):
-        ## Create an in-memory HDF5 file
-        #    output = BytesIO()
-        #    with h5py.File(output, 'w') as hf:
-        #        for key, value in dataset_meta.items():
-        #            hf.create_dataset(key, data=str(value))
-        #    # Prepare HttpResponse
-        #    output.seek(0)
-        #    response = HttpResponse(output.read(), content_type='application/x-hdf5')
-        #    response['Content-Disposition'] = f'attachment; filename="{dataset_id}_metadata.hdf5"'
-#
-        #    return response
-
-        #if request.GET.get('download_metadata_yaml'):
-        #    # Convert metadata to YAML formatted string
-        #    metadata_yaml = yaml.dump(dataset_meta)
-        #    # Create HttpResponse with YAML data
-        #    response = HttpResponse(metadata_yaml, content_type='application/x-yaml')
-        #    response['Content-Disposition'] = f'attachment; filename="{dataset_id}_metadata.yaml"'
-#
-        #    return response
-
-        #if request.GET.get('download_text'):
-        #    # Adding Sample Info section:
-        #    content_str = "*Sample Info*:\n"
-        #    content_str += f"    - ID: {dataset_meta.get('id', 'N/A')}\n"
-        #    content_str += f"    - Dataset Name: {dataset_meta.get('datasetName', 'N/A')}\n"
-        #    sample_info = dataset_meta['scientificMetadata']['sample_info']
-        #    for key, value in sample_info.items():
-        #        # Convert the key from snake_case to Title Case
-        #        title_case_key = snake_case_to_title_case(key)
-        #        content_str += f"    - {title_case_key}: {value}\n"
-#
-        #    # Adding Bibliography section
-        #    content_str += "\n*Bibliography*:\n"
-        #    bibliography = dataset_meta['scientificMetadata'].get('bibliography', {})
-        #    content_str += f"    - Owner: {dataset_meta.get('owner', 'N/A')}\n"
-        #    content_str += f"    - Institute: {dataset_meta.get('ownerGroup', 'N/A')}\n"
-        #    content_str += f"    - Contact Email: {dataset_meta.get('contactEmail', 'N/A')}\n"
-        #    for key, value in bibliography.items():
-        #        # Convert the key from snake_case to Title Case
-        #        title_case_key = snake_case_to_title_case(key)
-        #        content_str += f"    - {title_case_key}: {value}\n"
-#
-        #    # Adding Instrument section
-        #    content_str += "\n*Instrument*:\n"
-        #    instrument = dataset_meta['scientificMetadata'].get('instrument', {})
-        #    for key, value in instrument.items():
-        #        # Convert the key from snake_case to Title Case
-        #        title_case_key = snake_case_to_title_case(key)
-        #        content_str += f"    - {title_case_key}: {value}\n"
-#
-        #    # Filter Files objects by dataset_id
-        #    item_list = Files.objects.filter(dataset_id=dataset_id)
-        #    for item in item_list:
-        #        # Ensure there is a file associated with the item
-        #        if item.file:
-        #            # Reading the file content
-        #            item.file.open('r')
-        #            file_content = item.file.read()
-        #            content_str += f"\nContent of {item.file_name}:\n{file_content}\n"
-        #            item.file.close()
-#
-        #    # Creating the HttpResponse object with the content string
-        #    response = HttpResponse(content_str, content_type='text/plain')
-        #    response['Content-Disposition'] = f'attachment; filename="{dataset_id}_metaData.txt"'
-        #    return response
 
         attachment_response = (
             api_instance_dataset.datasets_controller_find_all_attachments(dataset_id)
         )
-        #print(len(attachment_response))
-        #print(attachment_response)
 
         try:
             raw_data_fig = attachment_response[0].thumbnail
@@ -568,10 +557,10 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
         except IndexError:
             return redirect("error")
 
-        if request.GET.get('download_zip'):
+        if request.GET.get("download_zip"):
             zip_buffer = BytesIO()
 
-            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+            with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
                 # Metadata as JSON
                 metadata_json = json.dumps(dataset_meta, indent=4)
                 zip_file.writestr(f"{dataset_id}_metadata.json", metadata_json)
@@ -582,52 +571,152 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
 
                 # Metadata as HDF5
                 hdf5_buffer = BytesIO()
-                with h5py.File(hdf5_buffer, 'w') as hf:
+                with h5py.File(hdf5_buffer, "w") as hf:
                     for key, value in dataset_meta.items():
                         hf.create_dataset(key, data=str(value))
                 hdf5_buffer.seek(0)
                 zip_file.writestr(f"{dataset_id}_metadata.hdf5", hdf5_buffer.read())
 
+                from datetime import datetime
+
+                # Get the current date and time
+                current_datetime = datetime.now()
+
+                # Format the date and time as MM/DD/YYYY and time in UTC
+                formatted_datetime = current_datetime.strftime('%m/%d/%Y %H:%M:%S UTC')
+
+                # Start building the content string with the header, date, and time
+                content_str = "# This file is provided by *RefXAS* database under DAPHNE4NFDI.\n"
+                content_str += "# For more information, go to http://xafsdb.ddns.net\n"
+                content_str += "# or contact: paripsa@uni-wuppertal.de\n"
+                content_str += f"# Download: {formatted_datetime}\n"
                 # Detailed Metadata as Text
                 # Adding Sample Info section:
-                content_str = "*Sample Info*:\n"
-                content_str += f"    - ID: {dataset_meta.get('id', 'N/A')}\n"
-                content_str += f"    - Dataset Name: {dataset_meta.get('datasetName', 'N/A')}\n"
-                sample_info = dataset_meta['scientificMetadata']['sample_info']
+                content_str += "\n# *Sample Info*:\n"
+                content_str += f"#     - ID: {dataset_meta.get('id', 'N/A')}\n"
+                content_str += (
+                    f"#     - Dataset Name: {dataset_meta.get('datasetName', 'N/A')}\n"
+                )
+                sample_info = dataset_meta["scientificMetadata"]["sample_info"]
                 for key, value in sample_info.items():
                     # Convert the key from snake_case to Title Case
                     title_case_key = snake_case_to_title_case(key)
-                    content_str += f"    - {title_case_key}: {value}\n"
+                    content_str += f"#     - {title_case_key}: {value}\n"
 
                 # Adding Bibliography section:
-                content_str += "\n*Bibliography*:\n"
-                bibliography = dataset_meta['scientificMetadata'].get('bibliography', {})
-                content_str += f"    - Owner: {dataset_meta.get('owner', 'N/A')}\n"
-                content_str += f"    - Institute: {dataset_meta.get('ownerGroup', 'N/A')}\n"
-                content_str += f"    - Contact Email: {dataset_meta.get('contactEmail', 'N/A')}\n"
+                content_str += "# ----------------------------------------------------\n# ----------------------------"
+                content_str += "\n# *Bibliography*:\n"
+                bibliography = dataset_meta["scientificMetadata"].get(
+                    "bibliography", {}
+                )
+                content_str += f"#     - Contact person: {dataset_meta.get('owner', 'N/A')}\n"
+                content_str += (
+                    f"#     - Institute: {dataset_meta.get('ownerGroup', 'N/A')}\n"
+                )
+                content_str += (
+                    f"#     - Contact Email: {dataset_meta.get('contactEmail', 'N/A')}\n"
+                )
                 for key, value in bibliography.items():
                     # Convert the key from snake_case to Title Case
                     title_case_key = snake_case_to_title_case(key)
-                    content_str += f"    - {title_case_key}: {value}\n"
+                    content_str += f"#     - {title_case_key}: {value}\n"
 
                 # Adding Instrument section:
-                content_str += "\n*Instrument*:\n"
-                instrument = dataset_meta['scientificMetadata'].get('instrument', {})
+                content_str += "# ----------------------------------------------------\n# ----------------------------"
+                content_str += "\n# *Instrument*:\n"
+                instrument = dataset_meta["scientificMetadata"].get("instrument", {})
                 for key, value in instrument.items():
                     # Convert the key from snake_case to Title Case
                     title_case_key = snake_case_to_title_case(key)
-                    content_str += f"    - {title_case_key}: {value}\n"
+                    content_str += f"#     - {title_case_key}: {value}\n"
 
-                # Filter Files objects by dataset_id
-                item_list = Files.objects.filter(dataset_id=dataset_id)
-                for item in item_list:
-                    # Ensure there is a file associated with the item
-                    if item.file:
-                        # Reading the file content
-                        item.file.open('r')
-                        file_content = item.file.read()
-                        content_str += f"\nContent of {item.file_name}:\n{file_content}\n"
-                        item.file.close()
+                # Adding QC section:
+                content_str += "# ----------------------------------------------------\n# ----------------------------"
+                content_str += "\n# *Results quality control*:\n"
+                edge_step = (
+                    dataset_meta["keywords"][0] if dataset_meta["keywords"] else "N/A"
+                )
+                content_str += f"#     - Edge step: {edge_step} a.u. \n"
+                k_max = (
+                    dataset_meta["keywords"][1] if dataset_meta["keywords"] else "N/A"
+                )
+                content_str += f"#     - K-max: {k_max} \u212B\u207B\u00B9 \n"
+                energy_resolution = (
+                    dataset_meta["keywords"][2] if dataset_meta["keywords"] else "N/A"
+                )
+                content_str += f"#     - Energy resolution: {energy_resolution} eV\n"
+                try:
+                    edge_energy = (
+                        dataset_meta["keywords"][3]
+                        if dataset_meta["keywords"]
+                        else "N/A"
+                    )
+                except IndexError:
+                    edge_energy = "N/A"
+                content_str += f"#     - Edge energy: {edge_energy} eV\n"
+
+                # Adding Update info:
+                content_str += "# ----------------------------------------------------\n# ----------------------------"
+                content_str += "\n# *Update / Verification Info*:\n# (The following entries have been altered)\n"
+                updated_sample_info = dataset_meta["history"][0][
+                    "updatedscientificMetadata"
+                ].get("sample_info", {})
+                for key, value in updated_sample_info.items():
+                    # Convert the key from snake_case to Title Case
+                    if value != "":
+                        title_case_key = snake_case_to_title_case(key)
+                        content_str += f"#     - {title_case_key}: {value}\n"
+                updated_bibliography = dataset_meta["history"][0][
+                    "updatedscientificMetadata"
+                ].get("bibliography", {})
+                for key, value in updated_bibliography.items():
+                    # Convert the key from snake_case to Title Case
+                    if value != "":
+                        title_case_key = snake_case_to_title_case(key)
+                        content_str += f"#     - {title_case_key}: {value}\n"
+                updated_instrument = dataset_meta["history"][0][
+                    "updatedscientificMetadata"
+                ].get("instrument", {})
+                for key, value in updated_instrument.items():
+                    # Convert the key from snake_case to Title Case
+                    if value != "":
+                        title_case_key = snake_case_to_title_case(key)
+                        content_str += f"#     - {title_case_key}: {value}\n"
+                content_str += (
+                    f"#     - Updated by: {dataset_meta.get('updatedBy', 'N/A')}\n"
+                )
+
+                # Adding data
+                content_str += "# ----------------------------------------------------\n# ----------------------------"
+                content_str += "\n# *Data*:\n"
+                # Assuming content_str and dataset_meta are defined and keywords are stored as JSON strings
+                if len(dataset_meta["keywords"]) > 4:
+                    energy_data = json.loads(dataset_meta["keywords"][4])
+                    mu_data = (
+                        json.loads(dataset_meta["keywords"][5])
+                        if len(dataset_meta["keywords"]) > 5
+                        else []
+                    )
+                    flat_data = (
+                        json.loads(dataset_meta["keywords"][6])
+                        if len(dataset_meta["keywords"]) > 6
+                        else []
+                    )
+
+                    # Prepare to display data side-by-side
+                    data_columns = zip_longest(
+                        energy_data, mu_data, flat_data, fillvalue=""
+                    )
+
+                    # Format data into three columns
+                    formatted_data = [
+                        "{:<20} {:<20} {:<20}".format(*map(str, cols))
+                        for cols in data_columns
+                    ]
+                    formatted_data_str = "\n".join(formatted_data)
+                    content_str += f"# Energy, Mu, Normalized:\n{formatted_data_str}\n"
+                else:
+                    content_str += "#     - Energy/Mu/Normalized: N/A\n"
 
                 zip_file.writestr(f"{dataset_id}_metaData.txt", content_str)
 
@@ -637,7 +726,9 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
                 for index, encoded_img in enumerate(encoded_images):
                     if encoded_img:
                         # Strip the prefix and decode the base64 string to binary data
-                        img_data = base64.b64decode(encoded_img.split("data:image/jpeg;base64,")[1])
+                        img_data = base64.b64decode(
+                            encoded_img.split("data:image/jpeg;base64,")[1]
+                        )
 
                         # Write the decoded image data to the ZIP file as JPEG images
                         zip_file.writestr(f"plot{index+1}.jpg", img_data)
@@ -695,8 +786,10 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
                 zip_file.writestr("README_ownership_and_usage_notice.txt", notice_text)
 
             zip_buffer.seek(0)
-            response = HttpResponse(zip_buffer, content_type='application/zip')
-            response['Content-Disposition'] = f'attachment; filename="{dataset_id}_plots_and_meta_data.zip"'
+            response = HttpResponse(zip_buffer, content_type="application/zip")
+            response[
+                "Content-Disposition"
+            ] = f'attachment; filename="{dataset_id}_plots_and_meta_data.zip"'
             return response
 
         item_list: List[Dict[str, str]] = Files.objects.filter(dataset_id=dataset_id)
@@ -711,17 +804,23 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
         # Iterate over all instruments to extract their beamline names
         for instrument in beamline_list:
             # Safely check if custom_metadata exists and has the 'FACILITY' key
-            if instrument.custom_metadata and 'FACILITY' in instrument.custom_metadata:
-                facility_info = instrument.custom_metadata['FACILITY']
-                beamline_name = facility_info.get('beamline')  # Use .get() for safe access
-                beamline_id = getattr(instrument, 'pid', None)  # Use getattr for safe attribute access
+            if instrument.custom_metadata and "FACILITY" in instrument.custom_metadata:
+                facility_info = instrument.custom_metadata["FACILITY"]
+                beamline_name = facility_info.get(
+                    "beamline"
+                )  # Use .get() for safe access
+                beamline_id = getattr(
+                    instrument, "pid", None
+                )  # Use getattr for safe attribute access
 
                 # Check if both beamline_name and beamline_id are not None
                 if beamline_name and beamline_id:
-                    all_beamline_data.append({'name': beamline_name, 'id': beamline_id})
+                    all_beamline_data.append({"name": beamline_name, "id": beamline_id})
             else:
                 # Optionally handle the case where instrument does not have the expected metadata structure
-                print(f"Instrument {getattr(instrument, 'pid', 'Unknown ID')} does not have the expected custom_metadata structure.")
+                print(
+                    f"Instrument {getattr(instrument, 'pid', 'Unknown ID')} does not have the expected custom_metadata structure."
+                )
 
     return render(
         request,
@@ -733,10 +832,11 @@ def dataset_details(request, dataset_id: str) -> HttpResponse:
             "k_fig": k_fig,
             "R_fig": R_fig,
             "item_list": item_list,
-            #"beamline_name": beamline_name,
+            # "beamline_name": beamline_name,
             "all_beamline_data": all_beamline_data,
         },
     )
+
 
 def dataset_list_curator(request: HttpRequest) -> HttpResponse:
     """
@@ -840,6 +940,180 @@ def dataset_details_curator(request: HttpRequest, dataset_id: str) -> HttpRespon
         except IndexError:
             return redirect("error")
 
+        if request.GET.get("download_zip"):
+            zip_buffer = BytesIO()
+
+            with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+                # Metadata as JSON
+                metadata_json = json.dumps(dataset_meta, indent=4)
+                zip_file.writestr(f"{dataset_id}_metadata.json", metadata_json)
+
+                # Metadata as YAML
+                metadata_yaml = yaml.dump(dataset_meta)
+                zip_file.writestr(f"{dataset_id}_metadata.yaml", metadata_yaml)
+
+                # Metadata as HDF5
+                hdf5_buffer = BytesIO()
+                with h5py.File(hdf5_buffer, "w") as hf:
+                    for key, value in dataset_meta.items():
+                        hf.create_dataset(key, data=str(value))
+                hdf5_buffer.seek(0)
+                zip_file.writestr(f"{dataset_id}_metadata.hdf5", hdf5_buffer.read())
+
+                # Detailed Metadata as Text
+                # Adding Sample Info section:
+                content_str = "*Sample Info*:\n"
+                content_str += f"    - ID: {dataset_meta.get('id', 'N/A')}\n"
+                content_str += (
+                    f"    - Dataset Name: {dataset_meta.get('datasetName', 'N/A')}\n"
+                )
+                sample_info = dataset_meta["scientificMetadata"]["sample_info"]
+                for key, value in sample_info.items():
+                    # Convert the key from snake_case to Title Case
+                    title_case_key = snake_case_to_title_case(key)
+                    content_str += f"    - {title_case_key}: {value}\n"
+
+                # Adding Bibliography section:
+                content_str += "----------------------------------------------------\n----------------------------"
+                content_str += "\n*Bibliography*:\n"
+                bibliography = dataset_meta["scientificMetadata"].get(
+                    "bibliography", {}
+                )
+                content_str += f"    - Contact person: {dataset_meta.get('owner', 'N/A')}\n"
+                content_str += (
+                    f"    - Institute: {dataset_meta.get('ownerGroup', 'N/A')}\n"
+                )
+                content_str += (
+                    f"    - Contact Email: {dataset_meta.get('contactEmail', 'N/A')}\n"
+                )
+                for key, value in bibliography.items():
+                    # Convert the key from snake_case to Title Case
+                    title_case_key = snake_case_to_title_case(key)
+                    content_str += f"    - {title_case_key}: {value}\n"
+
+                # Adding Instrument section:
+                content_str += "----------------------------------------------------\n----------------------------"
+                content_str += "\n*Instrument*:\n"
+                instrument = dataset_meta["scientificMetadata"].get("instrument", {})
+                for key, value in instrument.items():
+                    # Convert the key from snake_case to Title Case
+                    title_case_key = snake_case_to_title_case(key)
+                    content_str += f"    - {title_case_key}: {value}\n"
+
+                # Adding QC section:
+                content_str += "----------------------------------------------------\n----------------------------"
+                content_str += "\n*Results quality control*:\n"
+                edge_step = (
+                    dataset_meta["keywords"][0] if dataset_meta["keywords"] else "N/A"
+                )
+                content_str += f"    - Edge step: {edge_step}\n"
+                k_max = (
+                    dataset_meta["keywords"][1] if dataset_meta["keywords"] else "N/A"
+                )
+                content_str += f"    - K-max: {k_max}\n"
+                energy_resolution = (
+                    dataset_meta["keywords"][2] if dataset_meta["keywords"] else "N/A"
+                )
+                content_str += f"    - Energy resolution: {energy_resolution}\n"
+                try:
+                    edge_energy = (
+                        dataset_meta["keywords"][3]
+                        if dataset_meta["keywords"]
+                        else "N/A"
+                    )
+                except IndexError:
+                    edge_energy = "N/A"
+                content_str += f"    - Edge energy: {edge_energy}\n"
+
+                # Filter Files objects by dataset_id
+                item_list = Files.objects.filter(dataset_id=dataset_id)
+                for item in item_list:
+                    # Ensure there is a file associated with the item
+                    if item.file:
+                        # Reading the file content
+                        item.file.open("r")
+                        file_content = item.file.read()
+                        content_str += (
+                            f"\nContent of {item.file_name}:\n{file_content}\n"
+                        )
+                        item.file.close()
+
+                zip_file.writestr(f"{dataset_id}_metaData.txt", content_str)
+
+                # List of your base64 encoded image strings with the prefix
+                encoded_images = [raw_data_fig, normalized_data_fig, k_fig, R_fig]
+
+                for index, encoded_img in enumerate(encoded_images):
+                    if encoded_img:
+                        # Strip the prefix and decode the base64 string to binary data
+                        img_data = base64.b64decode(
+                            encoded_img.split("data:image/jpeg;base64,")[1]
+                        )
+
+                        # Write the decoded image data to the ZIP file as JPEG images
+                        zip_file.writestr(f"plot{index+1}.jpg", img_data)
+
+                # README content:
+                content_text = (
+                    "*Content description:*\n"
+                    "\n"
+                    "This zipfile contains 10 files (including this one):\n"
+                    "\n"
+                    "*1. README_FIRST*\n"
+                    "\n"
+                    "*2. README_ownership_and_usage_notice*\n"
+                    "General information and usage\n"
+                    "\n"
+                    "*3. PID..._metaData.txt*\n"
+                    "Contains all metadata from this dataset - HUMAN READABLE\n"
+                    "+ content of the original datafile - including the values.\n"
+                    "\n"
+                    "*4. PID..._metadata.hdf5*\n"
+                    "Contains all metadata. Format: hdf5 - MACHINE READABLE\n"
+                    "\n"
+                    "*5. PID..._metadata.json*\n"
+                    "Contains all metadata. Format: json - MACHINE READABLE\n"
+                    "\n"
+                    "*6. PID..._metadata.yaml*\n"
+                    "Contains all metadata. Format: yaml - MACHINE READABLE\n"
+                    "\n"
+                    "*7. plot1.jpg*\n"
+                    "JPEG image of the Raw XAFS\n"
+                    "\n"
+                    "*8. plot2.jpg*\n"
+                    "JPEG image of the Normalized XAFS\n"
+                    "\n"
+                    "*9. plot3.jpg*\n"
+                    "JPEG image of Chi(k)\n"
+                    "\n"
+                    "*9. plot4.jpg*\n"
+                    "JPEG image of Chi(R)\n"
+                    "\n"
+                    "NOTE: The size of all image windows can be changed!"
+                )
+                zip_file.writestr("README_FIRST.txt", content_text)
+
+                # Ownership and usage notice text
+                notice_text = (
+                    "Thank you for using RefXAS.\n"
+                    "Please be aware, do not misuse the data, cite properly when you use this data\n"
+                    "and please always cite RefXAS!\n"
+                    "For any questions, please write to paripsa@uni-wuppertal.de\n"
+                    "\n"
+                    "Thank you for supporting the RefXAS community."
+                )
+                # Write the notice text as a .txt file to the ZIP
+                zip_file.writestr("README_ownership_and_usage_notice.txt", notice_text)
+
+            zip_buffer.seek(0)
+            response = HttpResponse(zip_buffer, content_type="application/zip")
+            response[
+                "Content-Disposition"
+            ] = f'attachment; filename="{dataset_id}_plots_and_meta_data.zip"'
+            return response
+
+        item_list: List[Dict[str, str]] = Files.objects.filter(dataset_id=dataset_id)
+
     return render(
         request,
         "landing/base_curator.html",
@@ -851,6 +1125,11 @@ def dataset_details_curator(request: HttpRequest, dataset_id: str) -> HttpRespon
             "R_fig": R_fig,
         },
     )
+
+
+def get_element_map():
+    with open(settings.BASE_DIR / "materials/element_list.json") as file:
+        return json.load(file)
 
 
 class SearchView(TemplateView):
@@ -874,23 +1153,97 @@ class SearchView(TemplateView):
             A dictionary of context data for rendering the template.
         """
 
-        context: Dict[str, Any] = super().get_context_data(**kwargs)
-        request: HttpRequest = self.request
-        term: str = request.GET.get("term")
-        paginated_by: int = 10
+        context = super().get_context_data(**kwargs)
+        request = self.request
+        term = request.GET.get("term", "")
+        element_filter = request.GET.get("element_filter", "")
 
         allDatasets: List[Dict[str, Any]] = get_all_datasets()
         datasetList: List[Dict[str, Any]] = []
-        for title in allDatasets:
-            term_checker(title, term, datasetList)
+        element_counts = defaultdict(int)  # To store counts of each element
+        element_filter = request.GET.get(
+            "element_filter", ""
+        )  # New parameter for element filtering
 
-        paginator: Paginator = Paginator(datasetList, paginated_by)
-        page: str = self.request.GET.get("page")
+        ## Define your element map
+        # element_map = get_element_map()
+        # for dataset in allDatasets:
+        #    dataset_element = dataset['scientificMetadata']['instrument']['element_input']
+        #    dataset_element_lower = dataset_element.lower()  # Convert to lowercase for case-insensitive matching
+        #
+        #    if term.lower() in dataset_element_lower:
+        #        for symbol, element in element_map.items():
+        #            # Use a regular expression to search for full symbol matches only
+        #            # The pattern \b defines a word boundary, ensuring only complete matches are considered
+        #            if re.search(r'\b' + re.escape(symbol) + r'\b', dataset_element_lower):
+        #                element_counts[element] += 1
+        #                if element_filter.lower() == element.lower() or not element_filter:
+        #                    datasetList.append(dataset)
+        ##################################################################
+        ### Search and count logic
+        ##################################################################
+        if term:
+            for dataset in allDatasets:
+                term_checker(dataset, term, datasetList)
+            # Further refine by element if specified:
+            if element_filter:
+                refined_list = [
+                    dataset
+                    for dataset in datasetList
+                    if self.element_matches_filter(
+                        dataset, element_filter, element_counts
+                    )
+                ]
+                datasetList = refined_list
+        else:
+            for dataset in allDatasets:
+                self.element_matches_filter(
+                    dataset, element_filter, element_counts, datasetList
+                )
+
+        # Pagination handling
+        paginated_by = 10
+        paginator = Paginator(datasetList, paginated_by)
+        page = request.GET.get("page")
         datasetList = paginator.get_page(page)
 
+        # Adding element counts to context
         context["datasetList"] = datasetList
+        context["elementCounts"] = dict(element_counts)
+        context["element_filter"] = element_filter
 
         return context
+
+    def element_matches_filter(
+        self,
+        dataset: Dict[str, Any],
+        element_filter: str,
+        element_counts: defaultdict,
+        datasetList=None,
+    ) -> bool:
+        """
+        Checks if the dataset's element matches the filter and counts it if it does.
+
+        Args:
+            dataset (Dict[str, Any]): The dataset to check.
+            element_filter (str): The active element filter.
+            element_counts (defaultdict): A dictionary to count occurrences of elements.
+            datasetList (List[Dict[str, Any]], optional): List to append dataset if it matches.
+
+        Returns:
+            bool: True if the dataset matches the element filter, otherwise False.
+        """
+        dataset_element = dataset["scientificMetadata"]["instrument"][
+            "element_input"
+        ].lower()
+        for symbol, element in get_element_map().items():
+            if re.search(r"\b" + re.escape(symbol) + r"\b", dataset_element):
+                element_counts[element] += 1
+                if element_filter.lower() == element.lower() or not element_filter:
+                    if datasetList is not None:
+                        datasetList.append(dataset)
+                    return True
+        return False
 
 
 class FileViewSets(ModelViewSet):
@@ -913,6 +1266,7 @@ class FileViewSets(ModelViewSet):
         Returns the serializer class to use for the current request, depending
         on the HTTP method used.
     """
+
     queryset: Type[Files] = Files.objects.all()
     serializer_class: Type[FileSerializer] = FileSerializer
     parser_classes = [MultiPartParser, FileUploadParser]
@@ -1034,17 +1388,30 @@ class ContactForm(forms.Form):
         # Render the form with error messages
         ...
     """
-    first_name = forms.CharField(required=False, max_length=50, label="First name",
-                                 widget=forms.TextInput(attrs={'style': 'color: black;'}))
-    last_name = forms.CharField(required=True, max_length=50, label="Last name",
-                                widget=forms.TextInput(attrs={'style': 'color: black;'}))
+
+    first_name = forms.CharField(
+        required=False,
+        max_length=50,
+        label="First name",
+        widget=forms.TextInput(attrs={"style": "color: black;"}),
+    )
+    last_name = forms.CharField(
+        required=True,
+        max_length=50,
+        label="Last name",
+        widget=forms.TextInput(attrs={"style": "color: black;"}),
+    )
     email_address = forms.EmailField(
-        required=True, max_length=150, label="Email address",
-        widget=forms.EmailInput(attrs={'style': 'color: black;'})
+        required=True,
+        max_length=150,
+        label="Email address",
+        widget=forms.EmailInput(attrs={"style": "color: black;"}),
     )
     message = forms.CharField(
-        widget=forms.Textarea(attrs={'style': 'color: black;'}),
-        required=True, max_length=2000, label="Your message"
+        widget=forms.Textarea(attrs={"style": "color: black;"}),
+        required=True,
+        max_length=2000,
+        label="Your message",
     )
 
 
@@ -1076,10 +1443,26 @@ def team_contact(request) -> HttpResponse:
 
     # Team description data
     team_description = [
-        {'name': 'Sebastian Paripsa', 'role': 'Developer', 'contact': 'paripsa@uni-wuppertal.de'},
-        {'name': 'Abhijeet Gaur', 'role': 'Senior Scientist', 'contact': ' abhijeet.gaur@kit.edu'},
-        {'name': 'Frank Foerste', 'role': 'Developer', 'contact': 'ffoerste@physik.tu-berlin.de'},
-        {'name': 'Christopher Schlesiger', 'role': 'Scientist', 'contact': ' christopher.schlesiger@tu-berlin.de'},
+        {
+            "name": "Sebastian Paripsa",
+            "role": "Developer",
+            "contact": "paripsa@uni-wuppertal.de",
+        },
+        {
+            "name": "Abhijeet Gaur",
+            "role": "Senior Scientist",
+            "contact": " abhijeet.gaur@kit.edu",
+        },
+        {
+            "name": "Frank Foerste",
+            "role": "Developer",
+            "contact": "ffoerste@physik.tu-berlin.de",
+        },
+        {
+            "name": "Christopher Schlesiger",
+            "role": "Scientist",
+            "contact": " christopher.schlesiger@tu-berlin.de",
+        },
     ]
 
     # Handle contact form submission
@@ -1109,4 +1492,3 @@ def team_contact(request) -> HttpResponse:
     }
 
     return render(request, "landing/team_contact.html", context)
-

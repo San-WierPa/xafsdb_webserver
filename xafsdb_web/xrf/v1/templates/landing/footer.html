@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+
+<footer>
+    <div class="footer-text logo-text-container">
+        <p class="text-footer" >&copy; 2023 - 2024 <a href="mailto:paripsa@uni-wuppertal.de">Sebastian Paripsa</a> (<a href="https://www.hydrogen.uni-wuppertal.de/en/" target="_blank">University of Wuppertal</a>),
+            <br>
+            and <a href="mailto:ffoerste@physik.tu-berlin.de">Frank Förste</a> (<a href="https://www.blix.tu-berlin.de/" target="_blank">TU Berlin</a>).
+        </p>
+    </div>
+</footer>
+
+
+<style>
+     .logo-text-container {
+        position: relative;
+     }
+     .text-footer {
+        display: inline-block;
+     }
+     .logo-footer {
+       position: absolute;
+       display: inline-block;
+       width: 30%;
+       max-width: 200px;
+       min-width: 50px;
+       height: auto;
+       margin-top: 15px;
+       margin-left: 60px;
+    }
+    @media (max-width: 1440px) {
+      .logo-footer {
+        display: none;
+      }
+    }
+  </style>
+
+<script src="{% static 'js/app.js' %}" type="text/javascript"></script>

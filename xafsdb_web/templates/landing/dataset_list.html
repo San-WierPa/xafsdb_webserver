@@ -35,10 +35,15 @@
                 <td class="table-title limit-title-length">
                     {{ dataset_meta.datasetName }}
                     <table>
-                        <tr>
-                            <td class="limit-abstract-length"> Description: {{ dataset_meta.scientificMetadata.Description }} </td>
-
-                        </tr>
+                      {% if dataset_meta.history.0.updatedscientificMetadata.Description and dataset_meta.history.0.updatedscientificMetadata.Description != dataset_meta.scientificMetadata.Description %}
+                          <tr>
+                              <td> Description: {{ dataset_meta.history.0.updatedscientificMetadata.Description }}</td>
+                          </tr>
+                      {% else %}
+                          <tr>
+                              <td> Description: {{ dataset_meta.scientificMetadata.Description }}</td>
+                          </tr>
+                      {% endif %}
                     </table>
                 </td>
                 <td>

@@ -6,8 +6,6 @@ import uuid
 
 from django.db import models
 
-from webserver.backends import PrivateMediaStorage
-
 
 def upload_to(instance, filename):
     return f"{uuid.uuid4()}/{filename}"
@@ -16,9 +14,7 @@ def upload_to(instance, filename):
 class Files(models.Model):
     dataset_id = models.CharField(max_length=255, null=False, blank=False)
     file_name = models.CharField(max_length=255, null=True, blank=True)
-    file = models.FileField(
-        null=False, blank=False, storage=PrivateMediaStorage(), upload_to=upload_to
-    )
+    file = models.FileField(null=False, blank=False, upload_to=upload_to)
 
     def __str__(self):
         return f"{self.file_name}"

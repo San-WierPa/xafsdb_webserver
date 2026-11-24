@@ -2,7 +2,6 @@
 
 from django.db import migrations, models
 
-import webserver.backends
 import xafsdb_web.models
 
 
@@ -30,7 +29,6 @@ class Migration(migrations.Migration):
                 (
                     "file",
                     models.FileField(
-                        storage=webserver.backends.PrivateMediaStorage(),
                         upload_to=xafsdb_web.models.upload_to,
                     ),
                 ),

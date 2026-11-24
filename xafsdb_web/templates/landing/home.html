@@ -16,10 +16,25 @@
         <title>RefXAS - Home</title>
     {% endblock %}
 
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="XAFS Database - Your One-Stop Resource for X-ray Absorption Spectroscopy" />
+    <meta property="og:description" content="Explore, analyse, and share datasets for X-ray Absorption Fine Structure (XAFS) with ease." />
+    <meta property="og:url" content="http://xafsdb.ddns.net/" />
+    <meta property="og:image" content="http://xafsdb.ddns.net/static/img/refxas_thumbnail.JPG" />
+    <meta property="og:type" content="website" />
+
     <style>
       .link-under-button {
         text-align: center;
         margin-top: 10px;
+      }
+      .small-img {
+        position: left;
+        margin-right: 20px;
+        width: 500px;
+        height: auto;
+        border: 2px solid #ccc;
+        margin-top: 250px;
       }
     </style>
 
@@ -43,12 +58,13 @@
 
       {% block home_buttons %}
         <div class="button-center">
-          <button class="button button4"><a href="{% url 'dataset_list' %}">Browse all datasets</a></button>
+          <button class="button button4"><a href="{% url 'pg_search' %}">Browse all datasets</a></button>
           <div class="link-under-button">
-            <a href="https://san-wierpa.github.io/xafsdb4daphne/" target="_blank">Visit the docs</a>
+            <a href="https://san-wierpa.github.io/xafsdb_webserver/" target="_blank">VISIT THE DOCS</a>
           </div>
           <div class="link-under-button">
             <p>Publications:</p>
+            <a href="https://doi.org/10.1107/S1600577524006751" target="_blank">RefXAS: an open access database</a><br>
             <a href="https://doi.org/10.52825/cordi.v1i.258" target="_blank">CoRDI: 10.52825 </a><br>
             <a href="https://doi.org/10.5281/zenodo.8412918" target="_blank"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.8412918.svg" alt="DOI"></a>
           </div>
